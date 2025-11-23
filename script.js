@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setCurrentYear();
     initCookieBanner();
     loadPricingFromJS();
+    loadGoogleReviews();
 });
 
 /**
@@ -357,5 +358,99 @@ function buildWinterPackages(container, winterPackages) {
         item.appendChild(name);
         item.appendChild(desc);
         container.appendChild(item);
+    });
+}
+
+/**
+ * Ładowanie 5-gwiazdkowych opinii Google z pliku JSON (data/reviews.json)
+ */
+function loadGoogleReviews() {
+    const container = document.getElementById("reviews-container");
+    if (!container) return;
+
+    fetch("data/reviews.json", { cache: "no-store" })
+        .then(function (response) {
+            if (!response.ok) throw new Error("Brak danych opinii");
+            return response.json();
+        })
+        .then(function (data) {
+            renderReviews(container, data);
+        })
+        .catch(function () {
+            container.innerHTML = "<p class=\"reviews-loading\">Nie udało się pobrać opinii Google. Odśwież stronę lub sprawdź połączenie.</p>";
+        });
+}
+
+function renderReviews(container, reviews) {
+    const fiveStars = (reviews || []).filter(function (review) {
+        return Number(review.rating) === 5;
+    });
+
+    if (fiveStars.length === 0) {
+        container.innerHTML = "<p class=\"reviews-loading\">Brak opinii 5★ do wyświetlenia.</p>";
+        return;
+    }
+
+    container.innerHTML = "";
+
+    fiveStars.slice(0, 6).forEach(function (review) {
+        const card = document.createElement("article");
+        card.className = "review-card";
+
+        const header = document.createElement("header");
+        header.className = "review-header";
+
+        const avatar = document.createElement("div");
+        avatar.className = "review-avatar";
+        if (review.profile_photo_url) {
+            const img = document.createElement("img");
+            img.src = review.profile_photo_url;
+            img.alt = "Zdjęcie profilowe " + review.author_name;
+            avatar.appendChild(img);
+        } else {
+            avatar.textContent = "★";
+        }
+
+        const meta = document.createElement("div");
+        meta.className = "review-meta";
+        const author = document.createElement("strong");
+        author.textContent = review.author_name || "Anonim";
+        const time = document.createElement("span");
+        time.textContent = review.relative_time_description || "Niedawno";
+
+        meta.appendChild(author);
+        meta.appendChild(time);
+
+        const badge = document.createElement("span");
+        badge.className = "review-source";
+        badge.textContent = "Google ★★★★★";
+
+        header.appendChild(avatar);
+        header.appendChild(meta);
+        header.appendChild(badge);
+
+        const text = document.createElement("p");
+        text.className = "review-text";
+        text.textContent = review.text || "Brak treści opinii";
+
+        const rating = document.createElement("p");
+        rating.className = "review-rating";
+        rating.setAttribute("aria-label", "Ocena 5 na 5");
+        rating.textContent = "★★★★★";
+
+        if (review.url) {
+            const link = document.createElement("a");
+            link.href = review.url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.className = "review-link";
+            link.textContent = "Zobacz na Google";
+            rating.appendChild(link);
+        }
+
+        card.appendChild(header);
+        card.appendChild(text);
+        card.appendChild(rating);
+        container.appendChild(card);
     });
 }

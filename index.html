@@ -269,30 +269,10 @@
         <section id="opinie" class="section section-reviews js-observe" aria-labelledby="reviews-heading">
             <div class="section-header container">
                 <h2 id="reviews-heading">Opinie klientów</h2>
-                <p>Fragmenty recenzji. W przyszłości w tym miejscu można podpiąć opinie z Google.</p>
+                <p>Na bieżąco pokazujemy tylko 5‑gwiazdkowe recenzje z Google dotyczące myjni i studiów detailingu.</p>
             </div>
-            <div class="reviews-grid container">
-                <article class="review-card">
-                    <p class="review-text">
-                        Auto wyglądało lepiej niż w dniu odbioru z salonu. Świetna obsługa i wyjaśniony każdy etap pracy.
-                    </p>
-                    <p class="review-author">Marek, BMW 3</p>
-                    <p class="review-rating" aria-label="Ocena 5 na 5">★★★★★</p>
-                </article>
-                <article class="review-card">
-                    <p class="review-text">
-                        Mycie kompletne i pranie wnętrza zrobiły ogromną różnicę. Samochód wygląda jak nowy.
-                    </p>
-                    <p class="review-author">Aneta, Audi A4</p>
-                    <p class="review-rating" aria-label="Ocena 5 na 5">★★★★★</p>
-                </article>
-                <article class="review-card">
-                    <p class="review-text">
-                        Pakiet Zima z woskiem 6 miesięcznym i niewidzialną wycieraczką to idealne przygotowanie na sezon.
-                    </p>
-                    <p class="review-author">Paweł, Volkswagen Golf</p>
-                    <p class="review-rating" aria-label="Ocena 5 na 5">★★★★★</p>
-                </article>
+            <div class="reviews-grid container" id="reviews-container" aria-live="polite">
+                <p class="reviews-loading">Ładujemy świeże opinie Google...</p>
             </div>
         </section>
 
