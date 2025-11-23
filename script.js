@@ -2,8 +2,8 @@
 const DEFAULT_PLACE_ID = "ChIJ2SfIvVHLHkcRGovfOkM8RYo";
 const GOOGLE_API_KEY = "AIzaSyBBEGLuDhhYTF23KVnBC4XZa_KmTWQaZFs";
 
-// Jeśli kiedyś dodasz backend lub klucz Google API, możesz użyć PLACE_ID
-// do pobierania prawdziwych opinii. Obecnie sekcja opinii jest statyczna.
+// Loader skryptu Google Maps JS (Places) współdzielony między wywołaniami
+let googleMapsScriptPromise = null;
 const REVIEWS_FALLBACK = [
     {
         author_name: "Mateusz K.",
@@ -442,36 +442,74 @@ function loadGoogleReviews() {
             });
     }
 
+    function loadMapsScript(key) {
+        if (window.google && window.google.maps && window.google.maps.places) {
+            return Promise.resolve();
+        }
+        if (googleMapsScriptPromise) return googleMapsScriptPromise;
+
+        const src = "https://maps.googleapis.com/maps/api/js?" +
+            "key=" + encodeURIComponent(key) +
+            "&libraries=places";
+
+        googleMapsScriptPromise = new Promise(function (resolve, reject) {
+            const script = document.createElement("script");
+            script.src = src;
+            script.async = true;
+            script.defer = true;
+            script.onload = function () { resolve(); };
+            script.onerror = function () { reject(new Error("Nie udało się załadować Google Maps JS")); };
+            document.head.appendChild(script);
+        });
+
+        return googleMapsScriptPromise;
+    }
+
+    function fetchGooglePlacesReviews(key, id) {
+        return loadMapsScript(key).then(function () {
+            if (!(window.google && window.google.maps && window.google.maps.places)) {
+                throw new Error("Brak biblioteki Google Places");
+            }
+
+            return new Promise(function (resolve, reject) {
+                const service = new google.maps.places.PlacesService(document.createElement("div"));
+
+                service.getDetails(
+                    {
+                        placeId: id,
+                        fields: ["reviews", "url", "user_ratings_total"]
+                    },
+                    function (result, status) {
+                        if (status === google.maps.places.PlacesServiceStatus.OK && result) {
+                            resolve({
+                                reviews: Array.isArray(result.reviews) ? result.reviews : [],
+                                placeUrl: result.url
+                            });
+                        } else {
+                            reject(new Error("Status Google Places: " + status));
+                        }
+                    }
+                );
+            });
+        });
+    }
+
     if (apiKey && placeId) {
-        const googleUrl = new URL("https://maps.googleapis.com/maps/api/place/details/json");
-        googleUrl.searchParams.set("place_id", placeId);
-        googleUrl.searchParams.set("fields", "reviews,user_ratings_total,url");
-        googleUrl.searchParams.set("reviews_no_translations", "true");
-        googleUrl.searchParams.set("key", apiKey);
-
-        fetch(googleUrl.toString(), { cache: "no-store" })
-            .then(function (response) {
-                if (!response.ok) throw new Error("Brak odpowiedzi Google");
-                return response.json();
-            })
-            .then(function (data) {
-                const apiReviews = data && data.result && Array.isArray(data.result.reviews)
-                    ? data.result.reviews
-                    : [];
-
-                if (apiReviews.length === 0) {
+        fetchGooglePlacesReviews(apiKey, placeId)
+            .then(function (payload) {
+                if (!payload || !Array.isArray(payload.reviews) || payload.reviews.length === 0) {
                     renderWithFallback();
                     return;
                 }
 
-                const normalized = apiReviews.map(function (rev) {
+                const normalized = payload.reviews.map(function (rev) {
                     return {
                         author_name: rev.author_name,
                         rating: rev.rating,
                         relative_time_description: rev.relative_time_description,
                         text: rev.text,
                         profile_photo_url: rev.profile_photo_url,
-                        url: rev.author_url || data.result?.url
+                        url: rev.author_url || payload.placeUrl
                     };
                 });
 
