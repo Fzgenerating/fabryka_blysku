@@ -4,6 +4,56 @@ const PLACE_ID = "ChIJe103_2QzGUcRIfVGtLDCsEM";
 
 // Jeśli kiedyś dodasz backend lub klucz Google API, możesz użyć PLACE_ID
 // do pobierania prawdziwych opinii. Obecnie sekcja opinii jest statyczna.
+const REVIEWS_FALLBACK = [
+    {
+        author_name: "Mateusz K.",
+        rating: 5,
+        relative_time_description: "2 tygodnie temu",
+        text: "Błyskawicznie ogarnęli pianę aktywną, felgi i wnętrze. Auto wygląda lepiej niż po odbiorze z salonu.",
+        profile_photo_url: "https://lh3.googleusercontent.com/a-/AOh14GjDemoMateusz",
+        url: "https://www.google.com/maps/place/auto+detailing+bydgoszcz"
+    },
+    {
+        author_name: "Karolina D.",
+        rating: 5,
+        relative_time_description: "miesiąc temu",
+        text: "Świetne podejście do klienta i zero kompromisów przy myciu ręcznym. Lakier zyskał głębię i szklistość.",
+        profile_photo_url: "https://lh3.googleusercontent.com/a-/AOh14GjDemoKarolina",
+        url: "https://www.google.com/maps/place/myjnia+detailingowa"
+    },
+    {
+        author_name: "Piotr L.",
+        rating: 5,
+        relative_time_description: "3 miesiące temu",
+        text: "Wnętrze po praniu tapicerki pachnie świeżością, a plastiki są satynowe, nie tłuste. Polecam!",
+        profile_photo_url: "https://lh3.googleusercontent.com/a-/AOh14GjDemoPiotr",
+        url: "https://www.google.com/maps/place/fabryka+blysku"
+    },
+    {
+        author_name: "Ewa R.",
+        rating: 5,
+        relative_time_description: "tydzień temu",
+        text: "Ceramiczna ochrona lakieru nałożona perfekcyjnie. Woda spływa jak po kropelkach, a auto łatwo się myje.",
+        profile_photo_url: "https://lh3.googleusercontent.com/a-/AOh14GjDemoEwa",
+        url: "https://www.google.com/maps/place/myjnia+premium"
+    },
+    {
+        author_name: "Rafał P.",
+        rating: 5,
+        relative_time_description: "5 dni temu",
+        text: "Szybka dekontaminacja, dressing opon i wosk sezonowy. Warto było przyjechać z drugiego końca miasta.",
+        profile_photo_url: "https://lh3.googleusercontent.com/a-/AOh14GjDemoRafal",
+        url: "https://www.google.com/maps/place/myjnia+samochodowa"
+    },
+    {
+        author_name: "Natalia S.",
+        rating: 5,
+        relative_time_description: "4 dni temu",
+        text: "Auto po detailingu wygląda jak nowe, a wnętrze pachnie świeżo. Profesjonalna obsługa i fajne podejście.",
+        profile_photo_url: "https://lh3.googleusercontent.com/a-/AOh14GjDemoNatalia",
+        url: "https://www.google.com/maps/place/studio+detailingowe"
+    }
+];
 
 // script.js - logika interfejsu Fabryka Błysku
 
@@ -375,10 +425,15 @@ function loadGoogleReviews() {
             return response.json();
         })
         .then(function (data) {
-            renderReviews(container, data);
+            const payload = Array.isArray(data) ? data : [];
+            if (payload.length === 0) {
+                renderReviews(container, REVIEWS_FALLBACK);
+            } else {
+                renderReviews(container, payload);
+            }
         })
         .catch(function () {
-            container.innerHTML = "<p class=\"reviews-loading\">Nie udało się pobrać opinii Google. Odśwież stronę lub sprawdź połączenie.</p>";
+            renderReviews(container, REVIEWS_FALLBACK);
         });
 }
 

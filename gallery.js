@@ -37,6 +37,12 @@ async function initGallery() {
     switchView("slider");
     showSlide(0);
     startAuto();
+
+    window.addEventListener("resize", function () {
+        const sliderCurrent = document.getElementById("gallery-slider");
+        const imageCurrent = document.getElementById("gallery-active-image");
+        updateAspectRatio(sliderCurrent, imageCurrent);
+    });
 }
 
 function bindNavigation(slider) {
@@ -219,6 +225,14 @@ function updateAspectRatio(slider, imageEl) {
     if (!slider || !imageEl || !imageEl.naturalWidth || !imageEl.naturalHeight) return;
     const ratio = imageEl.naturalWidth / imageEl.naturalHeight;
     slider.style.setProperty("--active-ratio", ratio);
+
+    const sliderWidth = slider.clientWidth || slider.offsetWidth;
+    if (sliderWidth) {
+        const maxHeight = Math.min(window.innerHeight * 0.78, 760);
+        const idealHeight = sliderWidth / ratio;
+        const clampedHeight = Math.max(360, Math.min(maxHeight, idealHeight));
+        slider.style.height = clampedHeight + "px";
+    }
 }
 
 async function resolveImages() {
