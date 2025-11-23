@@ -78,12 +78,6 @@
             box-shadow: 0 10px 26px rgba(148, 163, 255, 0.26);
         }
 
-        .gallery-hint {
-            margin: 0;
-            color: var(--color-text-muted, #9ca3af);
-            font-size: 0.95rem;
-        }
-
         .gallery-slider {
             position: relative;
             border-radius: 20px;
@@ -108,37 +102,6 @@
             display: grid;
             place-items: center;
             padding: 18px;
-        }
-
-        .gallery-foam {
-            position: absolute;
-            inset: 6%;
-            pointer-events: none;
-            filter: drop-shadow(0 0 26px rgba(148, 163, 255, 0.3));
-            opacity: 0.7;
-        }
-
-        .foam-bubble {
-            position: absolute;
-            border-radius: 999px;
-            background: radial-gradient(circle at 28% 30%, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.1));
-            box-shadow:
-                inset 0 0 20px rgba(148, 163, 255, 0.25),
-                inset 10px 10px 25px rgba(255, 255, 255, 0.35);
-            opacity: 0.6;
-            animation: foamDrift 18s ease-in-out infinite;
-        }
-
-        .foam-bubble:nth-child(1) { width: 120px; height: 120px; left: 8%; top: 40%; animation-delay: 0s; }
-        .foam-bubble:nth-child(2) { width: 86px;  height: 86px;  left: 24%; top: 26%; animation-delay: 2s; }
-        .foam-bubble:nth-child(3) { width: 70px;  height: 70px;  left: 62%; top: 50%; animation-delay: 4s; }
-        .foam-bubble:nth-child(4) { width: 100px; height: 100px; left: 74%; top: 28%; animation-delay: 6s; }
-
-        @keyframes foamDrift {
-            0% { transform: translate3d(0, 0, 0) scale(0.96); opacity: 0.2; }
-            25% { transform: translate3d(-6px, -14px, 0) scale(1); opacity: 0.75; }
-            55% { transform: translate3d(10px, -22px, 0) scale(1.06); opacity: 0.9; }
-            100% { transform: translate3d(-6px, -28px, 0) scale(1.02); opacity: 0.2; }
         }
 
         #gallery-active-image {
@@ -343,7 +306,6 @@
         <div class="gallery-wrapper">
             <header class="gallery-header">
                 <h1>Galeria realizacji</h1>
-                <p>Wrzuć swoje pliki JPG, PNG lub WebP do folderu <code>assets/img/gallery</code> — skrypt automatycznie wykryje zdjęcia, dopasuje podgląd i zbuduje z nich pokaz slajdów oraz miniatury.</p>
             </header>
 
             <section aria-label="Pokaz slajdów z realizacjami" class="gallery-shell">
@@ -352,17 +314,10 @@
                         <button class="gallery-chip is-active" type="button" data-view="slider">Widok pokazu</button>
                         <button class="gallery-chip" type="button" data-view="grid">Miniatury</button>
                     </div>
-                    <p class="gallery-hint">Automatyczny autoslider dopasowuje się do proporcji zdjęć i zatrzymuje po najechaniu kursorem.</p>
                 </div>
 
                 <div class="gallery-slider" id="gallery-slider" aria-live="polite">
                     <div class="gallery-visual">
-                        <div class="gallery-foam">
-                            <span class="foam-bubble"></span>
-                            <span class="foam-bubble"></span>
-                            <span class="foam-bubble"></span>
-                            <span class="foam-bubble"></span>
-                        </div>
                         <img id="gallery-active-image" src="" alt="" loading="lazy">
                         <div class="gallery-caption">
                             <span class="gallery-counter" id="gallery-counter">0/0</span>
@@ -377,9 +332,7 @@
                     <div class="gallery-dots" id="gallery-dots" aria-hidden="true"></div>
                 </div>
 
-                <div class="gallery-thumbs" id="gallery-thumbs" aria-label="Miniatury realizacji">
-                    <p class="gallery-empty">Czekam na zdjęcia z folderu <code>assets/img/gallery</code>…</p>
-                </div>
+                <div class="gallery-thumbs" id="gallery-thumbs" aria-label="Miniatury realizacji"></div>
             </section>
 
             <div class="gallery-back">

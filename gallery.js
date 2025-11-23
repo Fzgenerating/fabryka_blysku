@@ -27,7 +27,7 @@ async function initGallery() {
     galleryState.images = await resolveImages();
 
     if (galleryState.images.length === 0) {
-        thumbsContainer.innerHTML = "<p class=\"gallery-empty\">Dodaj zdjęcia do folderu <code>assets/img/gallery</code>, a pokażemy je tutaj automatycznie.</p>";
+        thumbsContainer.innerHTML = "<p class=\"gallery-empty\">Brak zdjęć do wyświetlenia.</p>";
         slider.style.display = "none";
         return;
     }
@@ -299,13 +299,12 @@ async function discoverImages() {
 }
 
 async function urlExists(url) {
-    try {
-        const response = await fetch(url, { method: "HEAD" });
-        return response.ok;
-    } catch (error) {
-        console.warn("Brak dostępu do pliku", url, error);
-        return false;
-    }
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = function () { resolve(true); };
+        img.onerror = function () { resolve(false); };
+        img.src = url + (url.includes("?") ? "&" : "?") + "_ts=" + Date.now();
+    });
 }
 
 function buildAltFromName(fileName) {

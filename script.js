@@ -550,6 +550,7 @@ function initHeroBubbles() {
             this.turbulence = CONFIG.baseTurbulence * Math.min(sizeFactor, 2.3);
             this.age = 0;
             this.maxAge = randomRange(CONFIG.minLifetime, CONFIG.maxLifetime);
+            this.popHeight = randomRange(height * 0.04, height * 0.16);
 
             this.pulseSpeed = randomRange(CONFIG.pulseSpeedMin, CONFIG.pulseSpeedMax);
             this.pulsePhase = Math.random() * Math.PI * 2;
@@ -575,6 +576,7 @@ function initHeroBubbles() {
             this.state = "alive";
             this.popTime = 0;
             this.popDuration = 0.4;
+            this.hasQueuedPop = false;
         }
 
         startPop() {
@@ -617,7 +619,12 @@ function initHeroBubbles() {
 
             this.age += dt;
 
-            if (this.y < -this.radius || (this.age > this.maxAge && this.y < height * 0.3)) {
+            if (this.y <= this.popHeight || this.y < -this.radius || (this.age > this.maxAge && this.y < height * 0.3)) {
+                this.startPop();
+            }
+
+            if (!this.hasQueuedPop && this.age > this.maxAge * 0.55 && Math.random() < dt * 0.6) {
+                this.hasQueuedPop = true;
                 this.startPop();
             }
 
