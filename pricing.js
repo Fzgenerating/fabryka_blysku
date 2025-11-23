@@ -1,0 +1,88 @@
+// pricing.js - dane cennika Fabryka Błysku
+// Wystarczy edytować kwoty i opisy poniżej.
+
+window.PRICING_DATA = {
+    categories: ["Kategoria A", "Kategoria B", "Kategoria C", "Kategoria D", "Busy"],
+    services: [
+        {
+            name: "Mycie podstawowe",
+            prices: [50, 60, 70, 90, 110]
+        },
+        {
+            name: "Mycie z hydrowoskiem (dopłata)",
+            prices: ["+10", "+10", "+10", "+10", "+10"]
+        },
+        {
+            name: "Mycie z woskiem miesięcznym (dopłata)",
+            prices: ["+30/40", "+30/40", "+30/40", "+30/40", "+30/40"]
+        },
+        {
+            name: "Mycie z woskiem 6 miesięcznym (dopłata)",
+            prices: ["+100", "+100", "+100", "+100", "+100"]
+        },
+        {
+            name: "Mycie kompletne",
+            prices: [110, 120, 130, 150, 180]
+        },
+        {
+            name: "Mycie kompletne z hydrowoskiem (dopłata)",
+            prices: ["+10", "+10", "+10", "+10", "+10"]
+        },
+        {
+            name: "Mycie kompletne z woskiem miesięcznym (dopłata)",
+            prices: ["+30/40", "+30/40", "+30/40", "+30/40", "+30/40"]
+        },
+        {
+            name: "Mycie kompletne z woskiem 6 miesięcznym (dopłata)",
+            prices: ["+100", "+100", "+100", "+100", "+100"]
+        },
+        {
+            name: "Czyszczenie wnętrza",
+            prices: [60, 70, 80, 90, 110]
+        }
+    ],
+    extras: [
+        {
+            name: "Pranie tapicerki całościowe",
+            note: "499 zł (w cenie mycie kompletne), 509 zł, 519 zł, 529 zł, 599 zł - w zależności od kategorii pojazdu"
+        },
+        {
+            name: "Pranie foteli i kanapy",
+            note: "od 289 zł do 319 zł w zależności od kategorii (w cenie środek)"
+        },
+        { name: "Pranie podłogi", note: "cena ustalana indywidualnie" },
+        { name: "Pranie sufitu", note: "cena ustalana indywidualnie" },
+        { name: "Pranie bagażnika", note: "cena ustalana indywidualnie" },
+        { name: "Pranie boczków", note: "cena ustalana indywidualnie" },
+        {
+            name: "Czyszczenie i konserwacja tapicerki skórzanej",
+            note: "cena w zależności od zakresu prac i wielkości wnętrza"
+        },
+        { name: "Odkurzanie", note: "od 40 zł" },
+        { name: "Mycie szyb", note: "od 30 zł" },
+        { name: "Czyszczenie plastików", note: "od 40 zł" },
+        { name: "Mycie opon (4 koła)", note: "od 30 zł" },
+        { name: "Ozonowanie", note: "od 80 zł" },
+        { name: "Usuwanie sierści", note: "od 80 zł" },
+        { name: "Usuwanie naklejek", note: "od 80 zł" },
+        { name: "Czyszczenie silnika (bez użycia wody)", note: "od 150 zł" }
+    ],
+    winterPackages: [
+        {
+            name: "Pakiet Zima A",
+            description: "Dla mniejszych aut. Mycie kompletne, wosk 6 miesięczny, niewidzialna wycieraczka, zabezpieczenie uszczelek."
+        },
+        {
+            name: "Pakiet Zima B",
+            description: "Dla aut kompaktowych. Rozszerzone przygotowanie na zimę z pełną ochroną lakieru."
+        },
+        {
+            name: "Pakiet Zima C",
+            description: "Dla aut wyższej klasy i SUV. Wzmocniona ochrona lakieru i szyb, rekomendowana dla wymagających."
+        },
+        {
+            name: "Pakiet Zima D",
+            description: "Dla największych aut i busów. Kompleksowe przygotowanie na zimę całej karoserii i szyb."
+        }
+    ]
+};

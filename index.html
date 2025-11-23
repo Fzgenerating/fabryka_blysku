@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Fabryka Błysku - myjnia samochodowa i autodetailing Bydgoszcz</title>
+    <meta name="description" content="Fabryka Błysku - studio autodetailingu i myjnia samochodowa w Bydgoszczy. Kompleksowe mycie, detailing, pranie tapicerki, ochrona lakieru, folie PPF i pakiety sezonowe.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://fabrykablysku.pl/">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Fabryka Błysku - autodetailing i myjnia Bydgoszcz">
+    <meta property="og:description" content="Profesjonalne studio autodetailingu w Bydgoszczy. Mycie, detailing, pranie tapicerki, folie PPF i ochrona lakieru. Zadbaj o połysk swojego auta.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fabrykablysku.pl/">
+    <meta property="og:image" content="https://fabrykablysku.pl/og-image.jpg">
+
+    <!-- Schema.org LocalBusiness / AutoWash (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["LocalBusiness", "AutoWash"],
+      "name": "Fabryka Błysku",
+      "image": "https://fabrykablysku.pl/og-image.jpg",
+      "url": "https://fabrykablysku.pl/",
+      "telephone": "+48 577 772 707",
+      "email": "kontakt.fabrykablysku@gmail.com",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Brzozowa 4a",
+        "addressLocality": "Bydgoszcz",
+        "postalCode": "85-154",
+        "addressCountry": "PL"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday"],
+          "opens": "09:00",
+          "closes": "19:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Friday",
+          "opens": "09:00",
+          "closes": "20:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Saturday",
+          "opens": "09:00",
+          "closes": "20:00"
+        }
+      ]
+    }
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header i nawigacja -->
+    <header class="site-header">
+        <nav class="nav" aria-label="Główna nawigacja">
+            <div class="nav-logo">
+                <img src="assets/img/logo-fabryka-blysku.png" alt="Fabryka Błysku - studio autodetailingu i myjnia samochodowa" class="logo-img">
+            </div>
+
+            <button class="nav-toggle" aria-label="Otwórz menu" aria-expanded="false">
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+            </button>
+
+            <ul class="nav-links">
+                <li><a href="#start">Strona główna</a></li>
+                <li><a href="#uslugi">Usługi</a></li>
+                <li><a href="#cennik">Cennik</a></li>
+                <li><a href="#onas">O nas</a></li>
+                <li><a href="gallery.html">Galeria</a></li>
+                <li><a href="#opinie">Opinie</a></li>
+                <li><a href="#kontakt">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- HERO -->
+        <section id="start" class="hero js-observe" aria-labelledby="hero-heading">
+            <div class="hero-bg-layer"></div>
+            <div class="hero-glow"></div>
+            <div class="hero-bubbles" aria-hidden="true">
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+            </div>
+            <div class="hero-inner">
+                <div class="hero-content">
+                    <h1 id="hero-heading">Fabryka Błysku - twój samochód w wersji premium</h1>
+                    <p class="hero-subtitle">
+                        Studio autodetailingu i myjnia samochodowa w Bydgoszczy, w którym każde auto traktujemy jak swoje.
+                        Łączymy pasję do motoryzacji z precyzyjną pracą i nowoczesną chemią samochodową.
+                    </p>
+                    <div class="hero-cta">
+                        <button class="btn btn-primary" data-scroll-target="#kontakt">
+                            Umów wizytę
+                        </button>
+                        <button class="btn btn-secondary" data-scroll-target="#cennik">
+                            Sprawdź cennik
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- USŁUGI -->
+        <section id="uslugi" class="section section-services js-observe" aria-labelledby="services-heading">
+            <div class="section-header container">
+                <h2 id="services-heading">Co robimy</h2>
+                <p>Kompleksowa ochrona i odświeżanie samochodów - od szybkiego mycia po pełny detailing i folie PPF.</p>
+            </div>
+            <div class="services-grid container">
+                <article class="service-card">
+                    <div class="service-icon" aria-hidden="true">
+                        <i class="ti ti-droplet"></i>
+                    </div>
+                    <h3>Mycie zewnętrzne</h3>
+                    <p>Bezpieczne mycie nadwozia, felg i opon z użyciem piany aktywnej, ręcznych pianownic i miękkich rękawic.</p>
+                    <button class="service-btn" data-scroll-target="#cennik">Szczegóły i ceny</button>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon" aria-hidden="true">
+                        <i class="ti ti-vacuum-cleaner"></i>
+                    </div>
+                    <h3>Czyszczenie wnętrza</h3>
+                    <p>Dokładne odkurzanie, czyszczenie plastików, mycie szyb od środka i odświeżenie wszystkich zakamarków.</p>
+                    <button class="service-btn" data-scroll-target="#cennik">Szczegóły i ceny</button>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon" aria-hidden="true">
+                        <i class="ti ti-armchair"></i>
+                    </div>
+                    <h3>Pranie tapicerki</h3>
+                    <p>Głębokie pranie tapicerki materiałowej oraz pielęgnacja tapicerki skórzanej z konserwacją.</p>
+                    <button class="service-btn" data-scroll-target="#cennik">Szczegóły i ceny</button>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon" aria-hidden="true">
+                        <i class="ti ti-sparkles"></i>
+                    </div>
+                    <h3>Detailing i korekta lakieru</h3>
+                    <p>Wieloetapowe mycie, dekontaminacja, polerowanie i zabezpieczenie lakieru powłokami.</p>
+                    <button class="service-btn" data-scroll-target="#cennik">Szczegóły i ceny</button>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon" aria-hidden="true">
+                        <i class="ti ti-color-swatch"></i>
+                    </div>
+                    <h3>Folie PPF i zmiana koloru</h3>
+                    <p>Zabezpieczenie najbardziej narażonych elementów folią ochronną oraz zmiana koloru auta folią.</p>
+                    <button class="service-btn" data-scroll-target="#cennik">Szczegóły i ceny</button>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon" aria-hidden="true">
+                        <i class="ti ti-package"></i>
+                    </div>
+                    <h3>Pakiety sezonowe</h3>
+                    <p>Pakiety zimowe i letnie z myciem kompletnym, woskami, niewidzialną wycieraczką i uszczelkami.</p>
+                    <button class="service-btn" data-scroll-target="#cennik">Szczegóły i ceny</button>
+                </article>
+            </div>
+        </section>
+
+        <!-- CENNIK -->
+        <section id="cennik" class="section section-pricing js-observe" aria-labelledby="pricing-heading">
+            <div class="section-header container">
+                <h2 id="pricing-heading">Cennik</h2>
+                <p>Ceny można łatwo edytować w pliku <strong>pricing.js</strong> bez grzebania w kodzie HTML.</p>
+            </div>
+
+            <div class="container">
+                <div class="pricing-categories">
+                    <h3>Mycie zewnętrzne według kategorii pojazdu</h3>
+                    <div id="pricing-table-vehicles" class="pricing-table-wrapper" aria-label="Tabela cennika pojazdów">
+                        <div class="pricing-loading">Ładowanie cennika...</div>
+                    </div>
+                </div>
+
+                <div class="pricing-extras">
+                    <h3>Usługi dodatkowe</h3>
+                    <div id="pricing-extras-list" class="pricing-extras-grid"></div>
+                </div>
+
+                <div class="pricing-winter">
+                    <h3>Pakiety Zima</h3>
+                    <p class="pricing-winter-info">
+                        Pakiety różnią się ceną w zależności od kategorii pojazdu. W skład każdego pakietu wchodzi:
+                        mycie kompletne, nałożenie wosku 6 miesięcznego, niewidzialna wycieraczka oraz zabezpieczenie uszczelek.
+                    </p>
+                    <div id="pricing-winter-list" class="pricing-winter-grid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- O NAS -->
+        <section id="onas" class="section section-about js-observe" aria-labelledby="about-heading">
+            <div class="section-header container">
+                <h2 id="about-heading">O nas</h2>
+                <p>Łączymy pasję do motoryzacji z technologią autodetailingu, aby Twój samochód wyglądał lepiej niż kiedykolwiek wcześniej.</p>
+            </div>
+            <div class="about-content container">
+                <div class="about-text">
+                    <p>
+                        Witaj w naszym studiu autodetailingu - miejscu, w którym pasja do motoryzacji łączy się z precyzją i nowoczesną technologią.
+                        Dbamy o to, aby każde auto, które do nas trafia, wyglądało lepiej niż kiedykolwiek wcześniej.
+                    </p>
+                    <p>
+                        Specjalizujemy się w kompleksowej ochronie i odświeżaniu samochodów: od zmiany koloru folią,
+                        przez zabezpieczenia lakieru folią PPF, aż po profesjonalne polerowanie, pełne mycie detailingowe
+                        i głębokie czyszczenie wnętrz wraz z praniem tapicerki.
+                    </p>
+                </div>
+                <ul class="about-highlights">
+                    <li>
+                        <span class="about-icon" aria-hidden="true"><i class="ti ti-users-group"></i></span>
+                        <div>
+                            <h3>Doświadczeni specjaliści</h3>
+                            <p>Przeszkolony zespół, który zna się na lakierach, foliach i bezpiecznych metodach czyszczenia.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="about-icon" aria-hidden="true"><i class="ti ti-flask"></i></span>
+                        <div>
+                            <h3>Najlepsza chemia samochodowa</h3>
+                            <p>Używamy sprawdzonych produktów klasy premium, bezpiecznych dla lakieru, wnętrza i środowiska.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="about-icon" aria-hidden="true"><i class="ti ti-search"></i></span>
+                        <div>
+                            <h3>Dokładność i dbałość o detale</h3>
+                            <p>Nie pomijamy progów, wnęk, zakamarków i trudno dostępnych miejsc. Liczy się każdy detal.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- GALERIA dostępna jako osobna podstrona gallery.html -->
+        <!-- OPINIE -->
+        <section id="opinie" class="section section-reviews js-observe" aria-labelledby="reviews-heading">
+            <div class="section-header container">
+                <h2 id="reviews-heading">Opinie klientów</h2>
+                <p>Fragmenty recenzji. W przyszłości w tym miejscu można podpiąć opinie z Google.</p>
+            </div>
+            <div class="reviews-grid container">
+                <article class="review-card">
+                    <p class="review-text">
+                        Auto wyglądało lepiej niż w dniu odbioru z salonu. Świetna obsługa i wyjaśniony każdy etap pracy.
+                    </p>
+                    <p class="review-author">Marek, BMW 3</p>
+                    <p class="review-rating" aria-label="Ocena 5 na 5">★★★★★</p>
+                </article>
+                <article class="review-card">
+                    <p class="review-text">
+                        Mycie kompletne i pranie wnętrza zrobiły ogromną różnicę. Samochód wygląda jak nowy.
+                    </p>
+                    <p class="review-author">Aneta, Audi A4</p>
+                    <p class="review-rating" aria-label="Ocena 5 na 5">★★★★★</p>
+                </article>
+                <article class="review-card">
+                    <p class="review-text">
+                        Pakiet Zima z woskiem 6 miesięcznym i niewidzialną wycieraczką to idealne przygotowanie na sezon.
+                    </p>
+                    <p class="review-author">Paweł, Volkswagen Golf</p>
+                    <p class="review-rating" aria-label="Ocena 5 na 5">★★★★★</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- KONTAKT -->
+        <section id="kontakt" class="section section-contact js-observe" aria-labelledby="contact-heading">
+            <div class="section-header container">
+                <h2 id="contact-heading">Kontakt</h2>
+            <p>Umów wizytę, zapytaj o szczegóły lub zarezerwuj pakiet dla swojego auta.</p>
+            </div>
+            <div class="contact-layout container">
+                <div class="contact-info">
+                    <div class="contact-block">
+                        <h3>Dane kontaktowe</h3>
+                        <p><strong>Telefon:</strong> <a href="tel:+48577772707">577 772 707</a></p>
+                        <p><strong>E-mail:</strong> <a href="mailto:kontakt.fabrykablysku@gmail.com">kontakt.fabrykablysku@gmail.com</a></p>
+                    </div>
+
+                    <div class="contact-block">
+                        <h3>Adres</h3>
+                        <p>Fabryka Błysku<br>Brzozowa 4a<br>85-154 Bydgoszcz, Poland</p>
+                    </div>
+
+                    <div class="contact-block">
+                        <h3>Godziny otwarcia</h3>
+                        <p>
+                            poniedziałek - 09:00 - 19:00<br>
+                            wtorek - 09:00 - 19:00<br>
+                            środa - 09:00 - 19:00<br>
+                            czwartek - 09:00 - 19:00<br>
+                            piątek - 09:00 - 20:00<br>
+                            sobota - 09:00 - 20:00<br>
+                            niedziela - zamknięte
+                        </p>
+                    </div>
+
+                    <a class="btn btn-primary contact-call-btn" href="tel:+48577772707">
+                        Zadzwoń teraz
+                    </a>
+                </div>
+
+                <div class="contact-form-wrapper">
+                    <h3>Napisz do nas</h3>
+                    <form id="contact-form" novalidate>
+                        <div class="form-field">
+                            <label for="name">Imię i nazwisko <span class="field-required">*</span></label>
+                            <input type="text" id="name" name="name" required aria-required="true">
+                        </div>
+                        <div class="form-field">
+                            <label for="email">E-mail <span class="field-required">*</span></label>
+                            <input type="email" id="email" name="email" required aria-required="true">
+                        </div>
+                        <div class="form-field">
+                            <label for="phone">Telefon (opcjonalnie)</label>
+                            <input type="tel" id="phone" name="phone" aria-required="false">
+                        </div>
+                        <div class="form-field">
+                            <label for="subject">Temat <span class="field-required">*</span></label>
+                            <input type="text" id="subject" name="subject" required aria-required="true">
+                        </div>
+                        <div class="form-field">
+                            <label for="message">Wiadomość <span class="field-required">*</span></label>
+                            <textarea id="message" name="message" rows="4" required aria-required="true"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Wyślij wiadomość</button>
+                        <p id="form-message" class="form-message" aria-live="polite"></p>
+                    </form>
+                </div>
+            </div>
+
+            <div class="map-wrapper container" aria-label="Mapa dojazdu">
+                <iframe
+                    title="Mapa dojazdu Fabryka Błysku"
+                    src="https://www.google.com/maps?q=Brzozowa+4a+85-154+Bydgoszcz&output=embed"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner container">
+            <div class="footer-main">
+                <p>© <span id="year"></span> Fabryka Błysku. Wszystkie prawa zastrzeżone.</p>
+                <a href="privacy-policy.html" class="footer-link">Polityka prywatności</a>
+            </div>
+            <p class="footer-signature">
+                Projekt i wykonanie strony: <span>Jakub Torończak</span> -
+                <a
+                    class="footer-email"
+                    href="mailto:kontakt@jakubtoronczak.dev?subject=Zapytanie%20dotycz%C4%85ce%20strony%20Fabryka%20B%C5%82ysku&body=Dzie%C5%84%20dobry%2C%0A%0AChcia%C5%82bym%20porozmawia%C4%87%20na%20temat%20strony%20Fabryka%20B%C5%82ysku.%0A%0APozdrawiam%2C%0A"
+                >
+                    kontakt@jakubtoronczak.dev
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Baner cookies -->
+    <div id="cookie-banner" class="cookie-banner" aria-live="polite">
+        <p>
+            Ta strona korzysta z plików cookies w celach statystycznych i funkcjonalnych. Kontynuując korzystanie z serwisu
+            wyrażasz zgodę na ich użycie. Szczegóły znajdziesz w dokumencie
+            <a href="privacy-policy.html">Polityka prywatności i cookies</a>.
+        </p>
+        <button id="cookie-accept" class="btn btn-secondary">Akceptuję</button>
+    </div>
+
+    <!-- Najpierw dane cennika, potem logika -->
+    <script src="pricing.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

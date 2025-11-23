@@ -1,0 +1,25 @@
+Folder PATH listing
+Volume serial number is E462-6282
+C:.
+|   contact.php
+|   drzewko.txt
+|   gallery.html
+|   index.html
+|   pricing.js
+|   privacy-policy.html
+|   script.js
+|   style.css
+|   update-fabryka-blysku.ps1
+|   
++---assets
+|   \---img
+|       |   logo-fabryka-blysku.png
+|       |   
+|       \---gallery
+|               slide1.png
+|               slide2.png
+|               slide3.png
+|               
+\---data
+        pricing.json
+        

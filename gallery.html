@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Galeria - Fabryka Błysku</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .gallery-page {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 10% 0, rgba(158, 167, 255, 0.16) 0, transparent 55%),
+                radial-gradient(circle at 80% 10%, rgba(192, 203, 255, 0.22) 0, transparent 52%),
+                radial-gradient(circle at 50% 120%, rgba(37, 46, 113, 0.35) 0, transparent 55%);
+            color: var(--color-text, #e5e7eb);
+            padding-top: 90px;
+            padding-bottom: 40px;
+        }
+        .gallery-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .gallery-header {
+            margin-bottom: 24px;
+        }
+        .gallery-header h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        .gallery-header p {
+            color: var(--color-text-muted, #9ca3af);
+            max-width: 40rem;
+        }
+        .gallery-slider {
+            position: relative;
+            margin: 20px auto 24px;
+            max-width: 960px;
+            border-radius: 18px;
+            overflow: hidden;
+            background: radial-gradient(circle at 10% 0, rgba(148, 163, 255, 0.16), transparent 55%),
+                        rgba(15, 23, 42, 0.96);
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.9);
+        }
+        .gallery-slide {
+            display: none;
+        }
+        .gallery-slide img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .gallery-slider-nav {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+        .gallery-arrow {
+            pointer-events: auto;
+            border: none;
+            background: rgba(15, 23, 42, 0.55);
+            padding: 10px 14px;
+            border-radius: 999px;
+            color: #e5e7eb;
+            font-size: 22px;
+            cursor: pointer;
+            margin: 0 12px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .gallery-arrow:hover {
+            background: rgba(15, 23, 42, 0.85);
+            transform: translateY(-1px);
+        }
+        .gallery-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            border: none;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.65);
+            color: #e5e7eb;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .gallery-thumbs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .gallery-thumb {
+            width: 150px;
+            border-radius: 14px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid rgba(148, 163, 255, 0.35);
+            background: rgba(15, 23, 42, 0.9);
+        }
+        .gallery-thumb img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .gallery-thumb:hover {
+            box-shadow: 0 0 0 1px rgba(191, 219, 254, 0.6);
+        }
+        .gallery-back {
+            margin-top: 28px;
+            text-align: center;
+        }
+        .gallery-back a {
+            text-decoration: none;
+            color: var(--color-primary-strong, #e5e7eb);
+            font-size: 0.95rem;
+        }
+        @media (max-width: 768px) {
+            .gallery-header h1 {
+                font-size: 1.4rem;
+            }
+            .gallery-thumb {
+                width: 42%;
+            }
+        }
+    </style>
+</head>
+<body class="body-gallery">
+    <header class="site-header">
+        <nav class="nav" aria-label="Główna nawigacja">
+            <div class="nav-logo">
+                <a href="index.html" aria-label="Powrót na stronę główną">
+                    <img src="assets/img/logo-fabryka-blysku.png" alt="Fabryka Błysku - logo" class="logo-img">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html#start">Strona główna</a></li>
+                <li><a href="index.html#uslugi">Usługi</a></li>
+                <li><a href="index.html#cennik">Cennik</a></li>
+                <li><a href="index.html#onas">O nas</a></li>
+                <li><a href="gallery.html">Galeria</a></li>
+                <li><a href="index.html#opinie">Opinie</a></li>
+                <li><a href="index.html#kontakt">Kontakt</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="gallery-page">
+        <div class="gallery-wrapper">
+            <header class="gallery-header">
+                <h1>Galeria realizacji</h1>
+                <p>Przykładowe zdjęcia, które możesz łatwo podmienić na swoje - wystarczy wymienić pliki w folderze <code>assets/img/gallery</code>, zachowując nazwy plików.</p>
+            </header>
+
+            <section aria-label="Pokaz slajdów z realizacjami">
+                <div class="gallery-slider" id="gallery-slider">
+                    <button class="gallery-close" type="button" onclick="showThumbs()">×</button>
+
+                    <div class="gallery-slide">
+                        <img src="assets/img/gallery/slide1.jpg" alt="Realizacja 1 - Fabryka Błysku">
+                    </div>
+                    <div class="gallery-slide">
+                        <img src="assets/img/gallery/slide2.jpg" alt="Realizacja 2 - Fabryka Błysku">
+                    </div>
+                    <div class="gallery-slide">
+                        <img src="assets/img/gallery/slide3.jpg" alt="Realizacja 3 - Fabryka Błysku">
+                    </div>
+
+                    <div class="gallery-slider-nav">
+                        <button class="gallery-arrow" type="button" onclick="plusSlides(-1)">‹</button>
+                        <button class="gallery-arrow" type="button" onclick="plusSlides(1)">›</button>
+                    </div>
+                </div>
+
+                <div class="gallery-thumbs" id="gallery-thumbs">
+                    <div class="gallery-thumb" onclick="openSlide(1)">
+                        <img src="assets/img/gallery/slide1.jpg" alt="Miniatura realizacji 1">
+                    </div>
+                    <div class="gallery-thumb" onclick="openSlide(2)">
+                        <img src="assets/img/gallery/slide2.jpg" alt="Miniatura realizacji 2">
+                    </div>
+                    <div class="gallery-thumb" onclick="openSlide(3)">
+                        <img src="assets/img/gallery/slide3.jpg" alt="Miniatura realizacji 3">
+                    </div>
+                </div>
+            </section>
+
+            <div class="gallery-back">
+                <a href="index.html#start">← Wróć na stronę główną</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let slideIndex = 1;
+        let autoTimer = null;
+
+        function initSlider() {
+            showSlides(slideIndex);
+            startAuto();
+        }
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+            restartAuto();
+        }
+
+        function openSlide(n) {
+            document.getElementById('gallery-slider').style.display = 'block';
+            document.getElementById('gallery-thumbs').style.display = 'flex';
+            showSlides(slideIndex = n);
+            restartAuto();
+        }
+
+        function showThumbs() {
+            document.getElementById('gallery-slider').style.display = 'none';
+            document.getElementById('gallery-thumbs').style.display = 'flex';
+            stopAuto();
+        }
+
+        function showSlides(n) {
+            const slides = document.getElementsByClassName('gallery-slide');
+            if (!slides.length) return;
+            if (n > slides.length) { slideIndex = 1; }
+            if (n < 1) { slideIndex = slides.length; }
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = 'none';
+            }
+            slides[slideIndex - 1].style.display = 'block';
+        }
+
+        function startAuto() {
+            autoTimer = setInterval(function() { plusSlides(1); }, 5000);
+        }
+
+        function stopAuto() {
+            if (autoTimer) {
+                clearInterval(autoTimer);
+                autoTimer = null;
+            }
+        }
+
+        function restartAuto() {
+            stopAuto();
+            startAuto();
+        }
+
+        document.addEventListener('DOMContentLoaded', initSlider);
+    </script>
+</body>
+</html>
