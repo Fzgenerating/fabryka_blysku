@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", function () {
     setCurrentYear();
     initCookieBanner();
     loadPricingFromJS();
+    loadGoogleReviews();
+    initHeroBubbles();
 });
 
 /**
@@ -358,4 +360,374 @@ function buildWinterPackages(container, winterPackages) {
         item.appendChild(desc);
         container.appendChild(item);
     });
+}
+
+/**
+ * Ładowanie 5-gwiazdkowych opinii Google z pliku JSON (data/reviews.json)
+ */
+function loadGoogleReviews() {
+    const container = document.getElementById("reviews-container");
+    if (!container) return;
+
+    fetch("data/reviews.json", { cache: "no-store" })
+        .then(function (response) {
+            if (!response.ok) throw new Error("Brak danych opinii");
+            return response.json();
+        })
+        .then(function (data) {
+            renderReviews(container, data);
+        })
+        .catch(function () {
+            container.innerHTML = "<p class=\"reviews-loading\">Nie udało się pobrać opinii Google. Odśwież stronę lub sprawdź połączenie.</p>";
+        });
+}
+
+function renderReviews(container, reviews) {
+    const fiveStars = (reviews || []).filter(function (review) {
+        return Number(review.rating) === 5;
+    });
+
+    if (fiveStars.length === 0) {
+        container.innerHTML = "<p class=\"reviews-loading\">Brak opinii 5★ do wyświetlenia.</p>";
+        return;
+    }
+
+    container.innerHTML = "";
+
+    fiveStars.slice(0, 6).forEach(function (review) {
+        const card = document.createElement("article");
+        card.className = "review-card";
+
+        const header = document.createElement("header");
+        header.className = "review-header";
+
+        const avatar = document.createElement("div");
+        avatar.className = "review-avatar";
+        if (review.profile_photo_url) {
+            const img = document.createElement("img");
+            img.src = review.profile_photo_url;
+            img.alt = "Zdjęcie profilowe " + review.author_name;
+            avatar.appendChild(img);
+        } else {
+            avatar.textContent = "★";
+        }
+
+        const meta = document.createElement("div");
+        meta.className = "review-meta";
+        const author = document.createElement("strong");
+        author.textContent = review.author_name || "Anonim";
+        const time = document.createElement("span");
+        time.textContent = review.relative_time_description || "Niedawno";
+
+        meta.appendChild(author);
+        meta.appendChild(time);
+
+        const badge = document.createElement("span");
+        badge.className = "review-source";
+        badge.textContent = "Google ★★★★★";
+
+        header.appendChild(avatar);
+        header.appendChild(meta);
+        header.appendChild(badge);
+
+        const text = document.createElement("p");
+        text.className = "review-text";
+        text.textContent = review.text || "Brak treści opinii";
+
+        const rating = document.createElement("p");
+        rating.className = "review-rating";
+        rating.setAttribute("aria-label", "Ocena 5 na 5");
+        rating.textContent = "★★★★★";
+
+        if (review.url) {
+            const link = document.createElement("a");
+            link.href = review.url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.className = "review-link";
+            link.textContent = "Zobacz na Google";
+            rating.appendChild(link);
+        }
+
+        card.appendChild(header);
+        card.appendChild(text);
+        card.appendChild(rating);
+        container.appendChild(card);
+    });
+}
+
+/**
+ * Animacja pianowych baniek w hero oparta o canvas (lekka i responsywna)
+ */
+function initHeroBubbles() {
+    const canvas = document.getElementById("bubbles-canvas");
+    const hero = document.querySelector(".hero");
+
+    if (!canvas || !hero || !canvas.getContext) return;
+
+    const ctx = canvas.getContext("2d");
+    const bubbles = [];
+    const mouse = { x: 0, y: 0, isDown: false, hasMoved: false };
+    const fpsSamples = [];
+
+    const CONFIG = {
+        targetDensity: 32 / (1920 * 1080),
+        globalMinBubbles: 16,
+        globalMaxBubbles: 70,
+        baseSpawnInterval: 0.22,
+        minRadius: 12,
+        maxRadius: 54,
+        minInitialVy: -22,
+        maxInitialVy: -88,
+        maxInitialVx: 28,
+        baseBuoyancy: -16,
+        dragSmall: 0.02,
+        dragLarge: 0.08,
+        baseTurbulence: 32,
+        minLifetime: 6,
+        maxLifetime: 15,
+        minPopDuration: 0.12,
+        maxPopDuration: 0.22,
+        pulseAmplitude: 0.06,
+        pulseSpeedMin: 1.1,
+        pulseSpeedMax: 2.3,
+        baseAlphaMin: 0.28,
+        baseAlphaMax: 0.6,
+        lowFpsThreshold: 42
+    };
+
+    let width = 0;
+    let height = 0;
+    let dpr = window.devicePixelRatio || 1;
+    let targetMaxBubbles = CONFIG.globalMinBubbles;
+    let spawnAccumulator = 0;
+    let lastTimestamp = performance.now();
+
+    function resizeCanvas() {
+        const rect = hero.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        dpr = window.devicePixelRatio || 1;
+
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        recalcTargetBubbles();
+    }
+
+    function recalcTargetBubbles() {
+        const area = width * height;
+        const ideal = area * CONFIG.targetDensity;
+        targetMaxBubbles = Math.round(
+            Math.max(CONFIG.globalMinBubbles, Math.min(CONFIG.globalMaxBubbles, ideal))
+        );
+    }
+
+    function randomRange(min, max) {
+        return min + Math.random() * (max - min);
+    }
+
+    class Bubble {
+        constructor(x, y, radius) {
+            this.x = x;
+            this.y = y;
+            this.baseRadius = radius;
+            this.radius = radius;
+
+            const sizeFactor = CONFIG.maxRadius / radius;
+            this.vx = randomRange(-CONFIG.maxInitialVx, CONFIG.maxInitialVx) * Math.min(sizeFactor, 2.2);
+            this.vy = randomRange(CONFIG.minInitialVy, CONFIG.maxInitialVy) * Math.min(sizeFactor, 2.4);
+
+            const buoyancyScale = Math.min(1.7, Math.pow(sizeFactor, 0.58));
+            this.buoyancy = CONFIG.baseBuoyancy * buoyancyScale;
+
+            const sizeT = (radius - CONFIG.minRadius) / (CONFIG.maxRadius - CONFIG.minRadius);
+            this.drag = CONFIG.dragLarge * sizeT + CONFIG.dragSmall * (1 - sizeT);
+
+            this.turbulence = CONFIG.baseTurbulence * Math.min(sizeFactor, 2.3);
+            this.age = 0;
+            this.maxAge = randomRange(CONFIG.minLifetime, CONFIG.maxLifetime);
+
+            this.pulseSpeed = randomRange(CONFIG.pulseSpeedMin, CONFIG.pulseSpeedMax);
+            this.pulsePhase = Math.random() * Math.PI * 2;
+            this.baseAlpha = randomRange(CONFIG.baseAlphaMin, CONFIG.baseAlphaMax);
+            this.hue = randomRange(186, 205);
+
+            this.state = "alive";
+            this.popStartAge = 0;
+            this.popDuration = randomRange(CONFIG.minPopDuration, CONFIG.maxPopDuration);
+        }
+
+        startPop() {
+            if (this.state !== "popping") {
+                this.state = "popping";
+                this.popStartAge = this.age;
+            }
+        }
+
+        update(dt) {
+            this.age += dt;
+
+            if (this.state === "alive") {
+                if (this.age >= this.maxAge || this.y + this.baseRadius < -24) {
+                    this.startPop();
+                }
+
+                if (mouse.hasMoved) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist < this.baseRadius * 1.05) {
+                        if (mouse.isDown) {
+                            this.startPop();
+                        } else {
+                            this.maxAge = Math.min(this.maxAge, this.age + 0.7);
+                        }
+                    }
+                }
+
+                this.vx += (Math.random() - 0.5) * this.turbulence * dt;
+                this.vy += (Math.random() - 0.5) * this.turbulence * 0.32 * dt;
+
+                this.vy += this.buoyancy * dt;
+
+                const dragFactor = 1 - this.drag * dt;
+                this.vx *= dragFactor;
+                this.vy *= dragFactor;
+
+                this.x += this.vx * dt;
+                this.y += this.vy * dt;
+            } else if (this.state === "popping") {
+                if (this.age - this.popStartAge >= this.popDuration) return false;
+            }
+
+            return true;
+        }
+
+        draw(ctx) {
+            let radius = this.baseRadius;
+            let alpha = this.baseAlpha;
+
+            if (this.state === "alive") {
+                const pulse = Math.sin(this.age * this.pulseSpeed + this.pulsePhase) * CONFIG.pulseAmplitude;
+                radius = this.baseRadius * (1 + pulse);
+
+                const lifeRatio = this.age / this.maxAge;
+                if (lifeRatio > 0.74) {
+                    alpha *= 1 - Math.min(1, (lifeRatio - 0.74) / 0.26);
+                }
+            } else if (this.state === "popping") {
+                const t = (this.age - this.popStartAge) / this.popDuration;
+                const eased = 1 - Math.pow(1 - t, 2);
+                radius = this.baseRadius * (1 - eased);
+                alpha = this.baseAlpha * (1 - eased);
+            }
+
+            if (radius <= 0 || alpha <= 0) return;
+
+            const highlightX = this.x - radius * 0.3;
+            const highlightY = this.y - radius * 0.3;
+            const gradient = ctx.createRadialGradient(
+                highlightX,
+                highlightY,
+                radius * 0.12,
+                this.x,
+                this.y,
+                radius
+            );
+
+            const innerAlpha = alpha * 0.9;
+            const midAlpha = alpha * 0.55;
+            const outerAlpha = 0;
+
+            gradient.addColorStop(0, `rgba(255, 255, 255, ${innerAlpha.toFixed(3)})`);
+            gradient.addColorStop(0.32, `hsla(${this.hue.toFixed(1)}, 85%, 92%, ${innerAlpha.toFixed(3)})`);
+            gradient.addColorStop(0.7, `hsla(${this.hue.toFixed(1)}, 78%, 74%, ${midAlpha.toFixed(3)})`);
+            gradient.addColorStop(1, `hsla(${this.hue.toFixed(1)}, 80%, 60%, ${outerAlpha.toFixed(3)})`);
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.fillStyle = gradient;
+            ctx.arc(this.x, this.y, radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    function spawnBubble() {
+        const radius = randomRange(CONFIG.minRadius, CONFIG.maxRadius);
+        const x = randomRange(radius, width - radius);
+        const y = height + radius + randomRange(0, 30);
+        bubbles.push(new Bubble(x, y, radius));
+    }
+
+    function getAverageFps() {
+        if (!fpsSamples.length) return 60;
+        const sum = fpsSamples.reduce((acc, v) => acc + v, 0);
+        return sum / fpsSamples.length;
+    }
+
+    function loop(timestamp) {
+        requestAnimationFrame(loop);
+
+        let dt = (timestamp - lastTimestamp) / 1000;
+        lastTimestamp = timestamp;
+        if (dt > 0.05) dt = 0.05;
+
+        const fps = 1 / dt;
+        fpsSamples.push(fps);
+        if (fpsSamples.length > 60) fpsSamples.shift();
+
+        const avgFps = getAverageFps();
+        let effectiveTargetBubbles = targetMaxBubbles;
+        let spawnInterval = CONFIG.baseSpawnInterval;
+
+        if (avgFps < CONFIG.lowFpsThreshold) {
+            effectiveTargetBubbles = Math.max(CONFIG.globalMinBubbles, Math.round(targetMaxBubbles * 0.72));
+            spawnInterval *= 1.35;
+        }
+
+        spawnAccumulator += dt;
+        while (spawnAccumulator >= spawnInterval && bubbles.length < effectiveTargetBubbles) {
+            spawnBubble();
+            spawnAccumulator -= spawnInterval;
+        }
+
+        for (let i = bubbles.length - 1; i >= 0; i--) {
+            const alive = bubbles[i].update(dt);
+            if (!alive) bubbles.splice(i, 1);
+        }
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        bubbles.forEach((bubble) => bubble.draw(ctx));
+        ctx.restore();
+    }
+
+    function updateMousePosition(event) {
+        const rect = hero.getBoundingClientRect();
+        mouse.x = event.clientX - rect.left;
+        mouse.y = event.clientY - rect.top;
+        mouse.hasMoved = true;
+    }
+
+    hero.addEventListener("pointermove", updateMousePosition);
+    hero.addEventListener("pointerdown", function () { mouse.isDown = true; });
+    hero.addEventListener("pointerup", function () { mouse.isDown = false; });
+    hero.addEventListener("pointerleave", function () { mouse.hasMoved = false; mouse.isDown = false; });
+
+    const resizeObserver = window.ResizeObserver ? new ResizeObserver(resizeCanvas) : null;
+    if (resizeObserver) resizeObserver.observe(hero);
+    window.addEventListener("resize", resizeCanvas);
+
+    resizeCanvas();
+    requestAnimationFrame(loop);
+
+    for (let i = 0; i < CONFIG.globalMinBubbles; i++) {
+        spawnBubble();
+    }
 }

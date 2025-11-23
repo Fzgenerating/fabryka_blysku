@@ -733,25 +733,81 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 
 .section-reviews .reviews-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 16px;
 }
 
 .review-card {
     border-radius: var(--radius-lg);
-    border: 1px solid rgba(192, 196, 210, 0.18);
-    background: radial-gradient(circle at top, rgba(158, 167, 255, 0.1), rgba(6, 9, 15, 0.98));
+    border: 1px solid rgba(192, 196, 210, 0.2);
+    background:
+        radial-gradient(circle at 12% 0%, rgba(158, 167, 255, 0.15), transparent 42%),
+        linear-gradient(155deg, rgba(12, 16, 26, 0.98), rgba(6, 9, 15, 0.98));
     padding: 16px 14px;
     box-shadow: 0 14px 32px rgba(0, 0, 0, 0.8);
     font-size: 0.9rem;
     transition:
         transform 0.22s ease-out,
-        box-shadow 0.22s ease-out;
+        box-shadow 0.22s ease-out,
+        border-color 0.22s ease-out;
 }
 
 .review-card:hover {
-    transform: translateY(-5px) scale(1.03);
+    transform: translateY(-5px) scale(1.02);
     box-shadow: 0 26px 52px rgba(0, 0, 0, 0.96);
+    border-color: rgba(224, 231, 255, 0.45);
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.review-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: radial-gradient(circle at 30% 30%, rgba(148, 163, 255, 0.25), rgba(12, 16, 26, 0.95));
+    display: grid;
+    place-items: center;
+    color: #facc15;
+    font-weight: 700;
+    border: 1px solid rgba(192, 203, 255, 0.25);
+}
+
+.review-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.review-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.review-meta strong {
+    color: var(--color-primary-strong);
+}
+
+.review-meta span {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+}
+
+.review-source {
+    margin-left: auto;
+    background: rgba(148, 163, 255, 0.16);
+    color: var(--color-primary-strong);
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(192, 203, 255, 0.2);
+    letter-spacing: 0.04em;
 }
 
 .review-text {
@@ -759,15 +815,25 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
     color: var(--color-text-muted);
 }
 
-.review-author {
-    margin: 0 0 4px;
-    font-weight: 500;
-}
-
 .review-rating {
     margin: 0;
     color: #facc15;
     letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.review-link {
+    color: var(--color-primary-strong);
+    font-size: 0.85rem;
+}
+
+.reviews-loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--color-text-muted);
 }
 
 /* KONTAKT */
@@ -1013,7 +1079,7 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
     }
 
     .section-reviews .reviews-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     }
 
     .section-contact .contact-layout {
@@ -1165,112 +1231,15 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 
 
 
-/* Dekoracyjne bańki w sekcji hero - szybszy, bardziej widoczny ruch na całym prawym obszarze */
-.hero {
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-bubbles {
+/* Dekoracyjne bańki w sekcji hero - lekki efekt canvas */
+.hero-bubbles-canvas {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     z-index: 1;
-}
-
-/* Bazowy wygląd bańki piany */
-.hero-bubbles .bubble {
-    position: absolute;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    background:
-        radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.24)),
-        radial-gradient(circle at 70% 80%, rgba(148, 163, 255, 0.55), rgba(15, 23, 42, 0.0));
-    box-shadow: 0 0 34px rgba(148, 163, 255, 0.6);
-    opacity: 0;
-}
-
-/* 12 baniek w różnych miejscach po prawej i na dole */
-.hero-bubbles .bubble:nth-child(1)  { width: 120px; height: 120px; right: 8%;  bottom: -22%; animation: bubbleDriftA 18s linear infinite 0s; }
-.hero-bubbles .bubble:nth-child(2)  { width: 90px;  height: 90px;  right: 20%; bottom: -24%; animation: bubbleDriftB 20s linear infinite 1s; }
-.hero-bubbles .bubble:nth-child(3)  { width: 70px;  height: 70px;  right: 32%; bottom: -26%; animation: bubbleDriftC 19s linear infinite 2s; }
-.hero-bubbles .bubble:nth-child(4)  { width: 110px; height: 110px; right: 14%; bottom: -28%; animation: bubbleDriftB 21s linear infinite 3s; }
-.hero-bubbles .bubble:nth-child(5)  { width: 60px;  height: 60px;  right: 4%;  bottom: -20%; animation: bubbleDriftC 17s linear infinite 4s; }
-.hero-bubbles .bubble:nth-child(6)  { width: 80px;  height: 80px;  right: 26%; bottom: -28%; animation: bubbleDriftA 20s linear infinite 5s; }
-.hero-bubbles .bubble:nth-child(7)  { width: 55px;  height: 55px;  right: 36%; bottom: -24%; animation: bubbleDriftC 16s linear infinite 6s; }
-.hero-bubbles .bubble:nth-child(8)  { width: 100px; height: 100px; right: 18%; bottom: -32%; animation: bubbleDriftB 22s linear infinite 7s; }
-.hero-bubbles .bubble:nth-child(9)  { width: 85px;  height: 85px;  right: 10%; bottom: -30%; animation: bubbleDriftA 19s linear infinite 8s; }
-.hero-bubbles .bubble:nth-child(10) { width: 65px;  height: 65px;  right: 28%; bottom: -26%; animation: bubbleDriftC 17s linear infinite 9s; }
-.hero-bubbles .bubble:nth-child(11) { width: 50px;  height: 50px;  right: 6%;  bottom: -18%; animation: bubbleDriftB 15s linear infinite 10s; }
-.hero-bubbles .bubble:nth-child(12) { width: 95px;  height: 95px;  right: 34%; bottom: -30%; animation: bubbleDriftA 21s linear infinite 11s; }
-
-/* Trzy różne ścieżki ruchu - szybsze unoszenie do samej góry */
-@keyframes bubbleDriftA {
-    0% {
-        transform: translate3d(0, 0, 0) scale(0.9);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.85;
-    }
-    40% {
-        transform: translate3d(-10px, -160px, 0) scale(1.02);
-    }
-    70% {
-        transform: translate3d(-22px, -320px, 0) scale(1.05);
-        opacity: 1;
-    }
-    100% {
-        transform: translate3d(-30px, -420px, 0) scale(1.06);
-        opacity: 0;
-    }
-}
-
-@keyframes bubbleDriftB {
-    0% {
-        transform: translate3d(0, 0, 0) scale(0.95);
-        opacity: 0;
-    }
-    12% {
-        opacity: 0.9;
-    }
-    35% {
-        transform: translate3d(18px, -150px, 0) scale(1.0);
-    }
-    65% {
-        transform: translate3d(6px, -310px, 0) scale(1.05);
-        opacity: 1;
-    }
-    100% {
-        transform: translate3d(-10px, -430px, 0) scale(1.08);
-        opacity: 0;
-    }
-}
-
-@keyframes bubbleDriftC {
-    0% {
-        transform: translate3d(0, 0, 0) scale(0.9);
-        opacity: 0;
-    }
-    15% {
-        opacity: 0.8;
-    }
-    30% {
-        transform: translate3d(-8px, -140px, 0) scale(0.98);
-    }
-    55% {
-        transform: translate3d(12px, -280px, 0) scale(1.03);
-        opacity: 1;
-    }
-    100% {
-        transform: translate3d(0, -420px, 0) scale(1.05);
-        opacity: 0;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero-bubbles .bubble {
-        transform: scale(0.7);
-    }
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 16px 40px rgba(64, 140, 255, 0.25));
 }
 
