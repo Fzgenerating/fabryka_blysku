@@ -228,11 +228,22 @@ function updateAspectRatio(slider, imageEl) {
 
     const sliderWidth = slider.clientWidth || slider.offsetWidth;
     if (sliderWidth) {
-        const maxHeight = Math.min(window.innerHeight * 0.78, 760);
-        const idealHeight = sliderWidth / ratio;
-        const clampedHeight = Math.max(360, Math.min(maxHeight, idealHeight));
-        slider.style.height = clampedHeight + "px";
+        const chrome = getCaptionHeight(slider) + 32;
+        const maxHeight = Math.min(window.innerHeight * 0.88, 820);
+        const idealVisualHeight = sliderWidth / ratio;
+        const visualHeight = Math.max(320, Math.min(maxHeight - chrome, idealVisualHeight));
+        const totalHeight = Math.max(360, Math.min(maxHeight, visualHeight + chrome));
+        slider.style.setProperty("--active-height", totalHeight + "px");
+        slider.style.height = totalHeight + "px";
     }
+}
+
+function getCaptionHeight(slider) {
+    const caption = slider.querySelector(".gallery-caption");
+    if (!caption) return 0;
+    const styles = window.getComputedStyle(caption);
+    const marginBlock = parseFloat(styles.marginTop || 0) + parseFloat(styles.marginBottom || 0);
+    return caption.offsetHeight + marginBlock;
 }
 
 async function resolveImages() {

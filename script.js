@@ -419,7 +419,9 @@ function loadGoogleReviews() {
     const container = document.getElementById("reviews-container");
     if (!container) return;
 
-    fetch("data/reviews.json", { cache: "no-store" })
+    const endpoint = container.getAttribute("data-endpoint") || "data/reviews.json";
+
+    fetch(endpoint, { cache: "no-store" })
         .then(function (response) {
             if (!response.ok) throw new Error("Brak danych opinii");
             return response.json();
