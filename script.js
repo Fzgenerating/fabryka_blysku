@@ -560,10 +560,10 @@ function initHeroBubbles() {
             this.popStartAge = 0;
             this.popDuration = randomRange(CONFIG.minPopDuration, CONFIG.maxPopDuration);
 
-            // Każda bańka otrzymuje własną, delikatnie losową wysokość pęknięcia
-            // z niewielkim zapasem powyżej górnej krawędzi, by część znikała tuż "na granicy".
-            const topBand = height * randomRange(0.04, 0.14);
-            this.popHeight = randomRange(-radius * 0.8, topBand);
+            // Każda bańka dostaje wysokość pęknięcia tuż przy samej górnej krawędzi.
+            // Losujemy delikatny margines ujemny (nieco ponad kadr) lub bardzo wąski pas 0–2.5% wysokości.
+            // Dzięki temu większość baniek faktycznie dociera do samej góry zanim zniknie.
+            this.popHeight = randomRange(-radius * 1.1, height * 0.025);
         }
 
         startPop() {
@@ -577,10 +577,10 @@ function initHeroBubbles() {
             this.age += dt;
 
             if (this.state === "alive") {
-                const reachedTop = this.y - this.baseRadius <= this.popHeight;
-                // Naturalne pękanie: większość baniek znika blisko górnej krawędzi,
-                // część wcześniej, jeśli żyją zbyt długo i są już wysoko.
-                if (reachedTop || (this.age >= this.maxAge && this.y < height * 0.55)) {
+                const reachedTop = this.y - this.baseRadius <= this.popHeight || this.y + this.baseRadius < -8;
+                // Naturalne pękanie: większość baniek znika tuż przy górnej krawędzi,
+                // a tylko wyjątkowo wcześniej, gdy żyją bardzo długo i są już w górnej części kadru.
+                if (reachedTop || (this.age >= this.maxAge && this.y < height * 0.32)) {
                     this.startPop();
                 }
 
