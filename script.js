@@ -471,15 +471,15 @@ function initHeroBubbles() {
     const fpsSamples = [];
 
     const CONFIG = {
-        targetDensity: 32 / (1920 * 1080),
-        globalMinBubbles: 16,
-        globalMaxBubbles: 70,
-        baseSpawnInterval: 0.22,
+        targetDensity: 38 / (1920 * 1080),
+        globalMinBubbles: 18,
+        globalMaxBubbles: 74,
+        baseSpawnInterval: 0.2,
         minRadius: 12,
-        maxRadius: 54,
+        maxRadius: 52,
         minInitialVy: -22,
-        maxInitialVy: -88,
-        maxInitialVx: 28,
+        maxInitialVy: -86,
+        maxInitialVx: 24,
         baseBuoyancy: -16,
         dragSmall: 0.02,
         dragLarge: 0.08,
@@ -491,8 +491,8 @@ function initHeroBubbles() {
         pulseAmplitude: 0.06,
         pulseSpeedMin: 1.1,
         pulseSpeedMax: 2.3,
-        baseAlphaMin: 0.28,
-        baseAlphaMax: 0.6,
+        baseAlphaMin: 0.38,
+        baseAlphaMax: 0.72,
         lowFpsThreshold: 42
     };
 
@@ -554,7 +554,7 @@ function initHeroBubbles() {
             this.pulseSpeed = randomRange(CONFIG.pulseSpeedMin, CONFIG.pulseSpeedMax);
             this.pulsePhase = Math.random() * Math.PI * 2;
             this.baseAlpha = randomRange(CONFIG.baseAlphaMin, CONFIG.baseAlphaMax);
-            this.hue = randomRange(186, 205);
+            this.hue = randomRange(187, 202);
 
             this.state = "alive";
             this.popStartAge = 0;
@@ -564,6 +564,20 @@ function initHeroBubbles() {
             // Losujemy delikatny margines ujemny (nieco ponad kadr) lub bardzo wąski pas 0–2.5% wysokości.
             // Dzięki temu większość baniek faktycznie dociera do samej góry zanim zniknie.
             this.popHeight = randomRange(-radius * 1.1, height * 0.025);
+
+            // Zapisujemy delikatne "płaty" piany, aby wizualnie przypominały pieniącą się chemię.
+            // Dzięki temu zamiast przejrzystych baniek uzyskujemy mleczne, spienione obłoczki.
+            const speckCount = Math.round(randomRange(4, 7));
+            this.foamSpecks = Array.from({ length: speckCount }, () => {
+                const angle = Math.random() * Math.PI * 2;
+                const distance = randomRange(radius * 0.25, radius * 0.85);
+                return {
+                    dx: Math.cos(angle) * distance,
+                    dy: Math.sin(angle) * distance * 0.65,
+                    r: randomRange(radius * 0.08, radius * 0.18),
+                    a: randomRange(0.28, 0.52)
+                };
+            });
         }
 
         startPop() {
@@ -647,20 +661,40 @@ function initHeroBubbles() {
                 radius
             );
 
-            const innerAlpha = alpha * 0.9;
-            const midAlpha = alpha * 0.55;
-            const outerAlpha = 0;
+            const innerAlpha = alpha * 1.05;
+            const midAlpha = alpha * 0.7;
+            const rimAlpha = alpha * 0.18;
 
             gradient.addColorStop(0, `rgba(255, 255, 255, ${innerAlpha.toFixed(3)})`);
-            gradient.addColorStop(0.32, `hsla(${this.hue.toFixed(1)}, 85%, 92%, ${innerAlpha.toFixed(3)})`);
-            gradient.addColorStop(0.7, `hsla(${this.hue.toFixed(1)}, 78%, 74%, ${midAlpha.toFixed(3)})`);
-            gradient.addColorStop(1, `hsla(${this.hue.toFixed(1)}, 80%, 60%, ${outerAlpha.toFixed(3)})`);
+            gradient.addColorStop(0.38, `hsla(${this.hue.toFixed(1)}, 80%, 94%, ${innerAlpha.toFixed(3)})`);
+            gradient.addColorStop(0.72, `hsla(${this.hue.toFixed(1)}, 70%, 82%, ${midAlpha.toFixed(3)})`);
+            gradient.addColorStop(1, `hsla(${this.hue.toFixed(1)}, 75%, 78%, ${rimAlpha.toFixed(3)})`);
 
             ctx.save();
             ctx.beginPath();
             ctx.fillStyle = gradient;
             ctx.arc(this.x, this.y, radius, 0, Math.PI * 2);
             ctx.fill();
+
+            // Delikatne drobinki piany na obrzeżach – tworzą bardziej kremowy efekt.
+            this.foamSpecks.forEach((speck) => {
+                const speckAlpha = speck.a * alpha;
+                if (speckAlpha <= 0) return;
+                const speckGradient = ctx.createRadialGradient(
+                    this.x + speck.dx * 0.92,
+                    this.y + speck.dy * 0.92,
+                    speck.r * 0.2,
+                    this.x + speck.dx,
+                    this.y + speck.dy,
+                    speck.r
+                );
+                speckGradient.addColorStop(0, `rgba(255, 255, 255, ${(speckAlpha * 1.2).toFixed(3)})`);
+                speckGradient.addColorStop(1, `hsla(${this.hue.toFixed(1)}, 72%, 88%, ${(speckAlpha * 0.35).toFixed(3)})`);
+                ctx.beginPath();
+                ctx.fillStyle = speckGradient;
+                ctx.arc(this.x + speck.dx, this.y + speck.dy, speck.r, 0, Math.PI * 2);
+                ctx.fill();
+            });
             ctx.restore();
         }
     }
