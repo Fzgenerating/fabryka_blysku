@@ -556,146 +556,158 @@ function initHeroBubbles() {
             this.baseAlpha = randomRange(CONFIG.baseAlphaMin, CONFIG.baseAlphaMax);
             this.hue = randomRange(187, 202);
 
-            this.state = "alive";
-            this.popStartAge = 0;
-            this.popDuration = randomRange(CONFIG.minPopDuration, CONFIG.maxPopDuration);
-
-            // Każda bańka dostaje wysokość pęknięcia tuż przy samej górnej krawędzi.
-            // Losujemy delikatny margines ujemny (nieco ponad kadr) lub bardzo wąski pas 0–2.5% wysokości.
-            // Dzięki temu większość baniek faktycznie dociera do samej góry zanim zniknie.
-            this.popHeight = randomRange(-radius * 1.1, height * 0.025);
-
-            // Zapisujemy delikatne "płaty" piany, aby wizualnie przypominały pieniącą się chemię.
-            // Dzięki temu zamiast przejrzystych baniek uzyskujemy mleczne, spienione obłoczki.
-            const speckCount = Math.round(randomRange(4, 7));
-            this.foamSpecks = Array.from({ length: speckCount }, () => {
+            // --- NOWE: Generowanie struktury piany (wewnętrzne "chmurki") ---
+            this.foamSegments = [];
+            const segmentCount = Math.floor(3 + Math.random() * 3);
+            for (let i = 0; i < segmentCount; i++) {
                 const angle = Math.random() * Math.PI * 2;
-                const distance = randomRange(radius * 0.25, radius * 0.85);
-                return {
-                    dx: Math.cos(angle) * distance,
-                    dy: Math.sin(angle) * distance * 0.65,
-                    r: randomRange(radius * 0.08, radius * 0.18),
-                    a: randomRange(0.28, 0.52)
-                };
-            });
+                const dist = radius * (0.2 + Math.random() * 0.4);
+                this.foamSegments.push({
+                    dx: Math.cos(angle) * dist,
+                    dy: Math.sin(angle) * dist,
+                    r: radius * (0.3 + Math.random() * 0.3),
+                    alpha: 0.05 + Math.random() * 0.15
+                });
+            }
+
+            // --- NOWE: Zmienne do obsługi pękania ---
+            this.shards = null;
+            this.state = "alive";
+            this.popTime = 0;
+            this.popDuration = 0.4;
         }
 
         startPop() {
             if (this.state !== "popping") {
                 this.state = "popping";
-                this.popStartAge = this.age;
+                this.popTime = 0;
+
+                this.shards = [];
+                const shardCount = Math.floor(this.baseRadius / 2) + 8;
+
+                for (let i = 0; i < shardCount; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = 30 + Math.random() * 50;
+                    this.shards.push({
+                        x: this.x + Math.cos(angle) * this.baseRadius * 0.8,
+                        y: this.y + Math.sin(angle) * this.baseRadius * 0.8,
+                        vx: this.vx + Math.cos(angle) * speed,
+                        vy: this.vy + Math.sin(angle) * speed,
+                        size: 1 + Math.random() * 2,
+                        life: 1.0
+                    });
+                }
             }
         }
 
         update(dt) {
-            this.age += dt;
-
-            if (this.state === "alive") {
-                const reachedTop = this.y - this.baseRadius <= this.popHeight || this.y + this.baseRadius < -8;
-                // Naturalne pękanie: większość baniek znika tuż przy górnej krawędzi,
-                // a tylko wyjątkowo wcześniej, gdy żyją bardzo długo i są już w górnej części kadru.
-                if (reachedTop || (this.age >= this.maxAge && this.y < height * 0.32)) {
-                    this.startPop();
-                }
-
-                if (mouse.hasMoved) {
-                    const dx = mouse.x - this.x;
-                    const dy = mouse.y - this.y;
-                    const dist = Math.hypot(dx, dy);
-                    if (dist < this.baseRadius * 1.05) {
-                        if (mouse.isDown) {
-                            this.startPop();
-                        } else {
-                            this.maxAge = Math.min(this.maxAge, this.age + 0.7);
-                        }
+            if (this.state === "popping") {
+                this.popTime += dt;
+                if (this.shards) {
+                    for (let s of this.shards) {
+                        s.x += s.vx * dt;
+                        s.y += s.vy * dt;
+                        s.vy += 200 * dt;
+                        s.life -= dt * 2.5;
                     }
                 }
-
-                this.vx += (Math.random() - 0.5) * this.turbulence * dt;
-                this.vy += (Math.random() - 0.5) * this.turbulence * 0.32 * dt;
-
-                this.vy += this.buoyancy * dt;
-
-                const dragFactor = 1 - this.drag * dt;
-                this.vx *= dragFactor;
-                this.vy *= dragFactor;
-
-                this.x += this.vx * dt;
-                this.y += this.vy * dt;
-            } else if (this.state === "popping") {
-                if (this.age - this.popStartAge >= this.popDuration) return false;
+                if (this.popTime >= this.popDuration) return false;
+                return true;
             }
+
+            this.age += dt;
+
+            if (this.y < -this.radius || (this.age > this.maxAge && this.y < height * 0.3)) {
+                this.startPop();
+            }
+
+            this.vx += (Math.random() - 0.5) * this.turbulence * dt;
+            this.vy += (Math.random() - 0.5) * this.turbulence * 0.32 * dt;
+            this.vy += this.buoyancy * dt;
+
+            this.vx *= 1 - this.drag * dt;
+            this.vy *= 1 - this.drag * dt;
+
+            this.x += this.vx * dt;
+            this.y += this.vy * dt;
 
             return true;
         }
 
         draw(ctx) {
-            let radius = this.baseRadius;
-            let alpha = this.baseAlpha;
+            if (this.state === "popping") {
+                const progress = this.popTime / this.popDuration;
 
-            if (this.state === "alive") {
-                const pulse = Math.sin(this.age * this.pulseSpeed + this.pulsePhase) * CONFIG.pulseAmplitude;
-                radius = this.baseRadius * (1 + pulse);
-
-                const lifeRatio = this.age / this.maxAge;
-                if (lifeRatio > 0.74) {
-                    alpha *= 1 - Math.min(1, (lifeRatio - 0.74) / 0.26);
+                if (this.shards) {
+                    ctx.fillStyle = "#ffffff";
+                    for (let s of this.shards) {
+                        if (s.life > 0) {
+                            ctx.globalAlpha = s.life;
+                            ctx.beginPath();
+                            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
                 }
-            } else if (this.state === "popping") {
-                const t = (this.age - this.popStartAge) / this.popDuration;
-                const eased = 1 - Math.pow(1 - t, 2);
-                radius = this.baseRadius * (1 - eased);
-                alpha = this.baseAlpha * (1 - eased);
+
+                if (progress < 0.5) {
+                    ctx.globalAlpha = 1 - progress * 2;
+                    ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius * (1 + progress), 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+
+                ctx.globalAlpha = 1.0;
+                return;
             }
 
-            if (radius <= 0 || alpha <= 0) return;
+            let alpha = 1.0;
+            if (this.age < 0.5) alpha = this.age / 0.5;
+            else if (this.age > this.maxAge - 1) alpha = this.maxAge - this.age;
+            if (alpha <= 0) return;
 
-            const highlightX = this.x - radius * 0.3;
-            const highlightY = this.y - radius * 0.3;
             const gradient = ctx.createRadialGradient(
-                highlightX,
-                highlightY,
-                radius * 0.12,
                 this.x,
                 this.y,
-                radius
+                this.radius * 0.6,
+                this.x,
+                this.y,
+                this.radius
             );
+            gradient.addColorStop(0, "rgba(255, 255, 255, 0.0)");
+            gradient.addColorStop(0.8, "rgba(255, 255, 255, 0.1)");
+            gradient.addColorStop(1, "rgba(255, 255, 255, 0.25)");
 
-            const innerAlpha = alpha * 1.05;
-            const midAlpha = alpha * 0.7;
-            const rimAlpha = alpha * 0.18;
-
-            gradient.addColorStop(0, `rgba(255, 255, 255, ${innerAlpha.toFixed(3)})`);
-            gradient.addColorStop(0.38, `hsla(${this.hue.toFixed(1)}, 80%, 94%, ${innerAlpha.toFixed(3)})`);
-            gradient.addColorStop(0.72, `hsla(${this.hue.toFixed(1)}, 70%, 82%, ${midAlpha.toFixed(3)})`);
-            gradient.addColorStop(1, `hsla(${this.hue.toFixed(1)}, 75%, 78%, ${rimAlpha.toFixed(3)})`);
-
-            ctx.save();
-            ctx.beginPath();
+            ctx.globalAlpha = alpha;
             ctx.fillStyle = gradient;
-            ctx.arc(this.x, this.y, radius, 0, Math.PI * 2);
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fill();
 
-            // Delikatne drobinki piany na obrzeżach – tworzą bardziej kremowy efekt.
-            this.foamSpecks.forEach((speck) => {
-                const speckAlpha = speck.a * alpha;
-                if (speckAlpha <= 0) return;
-                const speckGradient = ctx.createRadialGradient(
-                    this.x + speck.dx * 0.92,
-                    this.y + speck.dy * 0.92,
-                    speck.r * 0.2,
-                    this.x + speck.dx,
-                    this.y + speck.dy,
-                    speck.r
-                );
-                speckGradient.addColorStop(0, `rgba(255, 255, 255, ${(speckAlpha * 1.2).toFixed(3)})`);
-                speckGradient.addColorStop(1, `hsla(${this.hue.toFixed(1)}, 72%, 88%, ${(speckAlpha * 0.35).toFixed(3)})`);
+            for (let seg of this.foamSegments) {
+                ctx.fillStyle = `rgba(255, 255, 255, ${seg.alpha})`;
                 ctx.beginPath();
-                ctx.fillStyle = speckGradient;
-                ctx.arc(this.x + speck.dx, this.y + speck.dy, speck.r, 0, Math.PI * 2);
+                ctx.arc(this.x + seg.dx, this.y + seg.dy, seg.r, 0, Math.PI * 2);
                 ctx.fill();
-            });
-            ctx.restore();
+            }
+
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            const glareX = this.x - this.radius * 0.4;
+            const glareY = this.y - this.radius * 0.4;
+
+            ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+            ctx.beginPath();
+            ctx.ellipse(glareX, glareY, this.radius * 0.25, this.radius * 0.15, Math.PI / 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.globalAlpha = 1.0;
         }
     }
 

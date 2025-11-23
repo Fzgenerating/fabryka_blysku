@@ -1239,7 +1239,7 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
     height: 100%;
     pointer-events: none;
     z-index: 1;
-    mix-blend-mode: screen;
-    filter: drop-shadow(0 16px 40px rgba(64, 140, 255, 0.25));
+    mix-blend-mode: normal;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
 }
 
