@@ -1,6 +1,6 @@
-// Google Places - docelowo opinie z wizytówki Google
-// TODO: po uruchomieniu własnej wizytówki Fabryki Błysku podmień PLACE_ID na swoje
-const PLACE_ID = "ChIJe103_2QzGUcRIfVGtLDCsEM";
+// Google Places - produkcyjny Place ID podany przez klienta
+const DEFAULT_PLACE_ID = "ChIJ2SfIvVHLHkcRGovfOkM8RYo";
+const GOOGLE_API_KEY = "AIzaSyBBEGLuDhhYTF23KVnBC4XZa_KmTWQaZFs";
 
 // Jeśli kiedyś dodasz backend lub klucz Google API, możesz użyć PLACE_ID
 // do pobierania prawdziwych opinii. Obecnie sekcja opinii jest statyczna.
@@ -420,26 +420,72 @@ function loadGoogleReviews() {
     if (!container) return;
 
     const endpoint = container.getAttribute("data-endpoint") || "data/reviews.json";
+    const apiKey = container.getAttribute("data-api-key") || GOOGLE_API_KEY;
+    const placeId = container.getAttribute("data-place-id") || DEFAULT_PLACE_ID;
 
-    fetch(endpoint, { cache: "no-store" })
-        .then(function (response) {
-            if (!response.ok) throw new Error("Brak danych opinii");
-            return response.json();
-        })
-        .then(function (data) {
-            const payload = Array.isArray(data) ? data : [];
-            if (payload.length === 0) {
-                renderReviews(container, REVIEWS_FALLBACK);
-            } else {
-                renderReviews(container, payload);
-            }
-        })
-        .catch(function () {
-            renderReviews(container, REVIEWS_FALLBACK);
-        });
+    function renderWithFallback() {
+        fetch(endpoint, { cache: "no-store" })
+            .then(function (response) {
+                if (!response.ok) throw new Error("Brak danych opinii");
+                return response.json();
+            })
+            .then(function (data) {
+                const payload = Array.isArray(data) ? data : [];
+                if (payload.length === 0) {
+                    renderReviews(container, REVIEWS_FALLBACK, 3);
+                } else {
+                    renderReviews(container, payload, 3);
+                }
+            })
+            .catch(function () {
+                renderReviews(container, REVIEWS_FALLBACK, 3);
+            });
+    }
+
+    if (apiKey && placeId) {
+        const googleUrl = new URL("https://maps.googleapis.com/maps/api/place/details/json");
+        googleUrl.searchParams.set("place_id", placeId);
+        googleUrl.searchParams.set("fields", "reviews,user_ratings_total,url");
+        googleUrl.searchParams.set("reviews_no_translations", "true");
+        googleUrl.searchParams.set("key", apiKey);
+
+        fetch(googleUrl.toString(), { cache: "no-store" })
+            .then(function (response) {
+                if (!response.ok) throw new Error("Brak odpowiedzi Google");
+                return response.json();
+            })
+            .then(function (data) {
+                const apiReviews = data && data.result && Array.isArray(data.result.reviews)
+                    ? data.result.reviews
+                    : [];
+
+                if (apiReviews.length === 0) {
+                    renderWithFallback();
+                    return;
+                }
+
+                const normalized = apiReviews.map(function (rev) {
+                    return {
+                        author_name: rev.author_name,
+                        rating: rev.rating,
+                        relative_time_description: rev.relative_time_description,
+                        text: rev.text,
+                        profile_photo_url: rev.profile_photo_url,
+                        url: rev.author_url || data.result?.url
+                    };
+                });
+
+                renderReviews(container, normalized, 3);
+            })
+            .catch(function () {
+                renderWithFallback();
+            });
+    } else {
+        renderWithFallback();
+    }
 }
 
-function renderReviews(container, reviews) {
+function renderReviews(container, reviews, limit) {
     const fiveStars = (reviews || []).filter(function (review) {
         return Number(review.rating) === 5;
     });
@@ -451,7 +497,9 @@ function renderReviews(container, reviews) {
 
     container.innerHTML = "";
 
-    fiveStars.slice(0, 6).forEach(function (review) {
+    const maxToShow = typeof limit === "number" ? limit : 6;
+
+    fiveStars.slice(0, maxToShow).forEach(function (review) {
         const card = document.createElement("article");
         card.className = "review-card";
 
