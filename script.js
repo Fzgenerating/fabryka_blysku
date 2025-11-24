@@ -432,13 +432,13 @@ function loadGoogleReviews() {
             .then(function (data) {
                 const payload = Array.isArray(data) ? data : [];
                 if (payload.length === 0) {
-                    renderReviews(container, REVIEWS_FALLBACK, 3);
+                    renderReviews(container, REVIEWS_FALLBACK, 3, REVIEWS_FALLBACK);
                 } else {
-                    renderReviews(container, payload, 3);
+                    renderReviews(container, payload, 3, REVIEWS_FALLBACK);
                 }
             })
             .catch(function () {
-                renderReviews(container, REVIEWS_FALLBACK, 3);
+                renderReviews(container, REVIEWS_FALLBACK, 3, REVIEWS_FALLBACK);
             });
     }
 
@@ -513,7 +513,7 @@ function loadGoogleReviews() {
                     };
                 });
 
-                renderReviews(container, normalized, 3);
+                renderReviews(container, normalized, 3, REVIEWS_FALLBACK);
             })
             .catch(function () {
                 renderWithFallback();
@@ -523,10 +523,32 @@ function loadGoogleReviews() {
     }
 }
 
-function renderReviews(container, reviews, limit) {
+function renderReviews(container, reviews, limit, fallbackReviews) {
     const fiveStars = (reviews || []).filter(function (review) {
         return Number(review.rating) === 5;
     });
+
+    const maxToShow = typeof limit === "number" ? limit : 6;
+
+    if (fiveStars.length < maxToShow && Array.isArray(fallbackReviews)) {
+        const usedKeys = new Set(
+            fiveStars.map(function (review) {
+                return (review.author_name || "") + "|" + (review.text || "");
+            })
+        );
+
+        fallbackReviews.some(function (review) {
+            if (fiveStars.length >= maxToShow) return true;
+            if (Number(review.rating) !== 5) return false;
+
+            const key = (review.author_name || "") + "|" + (review.text || "");
+            if (usedKeys.has(key)) return false;
+
+            usedKeys.add(key);
+            fiveStars.push(review);
+            return false;
+        });
+    }
 
     if (fiveStars.length === 0) {
         container.innerHTML = "<p class=\"reviews-loading\">Brak opinii 5★ do wyświetlenia.</p>";
@@ -534,8 +556,6 @@ function renderReviews(container, reviews, limit) {
     }
 
     container.innerHTML = "";
-
-    const maxToShow = typeof limit === "number" ? limit : 6;
 
     fiveStars.slice(0, maxToShow).forEach(function (review) {
         const card = document.createElement("article");
