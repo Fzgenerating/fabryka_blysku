@@ -575,33 +575,80 @@ function loadGoogleReviews() {
         });
     }
 
-    if (hasLiveGoogle) {
-        fetchGooglePlacesReviews(apiKey, placeId)
-            .then(function (payload) {
-                if (!payload || !Array.isArray(payload.reviews) || payload.reviews.length === 0) {
-                    container.innerHTML = "<p class=\"reviews-loading\">Nie udało się pobrać opinii z Google.</p>";
-                    return;
-                }
+    function fetchGooglePlacesReviewsRest(key, id) {
+        const sorts = ["most_relevant", "newest"];
+        const allReviews = [];
+        let placeUrl = "";
 
-                const unique = [];
-                const seenKeys = new Set();
-
-                payload.reviews.forEach(function (rev) {
-                    const key = (rev.author_name || "") + "|" + (rev.text || rev.relative_time_description || "");
-                    if (seenKeys.has(key)) return;
-                    seenKeys.add(key);
-
-                    unique.push({
-                        author_name: rev.author_name,
-                        rating: rev.rating,
-                        relative_time_description: rev.relative_time_description,
-                        text: rev.text,
-                        profile_photo_url: rev.profile_photo_url || DEFAULT_GOOGLE_AVATAR,
-                        url: rev.author_url || payload.placeUrl
-                    });
+        return Promise.all(
+            sorts.map(function (sort) {
+                const params = new URLSearchParams({
+                    place_id: id,
+                    key: key,
+                    fields: "reviews,url",
+                    reviews_sort: sort,
+                    reviews_no_translations: "true"
                 });
 
-                renderReviews(container, unique, 3, null, { requireProfilePhoto: false, allowFallback: false });
+                return fetch("https://maps.googleapis.com/maps/api/place/details/json?" + params.toString())
+                    .then(function (response) {
+                        if (!response.ok) throw new Error("HTTP " + response.status);
+                        return response.json();
+                    })
+                    .then(function (payload) {
+                        if (payload.status !== "OK" || !payload.result) return;
+
+                        placeUrl = placeUrl || payload.result.url || "";
+                        if (Array.isArray(payload.result.reviews)) {
+                            allReviews.push.apply(allReviews, payload.result.reviews);
+                        }
+                    })
+                    .catch(function () {
+                        /* ignorujemy pojedyncze błędy zapytań REST */
+                    });
+            })
+        ).then(function () {
+            if (allReviews.length === 0) {
+                throw new Error("Brak recenzji z REST");
+            }
+            return { reviews: allReviews, placeUrl: placeUrl };
+        });
+    }
+
+    function normalizeReviews(payload) {
+        const unique = [];
+        const seenKeys = new Set();
+
+        (payload.reviews || []).forEach(function (rev) {
+            const key = (rev.author_name || "") + "|" + (rev.text || rev.relative_time_description || "");
+            if (seenKeys.has(key)) return;
+            seenKeys.add(key);
+
+            unique.push({
+                author_name: rev.author_name,
+                rating: rev.rating,
+                relative_time_description: rev.relative_time_description,
+                text: rev.text,
+                profile_photo_url: rev.profile_photo_url || DEFAULT_GOOGLE_AVATAR,
+                url: rev.author_url || payload.placeUrl
+            });
+        });
+
+        return unique;
+    }
+
+    if (hasLiveGoogle) {
+        fetchGooglePlacesReviewsRest(apiKey, placeId)
+            .catch(function () {
+                return fetchGooglePlacesReviews(apiKey, placeId);
+            })
+            .then(function (payload) {
+                if (!payload || !Array.isArray(payload.reviews) || payload.reviews.length === 0) {
+                    throw new Error("Brak danych recenzji");
+                }
+
+                const normalized = normalizeReviews(payload);
+                renderReviews(container, normalized, 3, null, { requireProfilePhoto: false, allowFallback: false });
             })
             .catch(function () {
                 container.innerHTML = "<p class=\"reviews-loading\">Nie udało się pobrać opinii z Google.</p>";
