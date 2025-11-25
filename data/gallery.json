@@ -1,0 +1,19 @@
+{
+  "images": [
+    {
+      "file": "slide1.png",
+      "alt": "Piana aktywna na karoserii w myjni bezpiecznej dla lakieru",
+      "label": "Detailing na mokro"
+    },
+    {
+      "file": "slide2.png",
+      "alt": "Felgi i opony po dokładnym oczyszczeniu oraz dressingach",
+      "label": "Felgi na wysoki połysk"
+    },
+    {
+      "file": "slide3.png",
+      "alt": "Wnętrze auta po praniu tapicerki oraz detailingu plastików",
+      "label": "Czysta kabina"
+    }
+  ]
+}
