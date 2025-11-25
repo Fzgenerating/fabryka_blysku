@@ -9,6 +9,7 @@ const galleryState = {
     autoTimer: null,
     autoDelay: 5500,
     isPaused: false,
+    isAutoEnabled: true,
 };
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -23,6 +24,7 @@ async function initGallery() {
 
     bindNavigation(slider);
     bindViewSwitch();
+    bindAutoplayToggle();
 
     galleryState.images = await resolveImages();
 
@@ -54,7 +56,7 @@ function bindNavigation(slider) {
         } else {
             prevSlide();
         }
-        restartAuto();
+        disableAutoForManual();
     });
 
     slider.addEventListener("mouseenter", function () {
@@ -70,11 +72,11 @@ function bindNavigation(slider) {
     document.addEventListener("keydown", function (event) {
         if (event.key === "ArrowRight") {
             nextSlide();
-            restartAuto();
+            disableAutoForManual();
         }
         if (event.key === "ArrowLeft") {
             prevSlide();
-            restartAuto();
+            disableAutoForManual();
         }
     });
 }
@@ -87,6 +89,24 @@ function bindViewSwitch() {
             switchView(view);
         });
     });
+}
+
+function bindAutoplayToggle() {
+    const toggle = document.querySelector(".gallery-autoplay-toggle");
+    if (!toggle) return;
+
+    toggle.addEventListener("click", function () {
+        galleryState.isAutoEnabled = !galleryState.isAutoEnabled;
+        updateAutoplayToggle();
+
+        if (galleryState.isAutoEnabled) {
+            restartAuto();
+        } else {
+            stopAuto();
+        }
+    });
+
+    updateAutoplayToggle();
 }
 
 function switchView(view) {
@@ -123,7 +143,7 @@ function renderThumbnails(images) {
         button.addEventListener("click", function () {
             switchView("slider");
             showSlide(index);
-            restartAuto();
+            disableAutoForManual();
         });
 
         const imageEl = document.createElement("img");
@@ -144,7 +164,7 @@ function renderDots(count) {
         dot.className = "gallery-dot";
         dot.addEventListener("click", function () {
             showSlide(i);
-            restartAuto();
+            disableAutoForManual();
         });
         dots.appendChild(dot);
     }
@@ -202,7 +222,7 @@ function prevSlide() {
 }
 
 function startAuto() {
-    if (galleryState.autoTimer || galleryState.images.length < 2) return;
+    if (galleryState.autoTimer || galleryState.images.length < 2 || !galleryState.isAutoEnabled) return;
     galleryState.autoTimer = setInterval(function () {
         nextSlide();
     }, galleryState.autoDelay);
@@ -216,9 +236,24 @@ function stopAuto() {
 
 function restartAuto() {
     stopAuto();
-    if (!galleryState.isPaused) {
+    if (!galleryState.isPaused && galleryState.isAutoEnabled) {
         startAuto();
     }
+}
+
+function updateAutoplayToggle() {
+    const toggle = document.querySelector(".gallery-autoplay-toggle");
+    if (!toggle) return;
+
+    toggle.setAttribute("aria-pressed", String(galleryState.isAutoEnabled));
+    toggle.innerHTML = '<span class="toggle-dot" aria-hidden="true"></span>' +
+        (galleryState.isAutoEnabled ? " Automatyczne przewijanie: włączone" : " Automatyczne przewijanie: wyłączone");
+}
+
+function disableAutoForManual() {
+    galleryState.isAutoEnabled = false;
+    stopAuto();
+    updateAutoplayToggle();
 }
 
 function updateAspectRatio(slider, imageEl) {

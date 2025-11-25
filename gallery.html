@@ -51,6 +51,45 @@
             flex-wrap: wrap;
         }
 
+        .gallery-autoplay-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(5, 8, 14, 0.78);
+            border: 1px solid rgba(148, 163, 255, 0.22);
+            color: var(--color-primary-strong, #e5e7eb);
+            padding: 10px 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .gallery-autoplay-toggle[aria-pressed="false"] {
+            background: rgba(5, 8, 14, 0.5);
+            color: var(--color-text-muted, #9ca3af);
+        }
+
+        .gallery-autoplay-toggle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+        }
+
+        .toggle-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(148, 163, 255, 0.8), rgba(224, 231, 255, 0.9));
+            box-shadow: 0 0 0 4px rgba(148, 163, 255, 0.18);
+        }
+
+        .gallery-autoplay-toggle[aria-pressed="false"] .toggle-dot {
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
+        }
+
         .gallery-view-switch {
             display: inline-flex;
             gap: 8px;
@@ -318,6 +357,10 @@
                         <button class="gallery-chip is-active" type="button" data-view="slider">Widok pokazu</button>
                         <button class="gallery-chip" type="button" data-view="grid">Miniatury</button>
                     </div>
+                    <button class="gallery-autoplay-toggle" type="button" aria-pressed="true" aria-label="Przełącz automatyczne przewijanie">
+                        <span class="toggle-dot" aria-hidden="true"></span>
+                        Automatyczne przewijanie: włączone
+                    </button>
                 </div>
 
                 <div class="gallery-slider" id="gallery-slider" aria-live="polite">

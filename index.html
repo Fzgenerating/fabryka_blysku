@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <title>Fabryka Błysku - myjnia samochodowa i autodetailing Bydgoszcz</title>
     <meta name="description" content="Fabryka Błysku - studio autodetailingu i myjnia samochodowa w Bydgoszczy. Kompleksowe mycie, detailing, pranie tapicerki, ochrona lakieru, folie PPF i pakiety sezonowe.">
+    <meta name="keywords" content="myjnia samochodowa Bydgoszcz, autodetailing Bydgoszcz, Fabryka Błysku Brzozowa 4a, pranie tapicerki, folie PPF, mycie premium">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index,follow">
+    <meta name="geo.region" content="PL-KP">
+    <meta name="geo.placename" content="Bydgoszcz">
+    <meta name="geo.position" content="53.1111;18.0105">
+    <meta name="ICBM" content="53.1111, 18.0105">
     <link rel="canonical" href="https://fabrykablysku.pl/">
 
     <!-- Favicon -->
@@ -17,6 +22,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://fabrykablysku.pl/">
     <meta property="og:image" content="https://fabrykablysku.pl/og-image.jpg">
+    <meta property="og:locale" content="pl_PL">
 
     <!-- Schema.org LocalBusiness / AutoWash (JSON-LD) -->
     <script type="application/ld+json">
@@ -62,12 +68,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body data-meta-pixel-id="" data-tiktok-pixel-id="">
     <!-- Header i nawigacja -->
     <header class="site-header">
         <nav class="nav" aria-label="Główna nawigacja">
             <div class="nav-logo">
-                <img src="assets/img/logo-fabryka-blysku.png" alt="Fabryka Błysku - studio autodetailingu i myjnia samochodowa" class="logo-img">
+                <a href="#start" aria-label="Przejdź na stronę główną">
+                    <img src="assets/img/logo-fabryka-blysku.png" alt="Fabryka Błysku - studio autodetailingu i myjnia samochodowa" class="logo-img">
+                </a>
             </div>
 
             <button class="nav-toggle" aria-label="Otwórz menu" aria-expanded="false">
@@ -180,7 +188,7 @@
         <section id="cennik" class="section section-pricing js-observe" aria-labelledby="pricing-heading">
             <div class="section-header container">
                 <h2 id="pricing-heading">Cennik</h2>
-                <p>Ceny można łatwo edytować w pliku <strong>pricing.js</strong> bez grzebania w kodzie HTML.</p>
+                <p>Ceny edytujesz jednym plikiem: <strong>data/pricing.json</strong> (główne źródło) lub w rezerwie <strong>pricing.js</strong> – wystarczy podmienić plik, aby oferta zaktualizowała się sama.</p>
             </div>
 
             <div class="container">

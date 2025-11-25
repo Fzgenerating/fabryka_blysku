@@ -1,0 +1,39 @@
+=== Strona główna (index.html) ===
+Tytuł: Fabryka Błysku - myjnia samochodowa i autodetailing Bydgoszcz
+Meta description: Fabryka Błysku - studio autodetailingu i myjnia samochodowa w Bydgoszczy. Kompleksowe mycie, detailing, pranie tapicerki, ochrona lakieru, folie PPF i pakiety sezonowe.
+Slogan hero: Fabryka Błysku - twój samochód w wersji premium
+Hero podtytuł: Studio autodetailingu i myjnia samochodowa w Bydgoszczy, w którym każde auto traktujemy jak swoje. Łączymy pasję do motoryzacji z precyzyjną pracą i nowoczesną chemią samochodową.
+CTA hero: Umów wizytę / Sprawdź cennik
+
+Sekcja „Co robimy” (usługi):
+- Mycie zewnętrzne: Bezpieczne mycie nadwozia, felg i opon z użyciem piany aktywnej, ręcznych pianownic i miękkich rękawic.
+- Czyszczenie wnętrza: Dokładne odkurzanie, czyszczenie plastików, mycie szyb od środka i odświeżenie wszystkich zakamarków.
+- Pranie tapicerki: Głębokie pranie tapicerki materiałowej oraz pielęgnacja tapicerki skórzanej z konserwacją.
+- Detailing i korekta lakieru: Wieloetapowe mycie, dekontaminacja, polerowanie i zabezpieczenie lakieru powłokami.
+- Folie PPF i zmiana koloru: Zabezpieczenie najbardziej narażonych elementów folią ochronną oraz zmiana koloru auta folią.
+- Pakiety sezonowe: Pakiety zimowe i letnie z myciem kompletnym, woskami, niewidzialną wycieraczką i uszczelkami.
+
+Sekcja „Cennik”: Ceny edytujesz jednym plikiem: data/pricing.json (główne źródło) lub w rezerwie pricing.js – wystarczy podmienić plik, aby oferta zaktualizowała się sama. Kategorie pojazdów: Kategoria A, Kategoria B, Kategoria C, Kategoria D, Busy. Usługi (kolejność): Mycie podstawowe; Mycie z hydrowoskiem (dopłata); Mycie z woskiem miesięcznym (dopłata); Mycie z woskiem 6 miesięcznym (dopłata); Mycie kompletne; Mycie kompletne z hydrowoskiem (dopłata); Mycie kompletne z woskiem miesięcznym (dopłata); Mycie kompletne z woskiem 6 miesięcznym (dopłata); Czyszczenie wnętrza. Usługi dodatkowe (skróty opisów): Pranie tapicerki całościowe; Pranie foteli i kanapy; Pranie podłogi; Pranie sufitu; Pranie bagażnika; Pranie boczków; Czyszczenie i konserwacja tapicerki skórzanej; Odkurzanie; Mycie szyb; Czyszczenie plastików; Mycie opon (4 koła); Ozonowanie; Usuwanie sierści; Usuwanie naklejek; Czyszczenie silnika (bez użycia wody). Pakiety Zima A–D: mycie kompletne, wosk 6 miesięczny, niewidzialna wycieraczka, zabezpieczenie uszczelek (opis zależny od kategorii auta).
+
+Sekcja „O nas”:
+- Wstęp: Witaj w naszym studiu autodetailingu - miejscu, w którym pasja do motoryzacji łączy się z precyzją i nowoczesną technologią. Dbamy o to, aby każde auto, które do nas trafia, wyglądało lepiej niż kiedykolwiek wcześniej. Specjalizujemy się w kompleksowej ochronie i odświeżaniu samochodów: od zmiany koloru folią, przez zabezpieczenia lakieru folią PPF, aż po profesjonalne polerowanie, pełne mycie detailingowe i głębokie czyszczenie wnętrz wraz z praniem tapicerki.
+- Wyróżniki: Doświadczeni specjaliści; Najlepsza chemia samochodowa; Dokładność i dbałość o detale.
+
+Sekcja „Opinie klientów”: Na bieżąco pokazujemy tylko 5‑gwiazdkowe recenzje z Google dotyczące myjni i studiów detailingu.
+
+Sekcja „Kontakt”: Telefon 577 772 707; E-mail kontakt.fabrykablysku@gmail.com; Adres Fabryka Błysku, Brzozowa 4a, 85-154 Bydgoszcz, Poland. Godziny: poniedziałek–czwartek 09:00–19:00, piątek i sobota 09:00–20:00, niedziela zamknięte. Formularz: Imię i nazwisko, E-mail, Telefon (opcjonalnie), Temat, Wiadomość. Przycisk: Wyślij wiadomość. Przycisk CTA: Zadzwoń teraz. Mapa: Brzozowa 4a 85-154 Bydgoszcz.
+
+Stopka: © (rok bieżący) Fabryka Błysku. Wszystkie prawa zastrzeżone. Link: Polityka prywatności. Sygnatura: Projekt i wykonanie strony: Jakub Torończak – kontakt@jakubtoronczak.dev.
+
+Baner cookies: Ta strona korzysta z plików cookies w celach statystycznych i funkcjonalnych. Kontynuując korzystanie z serwisu wyrażasz zgodę na ich użycie. Szczegóły znajdziesz w dokumencie Polityka prywatności i cookies. Przycisk: Akceptuję.
+
+=== Galeria (gallery.html) ===
+Nagłówek: Galeria realizacji. Widoki: „Widok pokazu”, „Miniatury”. Przycisk: Automatyczne przewijanie: włączone/wyłączone. Nawigacja slajdów: strzałki poprzednie/następne, kropki, licznik „x/y”. Miniatury: siatka klikanych podglądów. Link powrotny: ← Wróć na stronę główną.
+
+=== Polityka prywatności (privacy-policy.html) ===
+Tytuł: Polityka prywatności i plików cookies.
+Wstęp: Dokument opisuje zasady przetwarzania danych osobowych oraz wykorzystywania plików cookies na stronie Fabryki Błysku.
+Dane administratora: Fabryka Błysku, Brzozowa 4a, 85-154 Bydgoszcz, e-mail kontakt.fabrykablysku@gmail.com.
+Formularz kontaktowy: dane używane wyłącznie do odpowiedzi i korespondencji usługowej.
+Pliki cookies: wykorzystywane do prawidłowego działania, analityki statystycznej i poprawy komfortu; ustawienia można zmienić w przeglądarce.
+Prawa użytkownika: dostęp, sprostowanie, usunięcie, ograniczenie, przenoszenie, sprzeciw; prawo skargi do PUODO.
