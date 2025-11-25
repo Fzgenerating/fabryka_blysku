@@ -1,6 +1,7 @@
 // Google Places - produkcyjny Place ID podany przez klienta
 const DEFAULT_PLACE_ID = "ChIJ2SfIvVHLHkcRGovfOkM8RYo";
 const GOOGLE_API_KEY = "AIzaSyBBEGLuDhhYTF23KVnBC4XZa_KmTWQaZFs";
+const DEFAULT_GOOGLE_AVATAR = "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/user_circle.png";
 
 // Loader skryptu Google Maps JS (Places) współdzielony między wywołaniami
 let googleMapsScriptPromise = null;
@@ -567,7 +568,7 @@ function loadGoogleReviews() {
                         rating: rev.rating,
                         relative_time_description: rev.relative_time_description,
                         text: rev.text,
-                        profile_photo_url: rev.profile_photo_url,
+                        profile_photo_url: rev.profile_photo_url || DEFAULT_GOOGLE_AVATAR,
                         url: rev.author_url || payload.placeUrl
                     };
                 });
@@ -585,7 +586,7 @@ function loadGoogleReviews() {
 function renderReviews(container, reviews, limit, fallbackReviews, options) {
     const opts = Object.assign({ requireProfilePhoto: false, allowFallback: true }, options);
     const fiveStars = (reviews || []).filter(function (review) {
-        const hasPhoto = !opts.requireProfilePhoto || Boolean(review.profile_photo_url);
+        const hasPhoto = !opts.requireProfilePhoto || Boolean(review.profile_photo_url || DEFAULT_GOOGLE_AVATAR);
         return Number(review.rating) === 5 && hasPhoto;
     });
 
@@ -627,14 +628,10 @@ function renderReviews(container, reviews, limit, fallbackReviews, options) {
 
         const avatar = document.createElement("div");
         avatar.className = "review-avatar";
-        if (review.profile_photo_url) {
-            const img = document.createElement("img");
-            img.src = review.profile_photo_url;
-            img.alt = "Zdjęcie profilowe " + review.author_name;
-            avatar.appendChild(img);
-        } else {
-            avatar.textContent = "★";
-        }
+        const img = document.createElement("img");
+        img.src = review.profile_photo_url || DEFAULT_GOOGLE_AVATAR;
+        img.alt = "Zdjęcie profilowe " + (review.author_name || "użytkownika");
+        avatar.appendChild(img);
 
         const meta = document.createElement("div");
         meta.className = "review-meta";
