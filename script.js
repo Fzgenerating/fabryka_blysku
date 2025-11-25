@@ -482,6 +482,7 @@ function loadGoogleReviews() {
     const endpoint = container.getAttribute("data-endpoint") || "data/reviews.json";
     const apiKey = container.getAttribute("data-api-key") || GOOGLE_API_KEY;
     const placeId = container.getAttribute("data-place-id") || DEFAULT_PLACE_ID;
+    const hasLiveGoogle = Boolean(apiKey && placeId);
 
     function renderWithFallback() {
         fetch(endpoint, { cache: "no-store" })
@@ -574,11 +575,11 @@ function loadGoogleReviews() {
         });
     }
 
-    if (apiKey && placeId) {
+    if (hasLiveGoogle) {
         fetchGooglePlacesReviews(apiKey, placeId)
             .then(function (payload) {
                 if (!payload || !Array.isArray(payload.reviews) || payload.reviews.length === 0) {
-                    renderReviews(container, [], 3, null, { requireProfilePhoto: true, allowFallback: false });
+                    container.innerHTML = "<p class=\"reviews-loading\">Nie udało się pobrać opinii z Google.</p>";
                     return;
                 }
 
@@ -603,7 +604,7 @@ function loadGoogleReviews() {
                 renderReviews(container, unique, 3, null, { requireProfilePhoto: false, allowFallback: false });
             })
             .catch(function () {
-                renderWithFallback();
+                container.innerHTML = "<p class=\"reviews-loading\">Nie udało się pobrać opinii z Google.</p>";
             });
     } else {
         renderWithFallback();
