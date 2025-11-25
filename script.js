@@ -531,25 +531,45 @@ function loadGoogleReviews() {
                 throw new Error("Brak biblioteki Google Places");
             }
 
+            const sorts = [null, google.maps.places.ReviewSortOrder.NEWEST];
+
             return new Promise(function (resolve, reject) {
                 const service = new google.maps.places.PlacesService(document.createElement("div"));
+                const allReviews = [];
+                let placeUrl = "";
+                let completed = 0;
+                let hadSuccess = false;
 
-                service.getDetails(
-                    {
-                        placeId: id,
-                        fields: ["reviews", "url", "user_ratings_total"]
-                    },
-                    function (result, status) {
-                        if (status === google.maps.places.PlacesServiceStatus.OK && result) {
-                            resolve({
-                                reviews: Array.isArray(result.reviews) ? result.reviews : [],
-                                placeUrl: result.url
-                            });
+                function handleResult(result, status) {
+                    completed += 1;
+
+                    if (status === google.maps.places.PlacesServiceStatus.OK && result) {
+                        hadSuccess = true;
+                        placeUrl = placeUrl || result.url || "";
+                        if (Array.isArray(result.reviews)) {
+                            allReviews.push.apply(allReviews, result.reviews);
+                        }
+                    }
+
+                    if (completed === sorts.length) {
+                        if (hadSuccess) {
+                            resolve({ reviews: allReviews, placeUrl: placeUrl });
                         } else {
                             reject(new Error("Status Google Places: " + status));
                         }
                     }
-                );
+                }
+
+                sorts.forEach(function (sortValue) {
+                    service.getDetails(
+                        {
+                            placeId: id,
+                            fields: ["reviews", "url", "user_ratings_total"],
+                            reviewsSort: sortValue
+                        },
+                        handleResult
+                    );
+                });
             });
         });
     }
@@ -562,18 +582,25 @@ function loadGoogleReviews() {
                     return;
                 }
 
-                const normalized = payload.reviews.map(function (rev) {
-                    return {
+                const unique = [];
+                const seenKeys = new Set();
+
+                payload.reviews.forEach(function (rev) {
+                    const key = (rev.author_name || "") + "|" + (rev.text || rev.relative_time_description || "");
+                    if (seenKeys.has(key)) return;
+                    seenKeys.add(key);
+
+                    unique.push({
                         author_name: rev.author_name,
                         rating: rev.rating,
                         relative_time_description: rev.relative_time_description,
                         text: rev.text,
                         profile_photo_url: rev.profile_photo_url || DEFAULT_GOOGLE_AVATAR,
                         url: rev.author_url || payload.placeUrl
-                    };
+                    });
                 });
 
-                renderReviews(container, normalized, 3, null, { requireProfilePhoto: true, allowFallback: false });
+                renderReviews(container, unique, 3, null, { requireProfilePhoto: false, allowFallback: false });
             })
             .catch(function () {
                 renderWithFallback();
