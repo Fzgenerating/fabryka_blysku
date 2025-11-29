@@ -24,13 +24,13 @@ Kategorie pojazdów: Kategoria A (małe auta); Kategoria B (hatchback/kombi/comp
 Tabela "Mycie podstawowe i dopłaty" (A / B / C / D1 / D2 / Busy):
 - Mycie podstawowe — 55 zł / 65 zł / 75 zł / 95 zł / 115 zł / 135 zł
 - Mycie z hydrowoskiem (dopłata) — +15 zł / +15 zł / +15 zł / +15 zł / +15 zł / +15 zł
-- Mycie z woskiem 1-miesięcznym (dopłata) — +35 zł / +35 zł / +35 zł / +45 zł / +45 zł / +45 zł
+- Mycie z woskiem 1-miesięcznym (dopłata) — +35 zł / +35 zł / +35 zł / +45 zł / +45 zł / +45 zł (notka: dopłata 35 zł dla A–C, 45 zł dla D1–Busy)
 - Mycie z woskiem 4-miesięcznym (dopłata) — +105 zł / +105 zł / +105 zł / +105 zł / +105 zł / +105 zł (notka: "Ceny jak wyżej +105 zł")
 
 Tabela "Mycie kompletne i wnętrze" (A / B / C / D1 / D2 / Busy):
 - Mycie kompletne — 115 zł / 125 zł / 135 zł / 155 zł / 175 zł / 205 zł
 - Mycie kompletne z hydrowoskiem (dopłata) — +15 zł / +15 zł / +15 zł / +15 zł / +15 zł / +15 zł
-- Mycie kompletne z woskiem 1-miesięcznym (dopłata) — +35 zł / +35 zł / +35 zł / +45 zł / +45 zł / +45 zł
+- Mycie kompletne z woskiem 1-miesięcznym (dopłata) — +35 zł / +35 zł / +35 zł / +45 zł / +45 zł / +45 zł (notka: dopłata 35 zł dla A–C, 45 zł dla D1–Busy)
 - Mycie kompletne z woskiem 4-miesięcznym (dopłata) — +105 zł / +105 zł / +105 zł / +105 zł / +105 zł / +105 zł
 - Czyszczenie wnętrza — 65 zł / 75 zł / 85 zł / 95 zł / 115 zł / 155 zł
 

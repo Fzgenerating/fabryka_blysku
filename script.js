@@ -464,7 +464,12 @@ function buildPricingTables(wrapper, categories, tables) {
         });
 
         table.appendChild(tbody);
-        block.appendChild(table);
+
+        const scroller = document.createElement("div");
+        scroller.className = "pricing-table-scroll";
+        scroller.appendChild(table);
+
+        block.appendChild(scroller);
         wrapper.appendChild(block);
     });
 }

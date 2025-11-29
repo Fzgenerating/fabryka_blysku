@@ -13,7 +13,11 @@
       "items": [
         { "name": "Mycie podstawowe", "prices": [55, 65, 75, 95, 115, 135] },
         { "name": "Mycie z hydrowoskiem (dopłata)", "prices": ["+15", "+15", "+15", "+15", "+15", "+15"] },
-        { "name": "Mycie z woskiem 1-miesięcznym (dopłata)", "prices": ["+35", "+35", "+35", "+45", "+45", "+45"] },
+        {
+          "name": "Mycie z woskiem 1-miesięcznym (dopłata)",
+          "prices": ["+35", "+35", "+35", "+45", "+45", "+45"],
+          "note": "Dopłata 35 zł (A-C) / 45 zł (D1-Busy)"
+        },
         {
           "name": "Mycie z woskiem 4-miesięcznym (dopłata)",
           "prices": ["+105", "+105", "+105", "+105", "+105", "+105"],
@@ -26,7 +30,11 @@
       "items": [
         { "name": "Mycie kompletne", "prices": [115, 125, 135, 155, 175, 205] },
         { "name": "Mycie kompletne z hydrowoskiem (dopłata)", "prices": ["+15", "+15", "+15", "+15", "+15", "+15"] },
-        { "name": "Mycie kompletne z woskiem 1-miesięcznym (dopłata)", "prices": ["+35", "+35", "+35", "+45", "+45", "+45"] },
+        {
+          "name": "Mycie kompletne z woskiem 1-miesięcznym (dopłata)",
+          "prices": ["+35", "+35", "+35", "+45", "+45", "+45"],
+          "note": "Dopłata 35 zł (A-C) / 45 zł (D1-Busy)"
+        },
         { "name": "Mycie kompletne z woskiem 4-miesięcznym (dopłata)", "prices": ["+105", "+105", "+105", "+105", "+105", "+105"] },
         { "name": "Czyszczenie wnętrza", "prices": [65, 75, 85, 95, 115, 155] }
       ]
