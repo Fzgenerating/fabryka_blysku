@@ -1,7 +1,7 @@
 === Strona główna (index.html) ===
 Tytuł strony: Fabryka Błysku - myjnia samochodowa i autodetailing Bydgoszcz
 Meta description: Fabryka Błysku - studio autodetailingu i myjnia samochodowa w Bydgoszczy. Kompleksowe mycie, detailing, pranie tapicerki, ochrona lakieru, folie PPF i pakiety sezonowe.
-Meta keywords: myjnia samochodowa Bydgoszcz, autodetailing Bydgoszcz, Fabryka Błysku Brzozowa 4a, pranie tapicerki, folie PPF, mycie premium
+Meta keywords: myjnia samochodowa Bydgoszcz, autodetailing Bydgoszcz, Fabryka Błysku Brzozowa 4A/2, pranie tapicerki, folie PPF, mycie premium
 Nawigacja: Strona główna; Usługi; Cennik; O nas; Galeria; Opinie; Kontakt
 
 Hero: "Fabryka Błysku - twój samochód w wersji premium" + podtytuł "Studio autodetailingu i myjnia samochodowa w Bydgoszczy, w którym każde auto traktujemy jak swoje. Łączymy pasję do motoryzacji z precyzyjną pracą i nowoczesną chemią samochodową." Przyciski: "Umów wizytę" i "Sprawdź cennik".
@@ -16,46 +16,55 @@ Sekcja "Co robimy" / usługi:
 
 Sekcja "Cennik":
 Nagłówek: Cennik
-Podtekst: "Ceny edytujesz jednym plikiem: data/pricing.json (główne źródło) lub w rezerwie pricing.js – wystarczy podmienić plik, aby oferta zaktualizowała się sama."
+Podtekst: "Ceny edytujesz jednym plikiem: data/pricing.json. Podmień go lokalnie lub na serwerze, a tabela i dodatki zaktualizują się automatycznie."
 Nagłówek tabeli kategorii: "Mycie zewnętrzne według kategorii pojazdu"
 Loader: "Ładowanie cennika..."
-Kategorie pojazdów: Kategoria A; Kategoria B; Kategoria C; Kategoria D; Busy
-Usługi (kolejność i ceny Kategoria A / B / C / D / Busy):
-- Mycie podstawowe — 50 zł / 60 zł / 70 zł / 90 zł / 110 zł
-- Mycie z hydrowoskiem (dopłata) — +10 zł / +10 zł / +10 zł / +10 zł / +10 zł
-- Mycie z woskiem miesięcznym (dopłata) — +30/40 zł / +30/40 zł / +30/40 zł / +30/40 zł / +30/40 zł
-- Mycie z woskiem 6 miesięcznym (dopłata) — +100 zł / +100 zł / +100 zł / +100 zł / +100 zł
-- Mycie kompletne — 110 zł / 120 zł / 130 zł / 150 zł / 180 zł
-- Mycie kompletne z hydrowoskiem (dopłata) — +10 zł / +10 zł / +10 zł / +10 zł / +10 zł
-- Mycie kompletne z woskiem miesięcznym (dopłata) — +30/40 zł / +30/40 zł / +30/40 zł / +30/40 zł / +30/40 zł
-- Mycie kompletne z woskiem 6 miesięcznym (dopłata) — +100 zł / +100 zł / +100 zł / +100 zł / +100 zł
-- Czyszczenie wnętrza — 60 zł / 70 zł / 80 zł / 90 zł / 110 zł
+Kategorie pojazdów: Kategoria A (małe auta); Kategoria B (hatchback/kombi/compact); Kategoria C (sedan/kombi/compact); Kategoria D1 (małe SUV/minivan); Kategoria D2 (duże SUV/7-osobowe); Busy
 
-Nagłówek: "Usługi dodatkowe"
-Lista usług dodatkowych (notki dokładnie jak na stronie):
-- Pranie tapicerki całościowe — "499 zł (w cenie mycie kompletne), 509 zł, 519 zł, 529 zł, 599 zł - w zależności od kategorii pojazdu"
-- Pranie foteli i kanapy — "od 289 zł do 319 zł w zależności od kategorii (w cenie środek)"
-- Pranie podłogi — "cena ustalana indywidualnie"
-- Pranie sufitu — "cena ustalana indywidualnie"
-- Pranie bagażnika — "cena ustalana indywidualnie"
-- Pranie boczków — "cena ustalana indywidualnie"
-- Czyszczenie i konserwacja tapicerki skórzanej — "cena w zależności od zakresu prac i wielkości wnętrza"
-- Odkurzanie — "od 40 zł"
-- Mycie szyb — "od 30 zł"
-- Czyszczenie plastików — "od 40 zł"
-- Mycie opon (4 koła) — "od 30 zł"
-- Ozonowanie — "od 80 zł"
-- Usuwanie sierści — "od 80 zł"
-- Usuwanie naklejek — "od 80 zł"
-- Czyszczenie silnika (bez użycia wody) — "od 150 zł"
+Tabela "Mycie podstawowe i dopłaty" (A / B / C / D1 / D2 / Busy):
+- Mycie podstawowe — 55 zł / 65 zł / 75 zł / 95 zł / 115 zł / 135 zł
+- Mycie z hydrowoskiem (dopłata) — +15 zł / +15 zł / +15 zł / +15 zł / +15 zł / +15 zł
+- Mycie z woskiem 1-miesięcznym (dopłata) — +35 zł / +35 zł / +35 zł / +45 zł / +45 zł / +45 zł
+- Mycie z woskiem 4-miesięcznym (dopłata) — +105 zł / +105 zł / +105 zł / +105 zł / +105 zł / +105 zł (notka: "Ceny jak wyżej +105 zł")
+
+Tabela "Mycie kompletne i wnętrze" (A / B / C / D1 / D2 / Busy):
+- Mycie kompletne — 115 zł / 125 zł / 135 zł / 155 zł / 175 zł / 205 zł
+- Mycie kompletne z hydrowoskiem (dopłata) — +15 zł / +15 zł / +15 zł / +15 zł / +15 zł / +15 zł
+- Mycie kompletne z woskiem 1-miesięcznym (dopłata) — +35 zł / +35 zł / +35 zł / +45 zł / +45 zł / +45 zł
+- Mycie kompletne z woskiem 4-miesięcznym (dopłata) — +105 zł / +105 zł / +105 zł / +105 zł / +105 zł / +105 zł
+- Czyszczenie wnętrza — 65 zł / 75 zł / 85 zł / 95 zł / 115 zł / 155 zł
+
+Tabela "Pranie tapicerki i elementów" (A / B / C / D1 / D2 / Busy):
+- Pranie tapicerki całościowe — 490 zł / 510 zł / 520 zł / 530 zł / 550 zł / 590 zł
+- Pranie foteli i kanapy — 290 zł / 300 zł / 310 zł / 320 zł / 340 zł / 350 zł
+- Pranie podłogi — 55 zł / 65 zł / 75 zł / 85 zł / 105 zł / 125 zł
+- Pranie sufitu — 85 zł / 95 zł / 105 zł / 115 zł / 135 zł / 155 zł
+- Pranie bagażnika — 55 zł / 65 zł / 75 zł / 85 zł / 105 zł / 125 zł
+- Pranie boczków — 25 zł / 35 zł / 45 zł / 55 zł / 65 zł / 85 zł
+- Czyszczenie i konserwacja tapicerki skórzanej — 205 zł / 235 zł / 265 zł / 285 zł / 305 zł / 355 zł (notka: "Dodatkowy fotel w busie/7-osobowym +45 zł/szt.")
+
+Tabela "Detale i dodatki" (A / B / C / D1 / D2 / Busy):
+- Odkurzanie — 25 zł / 30 zł / 35 zł / 40 zł / 55 zł / 70 zł
+- Mycie szyb — 20 zł / 25 zł / 35 zł / 40 zł / 55 zł / 70 zł
+- Czyszczenie plastików — 25 zł / 30 zł / 35 zł / 40 zł / 50 zł / 65 zł
+
+Usługi dodatkowe i pakiety (karty):
+- Czyszczenie opon (komplet 4 kół) — 60 zł
+- Ozonowanie 30 minut — 70 zł
+- Ozonowanie 60 minut — 105 zł
+- Usuwanie sierści — od 25 zł (notka: "wycena indywidualna przy dużej ilości")
+- Usuwanie naklejek — 15/35 zł+ (notka: "w górę po konsultacji; może dojść koszt zmywacza")
+- Konserwacja uszczelek na zimę — 15 zł
+- Czyszczenie silnika (bez użycia wody) — 55–75 zł (notka: "zależnie od detergentu i kształtu plastików")
+- Pakiet Zima A — 410 zł (notka: "Mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny, powłoka na szyby")
+- Pakiet Zima B — 420 zł (notka: jak wyżej)
+- Pakiet Zima C — 430 zł (notka: jak wyżej)
+- Pakiet Zima D / D2 — 450 / 470 zł (notka: jak wyżej)
+- Niewidzialna wycieraczka – szyba czołowa + 2 przednie — 170 zł / 190 zł (notka: "auta normalne / większe")
 
 Nagłówek: "Pakiety Zima"
-Opis pakietów: "Pakiety różnią się ceną w zależności od kategorii pojazdu. W skład każdego pakietu wchodzi: mycie kompletne, nałożenie wosku 6 miesięcznego, niewidzialna wycieraczka oraz zabezpieczenie uszczelek."
-Lista pakietów:
-- Pakiet Zima A — "Dla mniejszych aut. Mycie kompletne, wosk 6 miesięczny, niewidzialna wycieraczka, zabezpieczenie uszczelek."
-- Pakiet Zima B — "Dla aut kompaktowych. Rozszerzone przygotowanie na zimę z pełną ochroną lakieru."
-- Pakiet Zima C — "Dla aut wyższej klasy i SUV. Wzmocniona ochrona lakieru i szyb, rekomendowana dla wymagających."
-- Pakiet Zima D — "Dla największych aut i busów. Kompleksowe przygotowanie na zimę całej karoserii i szyb."
+Opis pakietów: "Pakiety różnią się ceną w zależności od kategorii pojazdu. W skład wchodzi mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny oraz powłoka na szyby."
+Lista pakietów (karty): Pakiet Zima A – 410 zł; Pakiet Zima B – 420 zł; Pakiet Zima C – 430 zł; Pakiet Zima D / D2 – 450 / 470 zł (wszystkie z opisem: "Mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny, powłoka na szyby").
 
 Sekcja "O nas":
 Nagłówek: O nas
@@ -76,7 +85,7 @@ Sekcja "Kontakt":
 Nagłówek: Kontakt
 Lead: "Umów wizytę, zapytaj o szczegóły lub zarezerwuj pakiet dla swojego auta."
 Blok "Dane kontaktowe": "Telefon: 577 772 707" (link tel), "E-mail: kontakt.fabrykablysku@gmail.com" (link mailto)
-Blok "Adres": "Fabryka Błysku\nBrzozowa 4a\n85-154 Bydgoszcz, Poland"
+Blok "Adres": "Fabryka Błysku\nBrzozowa 4A/2\n85-154 Bydgoszcz, Poland"
 Blok "Godziny otwarcia": "poniedziałek - 09:00 - 19:00"; "wtorek - 09:00 - 19:00"; "środa - 09:00 - 19:00"; "czwartek - 09:00 - 19:00"; "piątek - 09:00 - 20:00"; "sobota - 09:00 - 20:00"; "niedziela - zamknięte"
 Przycisk CTA: "Zadzwoń teraz"
 Formularz kontaktowy (etykiety): "Imię i nazwisko"; "E-mail"; "Telefon (opcjonalnie)"; "Temat"; "Wiadomość"; przycisk "Wyślij wiadomość"; komunikat statusu w polu #form-message.
@@ -92,14 +101,14 @@ Nawigacja (logo i menu): Strona główna; Usługi; Cennik; O nas; Galeria; Opini
 Nagłówek: "Galeria realizacji"
 Przełącznik widoku: przyciski "Widok pokazu" i "Miniatury".
 Przycisk autoplay: "Automatyczne przewijanie: włączone" / "Automatyczne przewijanie: wyłączone" (tekst zmienia się dynamicznie).
-Slider: podpis licznika "0/0" (aktualizowany), podpis zdjęcia startowy "Ładuję zdjęcia...", strzałki "‹" (Poprzednie zdjęcie) i "›" (Następne zdjęcie), kropki nawigacji.
+Slider: podpis licznika startowy "0/0" (aktualizowany), podpis zdjęcia startowy "Ładuję zdjęcia...", strzałki "‹" (Poprzednie zdjęcie) i "›" (Następne zdjęcie), kropki nawigacji.
 Miniatury: sekcja "Miniatury" z siatką; komunikat pusty "Brak zdjęć do wyświetlenia.".
 Link powrotu: "← Wróć na stronę główną".
 
 === Polityka prywatności (privacy-policy.html) ===
 Tytuł: Polityka prywatności i plików cookies
 Wstęp: "Ten dokument opisuje zasady przetwarzania danych osobowych oraz wykorzystywania plików cookies na stronie internetowej Fabryki Błysku."
-Dane kontaktowe administratora: "Administratorem danych osobowych jest Fabryka Błysku, Brzozowa 4a, 85-154 Bydgoszcz. Kontakt: kontakt.fabrykablysku@gmail.com."
+Dane kontaktowe administratora: "Administratorem danych osobowych jest Fabryka Błysku, Brzozowa 4A/2, 85-154 Bydgoszcz. Kontakt: kontakt.fabrykablysku@gmail.com."
 Formularz kontaktowy: "Dane podane w formularzu kontaktowym (imię i nazwisko, adres e-mail, opcjonalnie numer telefonu oraz treść wiadomości) są wykorzystywane wyłącznie w celu udzielenia odpowiedzi na Twoje zapytanie oraz prowadzenia korespondencji związanej z usługami Fabryki Błysku."
 Pliki cookies: "Strona korzysta z plików cookies w celu zapewnienia jej prawidłowego działania, analityki statystycznej oraz poprawy komfortu korzystania z serwisu. Możesz zmienić ustawienia dotyczące cookies w swojej przeglądarce internetowej."
 Prawa użytkownika: "Masz prawo dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przenoszenia danych oraz wniesienia sprzeciwu wobec przetwarzania. Możesz także wnieść skargę do Prezesa Urzędu Ochrony Danych Osobowych, jeśli uznasz, że przetwarzanie danych narusza przepisy."

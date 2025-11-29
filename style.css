@@ -138,7 +138,7 @@ body {
 .nav-links a {
     text-decoration: none;
     color: var(--color-text-muted);
-    font-size: 0.9rem;
+    font-size: 1rem;
     position: relative;
     padding: 6px 0;
 }
@@ -649,12 +649,12 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 .pricing-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
 }
 
 .pricing-table th,
 .pricing-table td {
-    padding: 10px 12px;
+    padding: 12px 14px;
     border-bottom: 1px solid rgba(36, 42, 54, 0.9);
 }
 
@@ -673,6 +673,30 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
     background: rgba(18, 22, 34, 0.96);
 }
 
+.pricing-table-block + .pricing-table-block {
+    margin-top: 16px;
+}
+
+.pricing-table-block h4 {
+    margin: 0;
+    padding: 12px 14px;
+    font-size: 1.05rem;
+    background: rgba(14, 20, 32, 0.96);
+    color: var(--color-heading);
+    border-bottom: 1px solid rgba(36, 42, 54, 0.9);
+}
+
+.pricing-name {
+    font-weight: 600;
+    color: var(--color-heading);
+}
+
+.pricing-note {
+    margin-top: 4px;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
 .pricing-loading {
     padding: 16px 14px;
     font-size: 0.9rem;
@@ -683,28 +707,36 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 
 .pricing-extras-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
 }
 
 .pricing-extra-item {
     border-radius: var(--radius-md);
     border: 1px solid rgba(192, 196, 210, 0.16);
     background: linear-gradient(135deg, rgba(10, 14, 24, 0.98), rgba(5, 7, 12, 0.98));
-    padding: 10px 12px;
+    padding: 12px 14px;
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    font-size: 0.9rem;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.95rem;
 }
 
 .pricing-extra-name {
+    margin: 0;
+    font-size: 1rem;
     color: var(--color-text);
+}
+
+.pricing-extra-price {
+    font-weight: 700;
+    color: var(--color-primary-strong);
 }
 
 .pricing-extra-note {
     color: var(--color-text-muted);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
 }
 
 /* Pakiety zimowe */

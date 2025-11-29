@@ -1,5 +1,5 @@
 // Google Places - produkcyjny Place ID podany przez klienta
-const DEFAULT_PLACE_ID = "ChIJ2SfIvVHLHkcRGovfOkM8RYo";
+const DEFAULT_PLACE_ID = "ChIJ-3tHZJ4TA0cRxoECsUB3b7k";
 const GOOGLE_API_KEY = "AIzaSyBBEGLuDhhYTF23KVnBC4XZa_KmTWQaZFs";
 const DEFAULT_GOOGLE_AVATAR = "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/user_circle.png";
 
@@ -377,12 +377,17 @@ function loadPricing() {
 function renderPricing(data, tableWrapper, extrasContainer, winterContainer) {
     if (!data) return;
 
-    if (data.categories && data.services) {
-        buildVehiclePricingTable(tableWrapper, data.categories, data.services);
+    const categories = data.categories || [];
+    const tables = data.tables || (data.services ? [{ title: "Cennik", items: data.services }] : []);
+
+    if (tables.length && categories.length) {
+        buildPricingTables(tableWrapper, categories, tables);
     }
 
-    if (data.extras && extrasContainer) {
-        buildExtrasList(extrasContainer, data.extras);
+    if (data.singleItems && extrasContainer) {
+        buildExtrasList(extrasContainer, data.singleItems);
+    } else if (data.extras && extrasContainer) {
+        buildLegacyExtrasList(extrasContainer, data.extras);
     }
 
     if (data.winterPackages && winterContainer) {
@@ -390,53 +395,109 @@ function renderPricing(data, tableWrapper, extrasContainer, winterContainer) {
     }
 }
 
-function buildVehiclePricingTable(wrapper, categories, services) {
-    const table = document.createElement("table");
-    table.className = "pricing-table";
+function formatPrice(value) {
+    if (value === null || value === undefined || value === "") return "-";
+    if (typeof value === "number") return value + " zł";
+    return String(value);
+}
 
-    const thead = document.createElement("thead");
-    const headRow = document.createElement("tr");
+function buildPricingTables(wrapper, categories, tables) {
+    wrapper.innerHTML = "";
 
-    const thService = document.createElement("th");
-    thService.textContent = "Usługa";
-    headRow.appendChild(thService);
+    tables.forEach(function (tableData) {
+        const block = document.createElement("div");
+        block.className = "pricing-table-block";
 
-    categories.forEach(function (cat) {
-        const th = document.createElement("th");
-        th.textContent = cat;
-        headRow.appendChild(th);
-    });
+        if (tableData.title) {
+            const h4 = document.createElement("h4");
+            h4.textContent = tableData.title;
+            block.appendChild(h4);
+        }
 
-    thead.appendChild(headRow);
-    table.appendChild(thead);
+        const table = document.createElement("table");
+        table.className = "pricing-table";
 
-    const tbody = document.createElement("tbody");
+        const thead = document.createElement("thead");
+        const headRow = document.createElement("tr");
 
-    services.forEach(function (service) {
-        const tr = document.createElement("tr");
-        const tdName = document.createElement("td");
-        tdName.textContent = service.name;
-        tr.appendChild(tdName);
+        const thService = document.createElement("th");
+        thService.textContent = "Usługa";
+        headRow.appendChild(thService);
 
-        (service.prices || []).forEach(function (price) {
-            const td = document.createElement("td");
-            if (price === null || price === undefined || price === "") {
-                td.textContent = "-";
-            } else {
-                td.textContent = String(price) + " zł";
-            }
-            tr.appendChild(td);
+        categories.forEach(function (cat) {
+            const th = document.createElement("th");
+            th.textContent = cat;
+            headRow.appendChild(th);
         });
 
-        tbody.appendChild(tr);
-    });
+        thead.appendChild(headRow);
+        table.appendChild(thead);
 
-    table.appendChild(tbody);
-    wrapper.innerHTML = "";
-    wrapper.appendChild(table);
+        const tbody = document.createElement("tbody");
+
+        (tableData.items || []).forEach(function (item) {
+            const tr = document.createElement("tr");
+            const tdName = document.createElement("td");
+
+            const nameWrap = document.createElement("div");
+            nameWrap.className = "pricing-name";
+            nameWrap.textContent = item.name;
+            tdName.appendChild(nameWrap);
+
+            if (item.note) {
+                const note = document.createElement("div");
+                note.className = "pricing-note";
+                note.textContent = item.note;
+                tdName.appendChild(note);
+            }
+
+            tr.appendChild(tdName);
+
+            const prices = item.prices || [];
+            categories.forEach(function (_, idx) {
+                const td = document.createElement("td");
+                td.textContent = formatPrice(prices[idx]);
+                tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+        block.appendChild(table);
+        wrapper.appendChild(block);
+    });
 }
 
 function buildExtrasList(container, extras) {
+    container.innerHTML = "";
+    extras.forEach(function (extra) {
+        const item = document.createElement("article");
+        item.className = "pricing-extra-item";
+
+        const name = document.createElement("h4");
+        name.className = "pricing-extra-name";
+        name.textContent = extra.name;
+
+        const price = document.createElement("div");
+        price.className = "pricing-extra-price";
+        price.textContent = extra.price || "-";
+
+        item.appendChild(name);
+        item.appendChild(price);
+
+        if (extra.note) {
+            const note = document.createElement("p");
+            note.className = "pricing-extra-note";
+            note.textContent = extra.note;
+            item.appendChild(note);
+        }
+
+        container.appendChild(item);
+    });
+}
+
+function buildLegacyExtrasList(container, extras) {
     container.innerHTML = "";
     extras.forEach(function (extra) {
         const item = document.createElement("div");
