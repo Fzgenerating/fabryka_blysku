@@ -13,6 +13,11 @@ Ten repozytorium nie zawiera binarnych grafik, żeby uniknąć błędów przy ge
 - **Zalecenia:** minimum 1600 px dłuższy bok, proporcje dowolne; opis alt/etykiety możesz edytować w `data/gallery.json`.
 - **Fallback:** jeśli folder jest pusty, strona pokaże placeholder `placeholder.svg` i komunikat.
 
+## Tło hero (wnętrze barbershopu)
+- **Plik:** `assets/img/hero/interior.jpg`
+- **Zalecenia:** poziome ujęcie wnętrza, min. 1800 px szerokości; ciemniejsze brzegi pomagają w czytelności tekstu.
+- **Użycie:** pełnoekranowe tło sekcji startowej w `index.html` (styl w `style.css`).
+
 ## Zespół (sekcja „O nas”)
 - **Folder:** `assets/img/barbers/`
 - **Nazwy:**
