@@ -35,8 +35,8 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 // Konfiguracja adresu docelowego
-$to          = 'kontakt.fabrykablysku@gmail.com';
-$subjectLine = 'Nowa wiadomość z formularza Fabryka Błysku: ' . $subject;
+$to          = 'klasykportowy@gmail.com';
+$subjectLine = 'Nowa wiadomość z formularza Klasyk Portowy Barber Shop: ' . $subject;
 
 // Treść wiadomości
 $bodyLines = [];
@@ -52,7 +52,7 @@ $body        = implode("\n", $bodyLines);
 
 // Nagłówki
 $headers   = [];
-$headers[] = 'From: Fabryka Błysku <kontakt.fabrykablysku@gmail.com>';
+$headers[] = 'From: Klasyk Portowy Barber Shop <klasykportowy@gmail.com>';
 $headers[] = 'Reply-To: ' . $name . ' <' . $email . '>';
 $headers[] = 'Content-Type: text/plain; charset=UTF-8';
 $headersStr = implode("\r\n", $headers);

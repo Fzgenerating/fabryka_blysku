@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" role="img" aria-label="Placeholder galerii">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1f2937" />
+    </linearGradient>
+    <linearGradient id="s" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#60a5fa" stop-opacity="0.85" />
+    </linearGradient>
+  </defs>
+  <rect width="600" height="400" fill="url(#g)" rx="24" ry="24" />
+  <rect x="32" y="32" width="536" height="336" fill="none" stroke="#ffffff" stroke-opacity="0.35" stroke-width="3" stroke-dasharray="12 12" rx="18" ry="18" />
+  <path d="M140 280 L220 210 L280 250 L360 190 L460 280 Z" fill="url(#s)" opacity="0.9" />
+  <circle cx="200" cy="160" r="42" fill="#f8fafc" fill-opacity="0.8" />
+  <text x="300" y="330" text-anchor="middle" font-family="'Inter', 'Segoe UI', system-ui, sans-serif" font-size="22" fill="#e5e7eb" opacity="0.92">
+    Dodaj swoje zdjęcia do folderu assets/img/gallery
+  </text>
+</svg>

@@ -1,0 +1,58 @@
+=== Strona główna (index.html) ===
+Tytuł strony: Klasyk Portowy Barber Shop – fryzjer męski Warszawa (Praga-Północ)
+Meta description: Klasyk Portowy Barber Shop – męskie strzyżenia, brody i golenie na Kępnej 2b w Warszawie. Rytuał barbera z gorącym ręcznikiem, brzytwą i portowym klimatem przy Porcie Praskim.
+Meta keywords: barber Warszawa, barber shop Warszawa, barber Praga Północ, Klasyk Portowy, strzyżenie męskie, golenie brzytwą, broda, fade, Kępna 2b
+Nawigacja: Strona główna; Usługi; Cennik; O nas; Galeria; Opinie; Kontakt
+
+Hero: eyebrow BARBER • Warszawa • Praga-Północ; nagłówek „Klasyk Portowy Barber Shop”; podtytuł „Szukasz dobrego barbera w Warszawie, który naprawdę ogarnia męskie fryzury i brody? Wpadnij do miejsca z klimatem, stylem i luzem przy Porcie Praskim, na Kępnej 2b. U nas fryzura to rytuał, nie obowiązek – siadasz, chillujesz i wychodzisz z wyglądem, który robi robotę.” CTA: „Umów wizytę w Booksy”, „Sprawdź cennik”.
+
+Sekcja Usługi (Portowe rzemiosło):
+- Strzyżenie klasyczne — „Perfekcyjny fade lub klasyczne cięcie z konturem, stylizacją i wskazówkami pielęgnacyjnymi.”
+- Broda & kontur — „Modelowanie brody, kontur brzytwą, balsam i odżywienie – tak, by nosiła się jak z okładki.”
+- Strzyżenie + broda — „Pełen pakiet barbera: cięcie, stylizacja, broda z brzytwą i gorący ręcznik w jednym terminie.”
+- Golenie tradycyjne — „Klasyczne golenie na mokro z pianą, brzytwą i kompresami – rytuał, który odpręża i odświeża.”
+- Junior cut — „Fryzury dla młodszych gentlemens – cierpliwie, dokładnie i w przyjaznej atmosferze.”
+- Stylizacja & kamuflaż — „Modelowanie, odsiwianie i zabiegi regeneracyjne, które podkreślają kształt fryzury i brody.”
+
+Sekcja Cennik: nagłówek „Cennik” + opis „Wszystkie ceny edytujesz w jednym pliku data/pricing.json – podmień go, a tabela zaktualizuje się automatycznie.”
+Tabela (kolumny: Czas, Cena) – Cennik usług:
+- Strzyżenie włosów — 45 min — 100 zł
+- Strzyżenie brody — 30 min — 80 zł
+- Broda SPA | strzyżenie (brzytwa, ozon, relaks) — 45 min — 110 zł
+- Combo | włosy + broda — 1 h 15 min — 160 zł
+- Combo SPA | włosy + broda (brzytwa, ozon, relaks) — 1 h 30 min — 190 zł
+- Combo + repigmentacja | włosy + broda — 1 h 30 min — 200 zł
+- Combo ojciec + strzyżenie syn | do 10 lat — 2 h — 220 zł
+- Strzyżenie włosów + repigmentacja | odsiwianie — 1 h — 140 zł
+- Strzyżenie włosów ojciec + syn | do 10 lat — 1 h 15 min — 170 zł
+- Broda + repigmentacja | odsiwianie — 45 min — 120 zł
+- Mycie + stylizacja włosów — 15 min — 30 zł
+- Przycinanie wąsa — 15 min — 30 zł
+- Strzyżenie dziecięce — 30 min — 80 zł
+
+Sekcja O nas: nagłówek „O nas”; podtytuł „Portowy klimat, rzemiosło i barberzy, którzy naprawdę ogarniają – w samym sercu warszawskiej Pragi-Północ.”
+Akapity: 1) „Szukasz dobrego barbera, który naprawdę ogarnia męskie fryzury i brody? Wpadnij do miejsca z klimatem, stylem i luzem w samym sercu Pragi-Północ, tuż przy Porcie Praskim. U nas fryzura to rytuał, nie obowiązek. Siadasz, chillujesz i wychodzisz z wyglądem, który robi robotę.” 2) „Specjalizujemy się w klasycznych i nowoczesnych strzyżeniach męskich oraz modelowaniu brody, gorących ręcznikach i precyzyjnej pracy brzytwą. Każdy zabieg prowadzimy tak, jak lubimy: dokładnie, ze spokojem i w męskim klimacie.”
+Wyróżniki: Ekipa z charakterem (zgrany zespół barberów), Rytuał, nie obowiązek (gorące ręczniki, brzytwa, spokojna atmosfera), Przy Porcie (Warszawa, Kępna 2b – Booksy, szybkie rezerwacje).
+
+Sekcja Barberzy (team):
+- Sergiusz — „Barber od 2017 roku, który świetnie radzi sobie z każdym rodzajem włosów – nie ma fryzury, której by się nie podjął. Poza pracą pasjonuje się sportem, podróżami i spędzaniem czasu z Dambo, swoim buldogiem. Znany z poczucia humoru i zamiłowania do memów. Były zawodnik rugby.” Zdjęcie: assets/img/barbers/sergiusz.jpg (fallback placeholder.svg).
+- Olka — „Barberka ostra jak brzytwa. Kobieta z pazurem perfekcyjnie poradzi sobie z każdym typem włosów – długie czy krótkie nie są dla niej wyzwaniem. Koneserka tatuaży oldschoolowych i muzyki punk rockowej. W domu półki uginają się od płyt.” Zdjęcie: assets/img/barbers/olka.jpg.
+- Sławek — „Lubi poznawać nowych ludzi i robić im fajne fryzury. Słucha jazzu, dba o aktywny tryb życia. Uwielbia wyjścia w góry i intensywne treningi – poranne biegi, siłownię, rowery.” Zdjęcie: assets/img/barbers/slawek.jpg.
+- Kamil — „Barber i Manager w jednej osobie. Od 2017 roku w branży. Doradzi w doborze odpowiedniej fryzury i brody. Lubi klasyczne fryzury i modern, fan tatuaży i motocykli oldschoolowych – pod salonem zobaczysz „czarną strzałę”.” Zdjęcie: assets/img/barbers/kamil.jpg.
+- Sandra — „Brzytwa i gorący ręcznik to jej codzienność. Perfekcyjna, skupiona, rozmowna. Po pracy lubi podróże i aktywnie spędza czas.” Zdjęcie: assets/img/barbers/sandra.jpg.
+Notka pod listą: dodaj zdjęcia JPG do assets/img/barbers pod powyższymi nazwami; brakujące zastąpi placeholder.
+
+Sekcja Opinie: nagłówek „Opinie klientów”; opis „Pokazujemy tylko 5‑gwiazdkowe recenzje z wizytówki Klasyk Portowy Barber Shop na Google.” Dane z Google (Place ID: ChIJ8e6j9v3NHkcRf16BlEm9VpQ, API key przekazany w data-api-key). Wyświetlane do 3 opinii, z rotacją z cache.
+
+Sekcja Kontakt: nagłówek „Kontakt”; opis „Umów wizytę, zapytaj o termin lub dopytaj o szczegóły usług barberskich.” Dane: telefon +48 503 807 503; e-mail klasykportowy@gmail.com; adres Kępna 2b, 03-730 Warszawa; godziny otwarcia pon-czw 09:00-19:00, pt-sob 09:00-20:00; przycisk „Zadzwoń teraz”. Mapa na adres Kępna 2b 03-730 Warszawa.
+
+Stopka: © Klasyk Portowy Barber Shop. Link do Polityki prywatności. Podpis projektanta z e-mailem kontakt@jakubtoronczak.dev.
+
+=== Galeria (gallery.html) ===
+Tytuł strony: Galeria - Klasyk Portowy Barber Shop
+Nagłówek: „Galeria Klasyk Portowy” + opis „Wybrane strzyżenia, brody i stylizacje wykonane w naszym barbershopie.” Widok pokazu/miniatur, przycisk autoplay (domyślnie włączony), licznik slajdów, nawigacja strzałkami. Logo w nawigacji: src assets/img/logo-klasyk-portowy.jpg z srcset SVG.
+
+=== Polityka prywatności (privacy-policy.html) ===
+Tytuł: Polityka prywatności i cookies - Klasyk Portowy Barber Shop
+Administrator: Klasyk Portowy Barber Shop, Kępna 2b, 03-730 Warszawa, e-mail: klasykportowy@gmail.com.
+Opis: zasady przetwarzania danych z formularza kontaktowego, plików cookies, prawa użytkownika. Stopka © Klasyk Portowy Barber Shop.

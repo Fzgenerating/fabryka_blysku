@@ -1,11 +1,15 @@
-// Google Places - docelowo opinie z wizytówki Google
-// TODO: po uruchomieniu własnej wizytówki Fabryki Błysku podmień PLACE_ID na swoje
-const PLACE_ID = "ChIJe103_2QzGUcRIfVGtLDCsEM";
+// Google Places - produkcyjny Place ID podany przez klienta (Klasyk Portowy Barber Shop)
+const DEFAULT_PLACE_ID = "ChIJ8e6j9v3NHkcRf16BlEm9VpQ";
+const GOOGLE_API_KEY = "AIzaSyBBEGLuDhhYTF23KVnBC4XZa_KmTWQaZFs";
+const DEFAULT_GOOGLE_AVATAR = "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/user_circle.png";
+const REVIEWS_CACHE_KEY = "kp_reviews_cache_v2";
+const REVIEWS_CACHE_TTL = 1000 * 60 * 60 * 12; // 12h
 
-// Jeśli kiedyś dodasz backend lub klucz Google API, możesz użyć PLACE_ID
-// do pobierania prawdziwych opinii. Obecnie sekcja opinii jest statyczna.
+// Loader skryptu Google Maps JS (Places) współdzielony między wywołaniami
+let googleMapsScriptPromise = null;
+const REVIEWS_FALLBACK = [];
 
-// script.js - logika interfejsu Fabryka Błysku
+// script.js - logika interfejsu Klasyk Portowy Barber Shop
 
 document.addEventListener("DOMContentLoaded", function () {
     setupSmoothScroll();
@@ -14,7 +18,10 @@ document.addEventListener("DOMContentLoaded", function () {
     setupContactFormHandling();
     setCurrentYear();
     initCookieBanner();
-    loadPricingFromJS();
+    loadPricing();
+    loadGoogleReviews();
+    initHeroBubbles();
+    initTeamFallbacks();
 });
 
 /**
@@ -238,6 +245,7 @@ function initCookieBanner() {
 
     if (localStorage.getItem(storageKey) === "accepted") {
         banner.style.display = "none";
+        initMarketingTracking();
         return;
     }
 
@@ -245,32 +253,99 @@ function initCookieBanner() {
     acceptBtn.addEventListener("click", function () {
         localStorage.setItem(storageKey, "accepted");
         banner.style.display = "none";
+        initMarketingTracking();
     });
 }
 
+function initMarketingTracking() {
+    const body = document.body;
+    if (!body) return;
+
+    const metaPixelId = body.dataset.metaPixelId;
+    const tiktokPixelId = body.dataset.tiktokPixelId;
+
+    if (metaPixelId) {
+        loadMetaPixel(metaPixelId);
+    }
+
+    if (tiktokPixelId) {
+        loadTikTokPixel(tiktokPixelId);
+    }
+}
+
+function loadMetaPixel(pixelId) {
+    if (window.fbq) return;
+    !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return; n = f.fbq = function () {
+            n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = "2.0";
+        n.queue = []; t = b.createElement(e); t.async = !0; t.src = v;
+        s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+    })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+    window.fbq("init", pixelId);
+    window.fbq("track", "PageView");
+}
+
+function loadTikTokPixel(pixelId) {
+    if (window.ttq) return;
+    (function (w, d, t) {
+        w.TiktokAnalyticsObject = t; var ttq = w[t] = w[t] || [];
+        ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "upload", "setAndDefer", "register" ,"registerOnce"];
+        ttq.setAndDefer = function (t, e) { t[e] = function () { t.push([e].concat(Array.prototype.slice.call(arguments, 0))); }; };
+        for (var i = 0; i < ttq.methods.length; i++) ttq.setAndDefer(ttq, ttq.methods[i]);
+        ttq.instance = function (t) { var e = ttq._i[t] || []; for (var n = 0; n < ttq.methods.length; n++) ttq.setAndDefer(e, ttq.methods[n]); return e; };
+        ttq.load = function (e, n) { var i = "https://analytics.tiktok.com/i18n/pixel/events.js"; ttq._i = ttq._i || {}; ttq._i[e] = []; ttq._i[e]._u = i; ttq._t = ttq._t || {}; ttq._t[e] = +new Date(); ttq._o = ttq._o || {}; ttq._o[e] = n || {}; var o = document.createElement("script"); o.type = "text/javascript"; o.async = !0; o.src = i + "?sdkid=" + e + "&lib=" + t; var a = document.getElementsByTagName("script")[0]; a.parentNode.insertBefore(o, a); };
+    })(window, document, "ttq");
+    window.ttq.load(pixelId);
+    window.ttq.page();
+}
+
 /**
- * Wczytywanie cennika z pricing.js (globalne window.PRICING_DATA)
- * działa zarówno lokalnie, jak i na serwerze.
+ * Wczytywanie cennika: priorytetowo z data/pricing.json,
+ * a w razie braku z globalnego window.PRICING_DATA (pricing.js).
  */
-function loadPricingFromJS() {
+function loadPricing() {
     const tableWrapper = document.getElementById("pricing-table-vehicles");
     const extrasContainer = document.getElementById("pricing-extras-list");
     const winterContainer = document.getElementById("pricing-winter-list");
 
     if (!tableWrapper) return;
 
-    const data = window.PRICING_DATA;
-    if (!data) {
-        tableWrapper.innerHTML = "<div class=\"pricing-loading\">Nie udało się wczytać cennika. Skontaktuj się z nami w celu poznania aktualnych cen.</div>";
-        return;
+    fetch("data/pricing.json", { cache: "no-store" })
+        .then(function (response) {
+            if (!response.ok) throw new Error("Brak pliku pricing.json");
+            return response.json();
+        })
+        .then(function (data) {
+            renderPricing(data, tableWrapper, extrasContainer, winterContainer);
+        })
+        .catch(function () {
+            if (window.PRICING_DATA) {
+                renderPricing(window.PRICING_DATA, tableWrapper, extrasContainer, winterContainer);
+            } else {
+                tableWrapper.innerHTML = "<div class=\"pricing-loading\">Nie udało się wczytać cennika. Skontaktuj się z nami w celu poznania aktualnych cen.</div>";
+            }
+        });
+}
+
+function renderPricing(data, tableWrapper, extrasContainer, winterContainer) {
+    if (!data) return;
+
+    const categories = data.categories || [];
+    const tables = data.tables || (data.services ? [{ title: "Cennik", items: data.services }] : []);
+
+    if (tables.length && categories.length) {
+        buildPricingTables(tableWrapper, categories, tables);
     }
 
-    if (data.categories && data.services) {
-        buildVehiclePricingTable(tableWrapper, data.categories, data.services);
-    }
-
-    if (data.extras && extrasContainer) {
-        buildExtrasList(extrasContainer, data.extras);
+    if (data.singleItems && extrasContainer) {
+        if (data.singleItems.length) {
+            buildExtrasList(extrasContainer, data.singleItems);
+        } else {
+            extrasContainer.innerHTML = "<p class=\"pricing-loading\">Dodaj dodatkowe usługi w pliku data/pricing.json.</p>";
+        }
+    } else if (data.extras && extrasContainer) {
+        buildLegacyExtrasList(extrasContainer, data.extras);
     }
 
     if (data.winterPackages && winterContainer) {
@@ -278,53 +353,114 @@ function loadPricingFromJS() {
     }
 }
 
-function buildVehiclePricingTable(wrapper, categories, services) {
-    const table = document.createElement("table");
-    table.className = "pricing-table";
+function formatPrice(value) {
+    if (value === null || value === undefined || value === "") return "-";
+    if (typeof value === "number") return value + " zł";
+    return String(value);
+}
 
-    const thead = document.createElement("thead");
-    const headRow = document.createElement("tr");
+function buildPricingTables(wrapper, categories, tables) {
+    wrapper.innerHTML = "";
 
-    const thService = document.createElement("th");
-    thService.textContent = "Usługa";
-    headRow.appendChild(thService);
+    tables.forEach(function (tableData) {
+        const block = document.createElement("div");
+        block.className = "pricing-table-block";
 
-    categories.forEach(function (cat) {
-        const th = document.createElement("th");
-        th.textContent = cat;
-        headRow.appendChild(th);
-    });
+        if (tableData.title) {
+            const h4 = document.createElement("h4");
+            h4.textContent = tableData.title;
+            block.appendChild(h4);
+        }
 
-    thead.appendChild(headRow);
-    table.appendChild(thead);
+        const table = document.createElement("table");
+        table.className = "pricing-table";
 
-    const tbody = document.createElement("tbody");
+        const thead = document.createElement("thead");
+        const headRow = document.createElement("tr");
 
-    services.forEach(function (service) {
-        const tr = document.createElement("tr");
-        const tdName = document.createElement("td");
-        tdName.textContent = service.name;
-        tr.appendChild(tdName);
+        const thService = document.createElement("th");
+        thService.textContent = "Usługa";
+        headRow.appendChild(thService);
 
-        (service.prices || []).forEach(function (price) {
-            const td = document.createElement("td");
-            if (price === null || price === undefined || price === "") {
-                td.textContent = "-";
-            } else {
-                td.textContent = String(price) + " zł";
-            }
-            tr.appendChild(td);
+        categories.forEach(function (cat) {
+            const th = document.createElement("th");
+            th.textContent = cat;
+            headRow.appendChild(th);
         });
 
-        tbody.appendChild(tr);
-    });
+        thead.appendChild(headRow);
+        table.appendChild(thead);
 
-    table.appendChild(tbody);
-    wrapper.innerHTML = "";
-    wrapper.appendChild(table);
+        const tbody = document.createElement("tbody");
+
+        (tableData.items || []).forEach(function (item) {
+            const tr = document.createElement("tr");
+            const tdName = document.createElement("td");
+
+            const nameWrap = document.createElement("div");
+            nameWrap.className = "pricing-name";
+            nameWrap.textContent = item.name;
+            tdName.appendChild(nameWrap);
+
+            if (item.note) {
+                const note = document.createElement("div");
+                note.className = "pricing-note";
+                note.textContent = item.note;
+                tdName.appendChild(note);
+            }
+
+            tr.appendChild(tdName);
+
+            const prices = item.prices || [];
+            categories.forEach(function (_, idx) {
+                const td = document.createElement("td");
+                td.textContent = formatPrice(prices[idx]);
+                tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+
+        const scroller = document.createElement("div");
+        scroller.className = "pricing-table-scroll";
+        scroller.appendChild(table);
+
+        block.appendChild(scroller);
+        wrapper.appendChild(block);
+    });
 }
 
 function buildExtrasList(container, extras) {
+    container.innerHTML = "";
+    extras.forEach(function (extra) {
+        const item = document.createElement("article");
+        item.className = "pricing-extra-item";
+
+        const name = document.createElement("h4");
+        name.className = "pricing-extra-name";
+        name.textContent = extra.name;
+
+        const price = document.createElement("div");
+        price.className = "pricing-extra-price";
+        price.textContent = extra.price || "-";
+
+        item.appendChild(name);
+        item.appendChild(price);
+
+        if (extra.note) {
+            const note = document.createElement("p");
+            note.className = "pricing-extra-note";
+            note.textContent = extra.note;
+            item.appendChild(note);
+        }
+
+        container.appendChild(item);
+    });
+}
+
+function buildLegacyExtrasList(container, extras) {
     container.innerHTML = "";
     extras.forEach(function (extra) {
         const item = document.createElement("div");
@@ -358,4 +494,507 @@ function buildWinterPackages(container, winterPackages) {
         item.appendChild(desc);
         container.appendChild(item);
     });
+}
+
+/**
+ * Ładowanie 5-gwiazdkowych opinii Google z pliku JSON (data/reviews.json)
+ */
+function loadGoogleReviews() {
+    const container = document.getElementById("reviews-container");
+    if (!container) return;
+
+    const endpoint = container.getAttribute("data-endpoint") || "data/reviews.json";
+    const apiKey = container.getAttribute("data-api-key") || GOOGLE_API_KEY;
+    const placeId = container.getAttribute("data-place-id") || DEFAULT_PLACE_ID;
+    const hasLiveGoogle = Boolean(apiKey && placeId);
+
+    function readCache() {
+        try {
+            const raw = localStorage.getItem(REVIEWS_CACHE_KEY);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (!parsed || parsed.placeId !== placeId) return null;
+            if (Date.now() - parsed.ts > REVIEWS_CACHE_TTL) return null;
+            return parsed;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function writeCache(reviews, placeUrl) {
+        try {
+            localStorage.setItem(REVIEWS_CACHE_KEY, JSON.stringify({
+                ts: Date.now(),
+                placeId: placeId,
+                placeUrl: placeUrl || "",
+                reviews: reviews
+            }));
+        } catch (e) {
+            /* ignore quota issues */
+        }
+    }
+
+    function rotateReviews(list, maxToShow) {
+        if (!Array.isArray(list) || list.length === 0) return [];
+        const limit = typeof maxToShow === "number" ? maxToShow : 3;
+        const indexKey = `${REVIEWS_CACHE_KEY}:idx:${placeId}`;
+        let start = 0;
+        try {
+            start = parseInt(localStorage.getItem(indexKey), 10) || 0;
+        } catch (e) {
+            start = 0;
+        }
+
+        const slice = [];
+        for (let i = 0; i < Math.min(limit, list.length); i++) {
+            slice.push(list[(start + i) % list.length]);
+        }
+
+        try {
+            localStorage.setItem(indexKey, ((start + limit) % list.length).toString());
+        } catch (e) {
+            /* ignore */
+        }
+
+        return slice;
+    }
+
+    function renderWithFallback() {
+        fetch(endpoint, { cache: "no-store" })
+            .then(function (response) {
+                if (!response.ok) throw new Error("Brak danych opinii");
+                return response.json();
+            })
+            .then(function (data) {
+                const payload = Array.isArray(data) ? data : [];
+                if (payload.length === 0) {
+                    renderReviews(container, REVIEWS_FALLBACK, 3, REVIEWS_FALLBACK);
+                } else {
+                    renderReviews(container, payload, 3, REVIEWS_FALLBACK);
+                }
+            })
+            .catch(function () {
+                renderReviews(container, REVIEWS_FALLBACK, 3, REVIEWS_FALLBACK);
+            });
+    }
+
+    const cached = readCache();
+    if (cached && Array.isArray(cached.reviews) && cached.reviews.length) {
+        const rotated = rotateReviews(cached.reviews, 3);
+        renderReviews(container, rotated, 3, null, { allowFallback: false, requireProfilePhoto: false });
+        return;
+    }
+
+    function loadMapsScript(key) {
+        if (window.google && window.google.maps && window.google.maps.places) {
+            return Promise.resolve();
+        }
+        if (googleMapsScriptPromise) return googleMapsScriptPromise;
+
+        const src = "https://maps.googleapis.com/maps/api/js?" +
+            "key=" + encodeURIComponent(key) +
+            "&libraries=places";
+
+        googleMapsScriptPromise = new Promise(function (resolve, reject) {
+            const script = document.createElement("script");
+            script.src = src;
+            script.async = true;
+            script.defer = true;
+            script.onload = function () { resolve(); };
+            script.onerror = function () { reject(new Error("Nie udało się załadować Google Maps JS")); };
+            document.head.appendChild(script);
+        });
+
+        return googleMapsScriptPromise;
+    }
+
+    function fetchGooglePlacesReviews(key, id) {
+        return loadMapsScript(key).then(function () {
+            if (!(window.google && window.google.maps && window.google.maps.places)) {
+                throw new Error("Brak biblioteki Google Places");
+            }
+
+            const sorts = [null, google.maps.places.ReviewSortOrder.NEWEST];
+
+            return new Promise(function (resolve, reject) {
+                const service = new google.maps.places.PlacesService(document.createElement("div"));
+                const allReviews = [];
+                let placeUrl = "";
+                let completed = 0;
+                let hadSuccess = false;
+
+                function handleResult(result, status) {
+                    completed += 1;
+
+                    if (status === google.maps.places.PlacesServiceStatus.OK && result) {
+                        hadSuccess = true;
+                        placeUrl = placeUrl || result.url || "";
+                        if (Array.isArray(result.reviews)) {
+                            allReviews.push.apply(allReviews, result.reviews);
+                        }
+                    }
+
+                    if (completed === sorts.length) {
+                        if (hadSuccess) {
+                            resolve({ reviews: allReviews, placeUrl: placeUrl });
+                        } else {
+                            reject(new Error("Status Google Places: " + status));
+                        }
+                    }
+                }
+
+                sorts.forEach(function (sortValue) {
+                    service.getDetails(
+                        {
+                            placeId: id,
+                            fields: ["reviews", "url", "user_ratings_total"],
+                            reviewsSort: sortValue
+                        },
+                        handleResult
+                    );
+                });
+            });
+        });
+    }
+
+    function fetchGooglePlacesReviewsRest(key, id) {
+        const sorts = ["most_relevant", "newest"];
+        const allReviews = [];
+        let placeUrl = "";
+
+        return Promise.all(
+            sorts.map(function (sort) {
+                const params = new URLSearchParams({
+                    place_id: id,
+                    key: key,
+                    fields: "reviews,url",
+                    reviews_sort: sort,
+                    reviews_no_translations: "true"
+                });
+
+                return fetch("https://maps.googleapis.com/maps/api/place/details/json?" + params.toString())
+                    .then(function (response) {
+                        if (!response.ok) throw new Error("HTTP " + response.status);
+                        return response.json();
+                    })
+                    .then(function (payload) {
+                        if (payload.status !== "OK" || !payload.result) return;
+
+                        placeUrl = placeUrl || payload.result.url || "";
+                        if (Array.isArray(payload.result.reviews)) {
+                            allReviews.push.apply(allReviews, payload.result.reviews);
+                        }
+                    })
+                    .catch(function () {
+                        /* ignorujemy pojedyncze błędy zapytań REST */
+                    });
+            })
+        ).then(function () {
+            if (allReviews.length === 0) {
+                throw new Error("Brak recenzji z REST");
+            }
+            return { reviews: allReviews, placeUrl: placeUrl };
+        });
+    }
+
+    function normalizeReviews(payload) {
+        const unique = [];
+        const seenKeys = new Set();
+
+        (payload.reviews || []).forEach(function (rev) {
+            const key = (rev.author_name || "") + "|" + (rev.text || rev.relative_time_description || "");
+            if (seenKeys.has(key)) return;
+            seenKeys.add(key);
+
+            unique.push({
+                author_name: rev.author_name,
+                rating: rev.rating,
+                relative_time_description: rev.relative_time_description,
+                text: rev.text,
+                profile_photo_url: rev.profile_photo_url || DEFAULT_GOOGLE_AVATAR,
+                url: rev.author_url || payload.placeUrl
+            });
+        });
+
+        return unique;
+    }
+
+    if (hasLiveGoogle) {
+        fetchGooglePlacesReviewsRest(apiKey, placeId)
+            .catch(function () {
+                return fetchGooglePlacesReviews(apiKey, placeId);
+            })
+            .then(function (payload) {
+                if (!payload || !Array.isArray(payload.reviews) || payload.reviews.length === 0) {
+                    throw new Error("Brak danych recenzji");
+                }
+
+                const normalized = normalizeReviews(payload);
+                writeCache(normalized, payload.placeUrl || "");
+                const rotated = rotateReviews(normalized, 3);
+                renderReviews(container, rotated, 3, null, { requireProfilePhoto: false, allowFallback: false });
+            })
+            .catch(function () {
+                container.innerHTML = "<p class=\"reviews-loading\">Nie udało się pobrać opinii z Google.</p>";
+            });
+    } else {
+        renderWithFallback();
+    }
+}
+
+function renderReviews(container, reviews, limit, fallbackReviews, options) {
+    const opts = Object.assign({ requireProfilePhoto: false, allowFallback: true }, options);
+    const fiveStars = (reviews || []).filter(function (review) {
+        const hasPhoto = !opts.requireProfilePhoto || Boolean(review.profile_photo_url || DEFAULT_GOOGLE_AVATAR);
+        return Number(review.rating) === 5 && hasPhoto;
+    });
+
+    const maxToShow = typeof limit === "number" ? limit : 6;
+
+    if (opts.allowFallback && fiveStars.length < maxToShow && Array.isArray(fallbackReviews)) {
+        const usedKeys = new Set(
+            fiveStars.map(function (review) {
+                return (review.author_name || "") + "|" + (review.text || "");
+            })
+        );
+
+        fallbackReviews.some(function (review) {
+            if (fiveStars.length >= maxToShow) return true;
+            if (Number(review.rating) !== 5) return false;
+
+            const key = (review.author_name || "") + "|" + (review.text || "");
+            if (usedKeys.has(key)) return false;
+
+            usedKeys.add(key);
+            fiveStars.push(review);
+            return false;
+        });
+    }
+
+    if (fiveStars.length === 0) {
+        container.innerHTML = "<p class=\"reviews-loading\">Brak opinii 5★ do wyświetlenia.</p>";
+        return;
+    }
+
+    container.innerHTML = "";
+
+    fiveStars.slice(0, maxToShow).forEach(function (review) {
+        const card = document.createElement("article");
+        card.className = "review-card";
+
+        const header = document.createElement("header");
+        header.className = "review-header";
+
+        const avatar = document.createElement("div");
+        avatar.className = "review-avatar";
+        const img = document.createElement("img");
+        img.src = review.profile_photo_url || DEFAULT_GOOGLE_AVATAR;
+        img.alt = "Zdjęcie profilowe " + (review.author_name || "użytkownika");
+        avatar.appendChild(img);
+
+        const meta = document.createElement("div");
+        meta.className = "review-meta";
+        const author = document.createElement("strong");
+        author.textContent = review.author_name || "Anonim";
+        const time = document.createElement("span");
+        time.textContent = review.relative_time_description || "Niedawno";
+
+        meta.appendChild(author);
+        meta.appendChild(time);
+
+        const badge = document.createElement("span");
+        badge.className = "review-source";
+        badge.textContent = "Google ★★★★★";
+
+        header.appendChild(avatar);
+        header.appendChild(meta);
+        header.appendChild(badge);
+
+        const text = document.createElement("p");
+        text.className = "review-text";
+        text.textContent = review.text || "Brak treści opinii";
+
+        const rating = document.createElement("p");
+        rating.className = "review-rating";
+        rating.setAttribute("aria-label", "Ocena 5 na 5");
+        rating.textContent = "★★★★★";
+
+        if (review.url) {
+            const link = document.createElement("a");
+            link.href = review.url;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.className = "review-link";
+            link.textContent = "Zobacz na Google";
+            rating.appendChild(link);
+        }
+
+        card.appendChild(header);
+        card.appendChild(text);
+        card.appendChild(rating);
+        container.appendChild(card);
+    });
+}
+
+function initTeamFallbacks() {
+    const imgs = document.querySelectorAll(".team-photo img[data-fallback]");
+    imgs.forEach(function (img) {
+        const fallback = img.getAttribute("data-fallback");
+        if (!fallback) return;
+
+        function useFallback() {
+            if (img.dataset.loadedFallback) return;
+            img.dataset.loadedFallback = "true";
+            img.src = fallback;
+        }
+
+        img.addEventListener("error", useFallback);
+
+        if (img.complete && img.naturalWidth === 0) {
+            useFallback();
+        }
+    });
+}
+
+/**
+ * Animacja pianowych baniek w hero oparta o canvas (lekka i responsywna)
+ */
+
+function initHeroBubbles() {
+    const canvas = document.getElementById("bubbles-canvas");
+    const hero = document.querySelector(".hero");
+
+    if (!canvas || !hero || !canvas.getContext) return;
+
+    const ctx = canvas.getContext("2d");
+    let width = 0;
+    let height = 0;
+    let dpr = window.devicePixelRatio || 1;
+    let last = performance.now();
+    let offset = 0;
+
+    const ribbons = Array.from({ length: 7 }).map(function (_, i) {
+        const isAccent = i % 2 === 0;
+        return {
+            color: isAccent ? "#d1202f" : "#0f1118",
+            accent: isAccent,
+            width: isAccent ? 110 : 60,
+            amplitude: 24 + Math.random() * 28,
+            wavelength: 320 + Math.random() * 120,
+            speed: 30 + Math.random() * 25,
+            phase: Math.random() * Math.PI * 2
+        };
+    });
+
+    const sparkles = Array.from({ length: 40 }).map(function () {
+        return {
+            x: Math.random(),
+            y: Math.random(),
+            size: 0.6 + Math.random() * 1.2,
+            speed: 10 + Math.random() * 25,
+            alpha: 0.1 + Math.random() * 0.35
+        };
+    });
+
+    function resize() {
+        const rect = hero.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = width + "px";
+        canvas.style.height = height + "px";
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function draw(dt) {
+        offset += dt;
+        ctx.clearRect(0, 0, width, height);
+
+        const diagonal = Math.sqrt(width * width + height * height);
+
+        ribbons.forEach(function (ribbon, idx) {
+            const scroll = (offset * ribbon.speed * (ribbon.accent ? 1.2 : 0.9)) % (ribbon.width * 4);
+
+            for (let x = -diagonal; x < diagonal * 1.2; x += ribbon.width * 3.5) {
+                ctx.save();
+                ctx.translate(x - scroll, 0);
+                ctx.rotate(-Math.PI / 7.5);
+
+                const path = new Path2D();
+                const baseY = -height * 0.3;
+                const stripeHeight = height * 1.8;
+                const amp = ribbon.amplitude;
+                const wave = ribbon.wavelength;
+                const startX = -ribbon.width * 0.5;
+                const endX = startX + ribbon.width;
+
+                path.moveTo(startX, baseY);
+                for (let y = baseY; y <= stripeHeight; y += 80) {
+                    const wobble = Math.sin((y + offset * ribbon.speed * 2) / wave + ribbon.phase + idx) * amp;
+                    path.lineTo(startX + wobble, y);
+                }
+                path.lineTo(endX, stripeHeight);
+                for (let y = stripeHeight; y >= baseY; y -= 80) {
+                    const wobble = Math.sin((y + offset * ribbon.speed * 2) / wave + ribbon.phase + idx + Math.PI / 4) * amp * 0.7;
+                    path.lineTo(endX + wobble, y);
+                }
+                path.closePath();
+
+                const grad = ctx.createLinearGradient(startX, 0, endX, 0);
+                grad.addColorStop(0, ribbon.accent ? "#e13d4b" : "#0a0c12");
+                grad.addColorStop(0.5, ribbon.color);
+                grad.addColorStop(1, ribbon.accent ? "#f06871" : "#161926");
+
+                ctx.fillStyle = grad;
+                ctx.globalAlpha = ribbon.accent ? 0.9 : 0.72;
+                ctx.filter = "blur(0.15px)";
+                ctx.fill(path);
+                ctx.restore();
+            }
+        });
+
+        // Rozsypane iskry
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        sparkles.forEach(function (spark) {
+            spark.y -= spark.speed * dt / height;
+            if (spark.y < -0.05) {
+                spark.y = 1.05;
+                spark.x = Math.random();
+            }
+            const x = spark.x * width;
+            const y = spark.y * height;
+            const g = ctx.createRadialGradient(x, y, 0, x, y, spark.size * 12);
+            g.addColorStop(0, `rgba(255,255,255,${spark.alpha})`);
+            g.addColorStop(1, "rgba(255,255,255,0)");
+            ctx.fillStyle = g;
+            ctx.beginPath();
+            ctx.arc(x, y, spark.size * 10, 0, Math.PI * 2);
+            ctx.fill();
+        });
+        ctx.restore();
+
+        // Delikatne ziarno
+        const grain = ctx.createLinearGradient(0, 0, width, height);
+        grain.addColorStop(0, "rgba(255,255,255,0.03)");
+        grain.addColorStop(1, "rgba(255,255,255,0.01)");
+        ctx.fillStyle = grain;
+        ctx.fillRect(0, 0, width, height);
+    }
+
+    function loop(now) {
+        const dt = Math.min(0.05, (now - last) / 1000);
+        last = now;
+        draw(dt);
+        requestAnimationFrame(loop);
+    }
+
+    const resizeObserver = window.ResizeObserver ? new ResizeObserver(resize) : null;
+    if (resizeObserver) resizeObserver.observe(hero);
+    window.addEventListener("resize", resize);
+
+    resize();
+    requestAnimationFrame(loop);
 }

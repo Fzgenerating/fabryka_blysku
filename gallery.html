@@ -2,54 +2,191 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Galeria - Fabryka Błysku</title>
+    <title>Galeria - Klasyk Portowy Barber Shop</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="stylesheet" href="style.css">
     <style>
         .gallery-page {
             min-height: 100vh;
             background:
-                radial-gradient(circle at 10% 0, rgba(158, 167, 255, 0.16) 0, transparent 55%),
-                radial-gradient(circle at 80% 10%, rgba(192, 203, 255, 0.22) 0, transparent 52%),
+                radial-gradient(circle at 12% 5%, rgba(158, 167, 255, 0.22) 0, transparent 52%),
+                radial-gradient(circle at 82% 12%, rgba(192, 203, 255, 0.32) 0, transparent 58%),
                 radial-gradient(circle at 50% 120%, rgba(37, 46, 113, 0.35) 0, transparent 55%);
             color: var(--color-text, #e5e7eb);
             padding-top: 90px;
             padding-bottom: 40px;
         }
+
         .gallery-wrapper {
-            max-width: 1100px;
+            max-width: 1120px;
             margin: 0 auto;
             padding: 0 20px;
         }
+
         .gallery-header {
             margin-bottom: 24px;
         }
+
         .gallery-header h1 {
             font-size: 2rem;
             margin-bottom: 8px;
         }
+
         .gallery-header p {
             color: var(--color-text-muted, #9ca3af);
-            max-width: 40rem;
+            max-width: 48rem;
         }
+
+        .gallery-shell {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .gallery-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .gallery-autoplay-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(5, 8, 14, 0.78);
+            border: 1px solid rgba(148, 163, 255, 0.22);
+            color: var(--color-primary-strong, #e5e7eb);
+            padding: 10px 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.55);
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .gallery-autoplay-toggle[aria-pressed="false"] {
+            background: rgba(5, 8, 14, 0.5);
+            color: var(--color-text-muted, #9ca3af);
+        }
+
+        .gallery-autoplay-toggle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+        }
+
+        .toggle-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(148, 163, 255, 0.8), rgba(224, 231, 255, 0.9));
+            box-shadow: 0 0 0 4px rgba(148, 163, 255, 0.18);
+        }
+
+        .gallery-autoplay-toggle[aria-pressed="false"] .toggle-dot {
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12);
+        }
+
+        .gallery-view-switch {
+            display: inline-flex;
+            gap: 8px;
+            background: rgba(148, 163, 255, 0.12);
+            padding: 6px;
+            border-radius: 14px;
+            border: 1px solid rgba(192, 203, 255, 0.16);
+        }
+
+        .gallery-chip {
+            border: none;
+            background: transparent;
+            color: var(--color-primary-strong, #e5e7eb);
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            transition: background 0.18s ease, transform 0.18s ease, color 0.18s ease;
+        }
+
+        .gallery-chip.is-active {
+            background: linear-gradient(135deg, rgba(148, 163, 255, 0.28), rgba(224, 231, 255, 0.18));
+            color: #0b1020;
+            box-shadow: 0 10px 26px rgba(148, 163, 255, 0.26);
+        }
+
         .gallery-slider {
             position: relative;
-            margin: 20px auto 24px;
-            max-width: 960px;
-            border-radius: 18px;
+            border-radius: 20px;
             overflow: hidden;
-            background: radial-gradient(circle at 10% 0, rgba(148, 163, 255, 0.16), transparent 55%),
-                        rgba(15, 23, 42, 0.96);
-            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.9);
+            background: radial-gradient(circle at 12% 18%, rgba(148, 163, 255, 0.18), transparent 42%),
+                        radial-gradient(circle at 86% 6%, rgba(255, 255, 255, 0.12), transparent 50%),
+                        linear-gradient(145deg, rgba(5, 8, 14, 0.94), rgba(10, 15, 26, 0.96));
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(192, 203, 255, 0.12);
+            display: grid;
+            grid-template-rows: 1fr auto;
+            height: var(--active-height, auto);
+            max-height: min(88vh, 820px);
+            min-height: 360px;
+            transition: height 0.35s ease;
         }
-        .gallery-slide {
-            display: none;
-        }
-        .gallery-slide img {
-            display: block;
+
+        .gallery-visual {
+            position: relative;
             width: 100%;
-            height: auto;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            padding: clamp(12px, 2vw, 22px);
         }
+
+        #gallery-active-image {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain !important;
+            object-position: center center;
+            border-radius: 16px;
+            background: radial-gradient(circle at 20% 16%, rgba(148, 163, 255, 0.15), transparent 44%),
+                        linear-gradient(145deg, rgba(10, 15, 24, 0.9), rgba(5, 8, 14, 0.94));
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.85);
+            display: block;
+        }
+
+        .gallery-caption {
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(90deg, rgba(5, 8, 14, 0.85), rgba(5, 8, 14, 0.3));
+            border-radius: 12px;
+            padding: 10px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .gallery-counter {
+            font-weight: 700;
+            color: var(--color-primary-strong, #e5e7eb);
+            letter-spacing: 0.08em;
+        }
+
+        .gallery-name {
+            color: var(--color-text-muted, #9ca3af);
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .gallery-slider-nav {
             position: absolute;
             inset: 0;
@@ -57,72 +194,129 @@
             align-items: center;
             justify-content: space-between;
             pointer-events: none;
+            padding: 14px;
         }
+
         .gallery-arrow {
             pointer-events: auto;
             border: none;
-            background: rgba(15, 23, 42, 0.55);
-            padding: 10px 14px;
+            background: rgba(5, 8, 14, 0.72);
+            padding: 12px 14px;
             border-radius: 999px;
             color: #e5e7eb;
             font-size: 22px;
             cursor: pointer;
-            margin: 0 12px;
-            transition: background 0.2s, transform 0.2s;
+            margin: 0 8px;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            border: 1px solid rgba(148, 163, 255, 0.18);
+            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.6);
         }
+
         .gallery-arrow:hover {
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(5, 8, 14, 0.95);
             transform: translateY(-1px);
+            box-shadow: 0 20px 36px rgba(0, 0, 0, 0.75);
         }
-        .gallery-close {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            border: none;
-            border-radius: 999px;
-            background: rgba(15, 23, 42, 0.65);
-            color: #e5e7eb;
-            padding: 6px 10px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .gallery-thumbs {
+
+        .gallery-dots {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
+            padding: 12px 14px 18px;
         }
+
+        .gallery-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(148, 163, 255, 0.25);
+            border: 1px solid rgba(192, 203, 255, 0.12);
+            transition: transform 0.18s ease, background 0.18s ease;
+        }
+
+        .gallery-dot.is-active {
+            transform: scale(1.2);
+            background: linear-gradient(135deg, rgba(148, 163, 255, 0.9), rgba(224, 231, 255, 0.75));
+        }
+
+        .gallery-thumbs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 6px;
+        }
+
         .gallery-thumb {
-            width: 150px;
+            position: relative;
             border-radius: 14px;
             overflow: hidden;
+            border: 1px solid rgba(148, 163, 255, 0.3);
+            background: linear-gradient(145deg, rgba(5, 8, 14, 0.98), rgba(12, 18, 30, 0.92));
+            padding: 6px;
             cursor: pointer;
-            border: 1px solid rgba(148, 163, 255, 0.35);
-            background: rgba(15, 23, 42, 0.9);
+            transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+            display: grid;
+            place-items: center;
         }
+
         .gallery-thumb img {
-            display: block;
             width: 100%;
-            height: auto;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
         }
+
         .gallery-thumb:hover {
-            box-shadow: 0 0 0 1px rgba(191, 219, 254, 0.6);
+            transform: translateY(-3px);
+            border-color: rgba(224, 231, 255, 0.55);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.7);
         }
+
+        .gallery-thumb.is-active::after {
+            content: "";
+            position: absolute;
+            inset: 6px;
+            border: 2px solid rgba(224, 231, 255, 0.8);
+            border-radius: 10px;
+            pointer-events: none;
+            box-shadow: 0 10px 26px rgba(148, 163, 255, 0.5);
+        }
+
+        .gallery-empty {
+            color: var(--color-text-muted, #9ca3af);
+            text-align: center;
+            grid-column: 1 / -1;
+        }
+
         .gallery-back {
             margin-top: 28px;
             text-align: center;
         }
+
         .gallery-back a {
             text-decoration: none;
             color: var(--color-primary-strong, #e5e7eb);
             font-size: 0.95rem;
         }
+
+        @media (max-width: 900px) {
+            .gallery-slider {
+                aspect-ratio: var(--active-ratio, 4 / 3);
+            }
+        }
+
         @media (max-width: 768px) {
             .gallery-header h1 {
                 font-size: 1.4rem;
             }
+            .gallery-toolbar {
+                align-items: flex-start;
+            }
+            .gallery-hint {
+                font-size: 0.9rem;
+            }
             .gallery-thumb {
-                width: 42%;
+                padding: 4px;
             }
         }
     </style>
@@ -132,9 +326,14 @@
         <nav class="nav" aria-label="Główna nawigacja">
             <div class="nav-logo">
                 <a href="index.html" aria-label="Powrót na stronę główną">
-                    <img src="assets/img/logo-fabryka-blysku.png" alt="Fabryka Błysku - logo" class="logo-img">
+                    <img src="assets/img/logo-klasyk-portowy.jpg" srcset="assets/img/logo-klasyk-portowy.svg" alt="Klasyk Portowy Barber Shop" class="logo-img">
                 </a>
             </div>
+            <button class="nav-toggle" aria-label="Otwórz menu" aria-expanded="false">
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+            </button>
             <ul class="nav-links">
                 <li><a href="index.html#start">Strona główna</a></li>
                 <li><a href="index.html#uslugi">Usługi</a></li>
@@ -150,41 +349,39 @@
     <main class="gallery-page">
         <div class="gallery-wrapper">
             <header class="gallery-header">
-                <h1>Galeria realizacji</h1>
-                <p>Przykładowe zdjęcia, które możesz łatwo podmienić na swoje - wystarczy wymienić pliki w folderze <code>assets/img/gallery</code>, zachowując nazwy plików.</p>
+                <h1>Galeria Klasyk Portowy</h1>
+                <p>Wybrane strzyżenia, brody i stylizacje wykonane w naszym barbershopie.</p>
             </header>
 
-            <section aria-label="Pokaz slajdów z realizacjami">
-                <div class="gallery-slider" id="gallery-slider">
-                    <button class="gallery-close" type="button" onclick="showThumbs()">×</button>
+            <section aria-label="Pokaz slajdów z realizacjami" class="gallery-shell">
+                <div class="gallery-toolbar">
+                    <div class="gallery-view-switch" role="group" aria-label="Przełącz widok galerii">
+                        <button class="gallery-chip is-active" type="button" data-view="slider">Widok pokazu</button>
+                        <button class="gallery-chip" type="button" data-view="grid">Miniatury</button>
+                    </div>
+                    <button class="gallery-autoplay-toggle" type="button" aria-pressed="true" aria-label="Przełącz automatyczne przewijanie">
+                        <span class="toggle-dot" aria-hidden="true"></span>
+                        Automatyczne przewijanie: włączone
+                    </button>
+                </div>
 
-                    <div class="gallery-slide">
-                        <img src="assets/img/gallery/slide1.jpg" alt="Realizacja 1 - Fabryka Błysku">
-                    </div>
-                    <div class="gallery-slide">
-                        <img src="assets/img/gallery/slide2.jpg" alt="Realizacja 2 - Fabryka Błysku">
-                    </div>
-                    <div class="gallery-slide">
-                        <img src="assets/img/gallery/slide3.jpg" alt="Realizacja 3 - Fabryka Błysku">
+                <div class="gallery-slider" id="gallery-slider" aria-live="polite">
+                    <div class="gallery-visual">
+                        <img id="gallery-active-image" src="" alt="" loading="lazy">
+                        <div class="gallery-caption">
+                            <span class="gallery-counter" id="gallery-counter">0/0</span>
+                            <span class="gallery-name" id="gallery-name">Ładuję zdjęcia...</span>
+                        </div>
                     </div>
 
                     <div class="gallery-slider-nav">
-                        <button class="gallery-arrow" type="button" onclick="plusSlides(-1)">‹</button>
-                        <button class="gallery-arrow" type="button" onclick="plusSlides(1)">›</button>
+                        <button class="gallery-arrow" type="button" data-direction="prev" aria-label="Poprzednie zdjęcie">‹</button>
+                        <button class="gallery-arrow" type="button" data-direction="next" aria-label="Następne zdjęcie">›</button>
                     </div>
+                    <div class="gallery-dots" id="gallery-dots" aria-hidden="true"></div>
                 </div>
 
-                <div class="gallery-thumbs" id="gallery-thumbs">
-                    <div class="gallery-thumb" onclick="openSlide(1)">
-                        <img src="assets/img/gallery/slide1.jpg" alt="Miniatura realizacji 1">
-                    </div>
-                    <div class="gallery-thumb" onclick="openSlide(2)">
-                        <img src="assets/img/gallery/slide2.jpg" alt="Miniatura realizacji 2">
-                    </div>
-                    <div class="gallery-thumb" onclick="openSlide(3)">
-                        <img src="assets/img/gallery/slide3.jpg" alt="Miniatura realizacji 3">
-                    </div>
-                </div>
+                <div class="gallery-thumbs" id="gallery-thumbs" aria-label="Miniatury realizacji"></div>
             </section>
 
             <div class="gallery-back">
@@ -193,61 +390,7 @@
         </div>
     </main>
 
-    <script>
-        let slideIndex = 1;
-        let autoTimer = null;
-
-        function initSlider() {
-            showSlides(slideIndex);
-            startAuto();
-        }
-
-        function plusSlides(n) {
-            showSlides(slideIndex += n);
-            restartAuto();
-        }
-
-        function openSlide(n) {
-            document.getElementById('gallery-slider').style.display = 'block';
-            document.getElementById('gallery-thumbs').style.display = 'flex';
-            showSlides(slideIndex = n);
-            restartAuto();
-        }
-
-        function showThumbs() {
-            document.getElementById('gallery-slider').style.display = 'none';
-            document.getElementById('gallery-thumbs').style.display = 'flex';
-            stopAuto();
-        }
-
-        function showSlides(n) {
-            const slides = document.getElementsByClassName('gallery-slide');
-            if (!slides.length) return;
-            if (n > slides.length) { slideIndex = 1; }
-            if (n < 1) { slideIndex = slides.length; }
-            for (let i = 0; i < slides.length; i++) {
-                slides[i].style.display = 'none';
-            }
-            slides[slideIndex - 1].style.display = 'block';
-        }
-
-        function startAuto() {
-            autoTimer = setInterval(function() { plusSlides(1); }, 5000);
-        }
-
-        function stopAuto() {
-            if (autoTimer) {
-                clearInterval(autoTimer);
-                autoTimer = null;
-            }
-        }
-
-        function restartAuto() {
-            stopAuto();
-            startAuto();
-        }
-
-        document.addEventListener('DOMContentLoaded', initSlider);
-    </script>
+    <script src="script.js"></script>
+    <script src="gallery.js"></script>
 </body>
 </html>
