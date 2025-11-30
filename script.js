@@ -1,62 +1,15 @@
-// Google Places - produkcyjny Place ID podany przez klienta
-const DEFAULT_PLACE_ID = "ChIJ-3tHZJ4TA0cRxoECsUB3b7k";
+// Google Places - produkcyjny Place ID podany przez klienta (Klasyk Portowy Barber Shop)
+const DEFAULT_PLACE_ID = "ChIJ8e6j9v3NHkcRf16BlEm9VpQ";
 const GOOGLE_API_KEY = "AIzaSyBBEGLuDhhYTF23KVnBC4XZa_KmTWQaZFs";
 const DEFAULT_GOOGLE_AVATAR = "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/user_circle.png";
+const REVIEWS_CACHE_KEY = "kp_reviews_cache_v1";
+const REVIEWS_CACHE_TTL = 1000 * 60 * 60 * 12; // 12h
 
 // Loader skryptu Google Maps JS (Places) współdzielony między wywołaniami
 let googleMapsScriptPromise = null;
-const REVIEWS_FALLBACK = [
-    {
-        author_name: "Mateusz K.",
-        rating: 5,
-        relative_time_description: "2 tygodnie temu",
-        text: "Błyskawicznie ogarnęli pianę aktywną, felgi i wnętrze. Auto wygląda lepiej niż po odbiorze z salonu.",
-        profile_photo_url: "https://lh3.googleusercontent.com/a-/AOh14GjDemoMateusz",
-        url: "https://www.google.com/maps/place/auto+detailing+bydgoszcz"
-    },
-    {
-        author_name: "Karolina D.",
-        rating: 5,
-        relative_time_description: "miesiąc temu",
-        text: "Świetne podejście do klienta i zero kompromisów przy myciu ręcznym. Lakier zyskał głębię i szklistość.",
-        profile_photo_url: "https://lh3.googleusercontent.com/a-/AOh14GjDemoKarolina",
-        url: "https://www.google.com/maps/place/myjnia+detailingowa"
-    },
-    {
-        author_name: "Piotr L.",
-        rating: 5,
-        relative_time_description: "3 miesiące temu",
-        text: "Wnętrze po praniu tapicerki pachnie świeżością, a plastiki są satynowe, nie tłuste. Polecam!",
-        profile_photo_url: "https://lh3.googleusercontent.com/a-/AOh14GjDemoPiotr",
-        url: "https://www.google.com/maps/place/fabryka+blysku"
-    },
-    {
-        author_name: "Ewa R.",
-        rating: 5,
-        relative_time_description: "tydzień temu",
-        text: "Ceramiczna ochrona lakieru nałożona perfekcyjnie. Woda spływa jak po kropelkach, a auto łatwo się myje.",
-        profile_photo_url: "https://lh3.googleusercontent.com/a-/AOh14GjDemoEwa",
-        url: "https://www.google.com/maps/place/myjnia+premium"
-    },
-    {
-        author_name: "Rafał P.",
-        rating: 5,
-        relative_time_description: "5 dni temu",
-        text: "Szybka dekontaminacja, dressing opon i wosk sezonowy. Warto było przyjechać z drugiego końca miasta.",
-        profile_photo_url: "https://lh3.googleusercontent.com/a-/AOh14GjDemoRafal",
-        url: "https://www.google.com/maps/place/myjnia+samochodowa"
-    },
-    {
-        author_name: "Natalia S.",
-        rating: 5,
-        relative_time_description: "4 dni temu",
-        text: "Auto po detailingu wygląda jak nowe, a wnętrze pachnie świeżo. Profesjonalna obsługa i fajne podejście.",
-        profile_photo_url: "https://lh3.googleusercontent.com/a-/AOh14GjDemoNatalia",
-        url: "https://www.google.com/maps/place/studio+detailingowe"
-    }
-];
+const REVIEWS_FALLBACK = [];
 
-// script.js - logika interfejsu Fabryka Błysku
+// script.js - logika interfejsu Klasyk Portowy Barber Shop
 
 document.addEventListener("DOMContentLoaded", function () {
     setupSmoothScroll();
@@ -550,6 +503,57 @@ function loadGoogleReviews() {
     const placeId = container.getAttribute("data-place-id") || DEFAULT_PLACE_ID;
     const hasLiveGoogle = Boolean(apiKey && placeId);
 
+    function readCache() {
+        try {
+            const raw = localStorage.getItem(REVIEWS_CACHE_KEY);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (!parsed || parsed.placeId !== placeId) return null;
+            if (Date.now() - parsed.ts > REVIEWS_CACHE_TTL) return null;
+            return parsed;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function writeCache(reviews, placeUrl) {
+        try {
+            localStorage.setItem(REVIEWS_CACHE_KEY, JSON.stringify({
+                ts: Date.now(),
+                placeId: placeId,
+                placeUrl: placeUrl || "",
+                reviews: reviews
+            }));
+        } catch (e) {
+            /* ignore quota issues */
+        }
+    }
+
+    function rotateReviews(list, maxToShow) {
+        if (!Array.isArray(list) || list.length === 0) return [];
+        const limit = typeof maxToShow === "number" ? maxToShow : 3;
+        const indexKey = `${REVIEWS_CACHE_KEY}:idx:${placeId}`;
+        let start = 0;
+        try {
+            start = parseInt(localStorage.getItem(indexKey), 10) || 0;
+        } catch (e) {
+            start = 0;
+        }
+
+        const slice = [];
+        for (let i = 0; i < Math.min(limit, list.length); i++) {
+            slice.push(list[(start + i) % list.length]);
+        }
+
+        try {
+            localStorage.setItem(indexKey, ((start + limit) % list.length).toString());
+        } catch (e) {
+            /* ignore */
+        }
+
+        return slice;
+    }
+
     function renderWithFallback() {
         fetch(endpoint, { cache: "no-store" })
             .then(function (response) {
@@ -567,6 +571,13 @@ function loadGoogleReviews() {
             .catch(function () {
                 renderReviews(container, REVIEWS_FALLBACK, 3, REVIEWS_FALLBACK);
             });
+    }
+
+    const cached = readCache();
+    if (cached && Array.isArray(cached.reviews) && cached.reviews.length) {
+        const rotated = rotateReviews(cached.reviews, 3);
+        renderReviews(container, rotated, 3, null, { allowFallback: false, requireProfilePhoto: false });
+        return;
     }
 
     function loadMapsScript(key) {
@@ -714,7 +725,9 @@ function loadGoogleReviews() {
                 }
 
                 const normalized = normalizeReviews(payload);
-                renderReviews(container, normalized, 3, null, { requireProfilePhoto: false, allowFallback: false });
+                writeCache(normalized, payload.placeUrl || "");
+                const rotated = rotateReviews(normalized, 3);
+                renderReviews(container, rotated, 3, null, { requireProfilePhoto: false, allowFallback: false });
             })
             .catch(function () {
                 container.innerHTML = "<p class=\"reviews-loading\">Nie udało się pobrać opinii z Google.</p>";
@@ -821,6 +834,7 @@ function renderReviews(container, reviews, limit, fallbackReviews, options) {
 /**
  * Animacja pianowych baniek w hero oparta o canvas (lekka i responsywna)
  */
+
 function initHeroBubbles() {
     const canvas = document.getElementById("bubbles-canvas");
     const hero = document.querySelector(".hero");
@@ -828,329 +842,69 @@ function initHeroBubbles() {
     if (!canvas || !hero || !canvas.getContext) return;
 
     const ctx = canvas.getContext("2d");
-    const bubbles = [];
-    const mouse = { x: 0, y: 0, isDown: false, hasMoved: false };
-    const fpsSamples = [];
-
-    const CONFIG = {
-        targetDensity: 38 / (1920 * 1080),
-        globalMinBubbles: 18,
-        globalMaxBubbles: 74,
-        baseSpawnInterval: 0.2,
-        minRadius: 12,
-        maxRadius: 52,
-        minInitialVy: -22,
-        maxInitialVy: -86,
-        maxInitialVx: 24,
-        baseBuoyancy: -16,
-        dragSmall: 0.02,
-        dragLarge: 0.08,
-        baseTurbulence: 32,
-        minLifetime: 7.5,
-        maxLifetime: 17,
-        minPopDuration: 0.12,
-        maxPopDuration: 0.22,
-        pulseAmplitude: 0.06,
-        pulseSpeedMin: 1.1,
-        pulseSpeedMax: 2.3,
-        baseAlphaMin: 0.38,
-        baseAlphaMax: 0.72,
-        lowFpsThreshold: 42
-    };
-
     let width = 0;
     let height = 0;
     let dpr = window.devicePixelRatio || 1;
-    let targetMaxBubbles = CONFIG.globalMinBubbles;
-    let spawnAccumulator = 0;
-    let lastTimestamp = performance.now();
+    let last = performance.now();
+    let offset = 0;
 
-    function resizeCanvas() {
+    const stripes = [
+        { color: "#d1202f", width: 90 },
+        { color: "#0f1118", width: 40 },
+        { color: "#1a7fd1", width: 90 },
+        { color: "#0f1118", width: 40 },
+        { color: "rgba(255,255,255,0.12)", width: 60 }
+    ];
+
+    function resize() {
         const rect = hero.getBoundingClientRect();
         width = rect.width;
         height = rect.height;
         dpr = window.devicePixelRatio || 1;
-
         canvas.width = Math.floor(width * dpr);
         canvas.height = Math.floor(height * dpr);
         canvas.style.width = width + "px";
         canvas.style.height = height + "px";
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-        recalcTargetBubbles();
     }
 
-    function recalcTargetBubbles() {
-        const area = width * height;
-        const ideal = area * CONFIG.targetDensity;
-        targetMaxBubbles = Math.round(
-            Math.max(CONFIG.globalMinBubbles, Math.min(CONFIG.globalMaxBubbles, ideal))
-        );
-    }
-
-    function randomRange(min, max) {
-        return min + Math.random() * (max - min);
-    }
-
-    class Bubble {
-        constructor(x, y, radius) {
-            this.x = x;
-            this.y = y;
-            this.baseRadius = radius;
-            this.radius = radius;
-
-            const sizeFactor = CONFIG.maxRadius / radius;
-            this.vx = randomRange(-CONFIG.maxInitialVx, CONFIG.maxInitialVx) * Math.min(sizeFactor, 2.2);
-            this.vy = randomRange(CONFIG.minInitialVy, CONFIG.maxInitialVy) * Math.min(sizeFactor, 2.4);
-
-            const buoyancyScale = Math.min(1.7, Math.pow(sizeFactor, 0.58));
-            this.buoyancy = CONFIG.baseBuoyancy * buoyancyScale;
-
-            const sizeT = (radius - CONFIG.minRadius) / (CONFIG.maxRadius - CONFIG.minRadius);
-            this.drag = CONFIG.dragLarge * sizeT + CONFIG.dragSmall * (1 - sizeT);
-
-            this.turbulence = CONFIG.baseTurbulence * Math.min(sizeFactor, 2.3);
-            this.age = 0;
-            this.maxAge = randomRange(CONFIG.minLifetime, CONFIG.maxLifetime);
-            this.popHeight = randomRange(height * 0.04, height * 0.16);
-
-            this.pulseSpeed = randomRange(CONFIG.pulseSpeedMin, CONFIG.pulseSpeedMax);
-            this.pulsePhase = Math.random() * Math.PI * 2;
-            this.baseAlpha = randomRange(CONFIG.baseAlphaMin, CONFIG.baseAlphaMax);
-            this.hue = randomRange(187, 202);
-
-            // --- NOWE: Generowanie struktury piany (wewnętrzne "chmurki") ---
-            this.foamSegments = [];
-            const segmentCount = Math.floor(3 + Math.random() * 3);
-            for (let i = 0; i < segmentCount; i++) {
-                const angle = Math.random() * Math.PI * 2;
-                const dist = radius * (0.2 + Math.random() * 0.4);
-                this.foamSegments.push({
-                    dx: Math.cos(angle) * dist,
-                    dy: Math.sin(angle) * dist,
-                    r: radius * (0.3 + Math.random() * 0.3),
-                    alpha: 0.05 + Math.random() * 0.15
-                });
-            }
-
-            // --- NOWE: Zmienne do obsługi pękania ---
-            this.shards = null;
-            this.state = "alive";
-            this.popTime = 0;
-            this.popDuration = 0.4;
-            this.hasQueuedPop = false;
-        }
-
-        startPop() {
-            if (this.state !== "popping") {
-                this.state = "popping";
-                this.popTime = 0;
-
-                this.shards = [];
-                const shardCount = Math.floor(this.baseRadius / 2) + 8;
-
-                for (let i = 0; i < shardCount; i++) {
-                    const angle = Math.random() * Math.PI * 2;
-                    const speed = 30 + Math.random() * 50;
-                    this.shards.push({
-                        x: this.x + Math.cos(angle) * this.baseRadius * 0.8,
-                        y: this.y + Math.sin(angle) * this.baseRadius * 0.8,
-                        vx: this.vx + Math.cos(angle) * speed,
-                        vy: this.vy + Math.sin(angle) * speed,
-                        size: 1 + Math.random() * 2,
-                        life: 1.0
-                    });
-                }
-            }
-        }
-
-        update(dt) {
-            if (this.state === "popping") {
-                this.popTime += dt;
-                if (this.shards) {
-                    for (let s of this.shards) {
-                        s.x += s.vx * dt;
-                        s.y += s.vy * dt;
-                        s.vy += 200 * dt;
-                        s.life -= dt * 2.5;
-                    }
-                }
-                if (this.popTime >= this.popDuration) return false;
-                return true;
-            }
-
-            this.age += dt;
-
-            if (this.y <= this.popHeight || this.y < -this.radius || (this.age > this.maxAge && this.y < height * 0.3)) {
-                this.startPop();
-            }
-
-            if (!this.hasQueuedPop && this.age > this.maxAge * 0.55 && Math.random() < dt * 0.6) {
-                this.hasQueuedPop = true;
-                this.startPop();
-            }
-
-            this.vx += (Math.random() - 0.5) * this.turbulence * dt;
-            this.vy += (Math.random() - 0.5) * this.turbulence * 0.32 * dt;
-            this.vy += this.buoyancy * dt;
-
-            this.vx *= 1 - this.drag * dt;
-            this.vy *= 1 - this.drag * dt;
-
-            this.x += this.vx * dt;
-            this.y += this.vy * dt;
-
-            return true;
-        }
-
-        draw(ctx) {
-            if (this.state === "popping") {
-                const progress = this.popTime / this.popDuration;
-
-                if (this.shards) {
-                    ctx.fillStyle = "#ffffff";
-                    for (let s of this.shards) {
-                        if (s.life > 0) {
-                            ctx.globalAlpha = s.life;
-                            ctx.beginPath();
-                            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                    }
-                }
-
-                if (progress < 0.5) {
-                    ctx.globalAlpha = 1 - progress * 2;
-                    ctx.strokeStyle = "rgba(255, 255, 255, 0.8)";
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius * (1 + progress), 0, Math.PI * 2);
-                    ctx.stroke();
-                }
-
-                ctx.globalAlpha = 1.0;
-                return;
-            }
-
-            let alpha = 1.0;
-            if (this.age < 0.5) alpha = this.age / 0.5;
-            else if (this.age > this.maxAge - 1) alpha = this.maxAge - this.age;
-            if (alpha <= 0) return;
-
-            const gradient = ctx.createRadialGradient(
-                this.x,
-                this.y,
-                this.radius * 0.6,
-                this.x,
-                this.y,
-                this.radius
-            );
-            gradient.addColorStop(0, "rgba(255, 255, 255, 0.0)");
-            gradient.addColorStop(0.8, "rgba(255, 255, 255, 0.1)");
-            gradient.addColorStop(1, "rgba(255, 255, 255, 0.25)");
-
-            ctx.globalAlpha = alpha;
-            ctx.fillStyle = gradient;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fill();
-
-            for (let seg of this.foamSegments) {
-                ctx.fillStyle = `rgba(255, 255, 255, ${seg.alpha})`;
-                ctx.beginPath();
-                ctx.arc(this.x + seg.dx, this.y + seg.dy, seg.r, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.stroke();
-
-            const glareX = this.x - this.radius * 0.4;
-            const glareY = this.y - this.radius * 0.4;
-
-            ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
-            ctx.beginPath();
-            ctx.ellipse(glareX, glareY, this.radius * 0.25, this.radius * 0.15, Math.PI / 4, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.globalAlpha = 1.0;
-        }
-    }
-
-    function spawnBubble() {
-        const radius = randomRange(CONFIG.minRadius, CONFIG.maxRadius);
-        const x = randomRange(radius, width - radius);
-        const y = height + radius + randomRange(0, 30);
-        bubbles.push(new Bubble(x, y, radius));
-    }
-
-    function getAverageFps() {
-        if (!fpsSamples.length) return 60;
-        const sum = fpsSamples.reduce((acc, v) => acc + v, 0);
-        return sum / fpsSamples.length;
-    }
-
-    function loop(timestamp) {
-        requestAnimationFrame(loop);
-
-        let dt = (timestamp - lastTimestamp) / 1000;
-        lastTimestamp = timestamp;
-        if (dt > 0.05) dt = 0.05;
-
-        const fps = 1 / dt;
-        fpsSamples.push(fps);
-        if (fpsSamples.length > 60) fpsSamples.shift();
-
-        const avgFps = getAverageFps();
-        let effectiveTargetBubbles = targetMaxBubbles;
-        let spawnInterval = CONFIG.baseSpawnInterval;
-
-        if (avgFps < CONFIG.lowFpsThreshold) {
-            effectiveTargetBubbles = Math.max(CONFIG.globalMinBubbles, Math.round(targetMaxBubbles * 0.72));
-            spawnInterval *= 1.35;
-        }
-
-        spawnAccumulator += dt;
-        while (spawnAccumulator >= spawnInterval && bubbles.length < effectiveTargetBubbles) {
-            spawnBubble();
-            spawnAccumulator -= spawnInterval;
-        }
-
-        for (let i = bubbles.length - 1; i >= 0; i--) {
-            const alive = bubbles[i].update(dt);
-            if (!alive) bubbles.splice(i, 1);
-        }
-
+    function draw(dt) {
+        offset += dt * 80;
         ctx.clearRect(0, 0, width, height);
+
         ctx.save();
-        ctx.globalCompositeOperation = "lighter";
-        bubbles.forEach((bubble) => bubble.draw(ctx));
+        ctx.translate(-offset, 0);
+        ctx.rotate(-Math.PI / 8);
+        let x = -width;
+        const stripeHeight = height * 1.6;
+
+        while (x < width * 2) {
+            for (const stripe of stripes) {
+                ctx.fillStyle = stripe.color;
+                ctx.fillRect(x, -stripeHeight / 2, stripe.width, stripeHeight);
+                x += stripe.width;
+            }
+        }
         ctx.restore();
+
+        const grain = ctx.createLinearGradient(0, 0, width, height);
+        grain.addColorStop(0, "rgba(255,255,255,0.02)");
+        grain.addColorStop(1, "rgba(255,255,255,0.01)");
+        ctx.fillStyle = grain;
+        ctx.fillRect(0, 0, width, height);
     }
 
-    function updateMousePosition(event) {
-        const rect = hero.getBoundingClientRect();
-        mouse.x = event.clientX - rect.left;
-        mouse.y = event.clientY - rect.top;
-        mouse.hasMoved = true;
+    function loop(now) {
+        const dt = Math.min(0.05, (now - last) / 1000);
+        last = now;
+        draw(dt);
+        requestAnimationFrame(loop);
     }
 
-    hero.addEventListener("pointermove", updateMousePosition);
-    hero.addEventListener("pointerdown", function () { mouse.isDown = true; });
-    hero.addEventListener("pointerup", function () { mouse.isDown = false; });
-    hero.addEventListener("pointerleave", function () { mouse.hasMoved = false; mouse.isDown = false; });
-
-    const resizeObserver = window.ResizeObserver ? new ResizeObserver(resizeCanvas) : null;
+    const resizeObserver = window.ResizeObserver ? new ResizeObserver(resize) : null;
     if (resizeObserver) resizeObserver.observe(hero);
-    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("resize", resize);
 
-    resizeCanvas();
+    resize();
     requestAnimationFrame(loop);
-
-    for (let i = 0; i < CONFIG.globalMinBubbles; i++) {
-        spawnBubble();
-    }
 }

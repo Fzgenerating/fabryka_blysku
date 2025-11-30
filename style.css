@@ -1,16 +1,16 @@
 ﻿/* Zmienne i reset */
 :root {
-    --color-bg: #05070a;
-    --color-bg-elevated: #0b0f16;
-    --color-bg-soft: #10151f;
-    --color-primary: #e0e7ff;
-    --color-primary-strong: #f5f7ff;
-    --color-accent: #9ea7ff;
-    --color-accent-strong: #c0cbff;
-    --color-silver: #c0c4d2;
-    --color-border: #242a36;
-    --color-text: #f5f5f7;
-    --color-text-muted: #a1a7b7;
+    --color-bg: #050505;
+    --color-bg-elevated: #0c0c10;
+    --color-bg-soft: #11111a;
+    --color-primary: #ffffff;
+    --color-primary-strong: #f5f5f7;
+    --color-accent: #d1202f;
+    --color-accent-strong: #1a7fd1;
+    --color-silver: #d7d8df;
+    --color-border: #1f2028;
+    --color-text: #f4f6ff;
+    --color-text-muted: #9aa0b5;
     --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.6);
     --radius-md: 12px;
     --radius-lg: 20px;
@@ -943,6 +943,26 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
     color: var(--color-text-muted);
 }
 
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.social-links a {
+    color: var(--color-primary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+}
+
+.social-links a:hover {
+    color: var(--color-accent-strong);
+    transform: translateX(2px);
+}
+
 .contact-info a {
     color: var(--color-accent-strong);
     text-decoration: none;
@@ -1306,7 +1326,7 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 
 
 
-/* Dekoracyjne bańki w sekcji hero - lekki efekt canvas */
+/* Dekoracyjne pasy w sekcji hero - canvas z ruchomymi barberskimi paskami */
 .hero-bubbles-canvas {
     position: absolute;
     inset: 0;
@@ -1315,6 +1335,6 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
     pointer-events: none;
     z-index: 1;
     mix-blend-mode: normal;
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+    opacity: 0.75;
 }
 

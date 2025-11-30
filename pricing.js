@@ -1,90 +1,33 @@
-// pricing.js - dane cennika Fabryka Błysku (fallback)
+// pricing.js - fallback cennika Klasyk Portowy Barber Shop
 // Główne źródło danych to data/pricing.json. Podmień ten plik lub JSON, aby zaktualizować ceny.
 
 window.PRICING_DATA = {
-    categories: [
-        "Kategoria A (małe auta)",
-        "Kategoria B (hatchback/kombi/compact)",
-        "Kategoria C (sedan/kombi/compact)",
-        "Kategoria D1 (małe SUV/minivan)",
-        "Kategoria D2 (duże SUV/7-osobowe)",
-        "Busy"
-    ],
+    categories: ["Cena"],
     tables: [
         {
-            title: "Mycie podstawowe i dopłaty",
+            title: "Strzyżenia i brody",
             items: [
-                { name: "Mycie podstawowe", prices: [55, 65, 75, 95, 115, 135] },
-                { name: "Mycie z hydrowoskiem (dopłata)", prices: ["+15", "+15", "+15", "+15", "+15", "+15"] },
-                {
-                    name: "Mycie z woskiem 1-miesięcznym (dopłata)",
-                    prices: ["+35", "+35", "+35", "+45", "+45", "+45"],
-                    note: "Dopłata 35 zł (A-C) / 45 zł (D1-Busy)"
-                },
-                {
-                    name: "Mycie z woskiem 4-miesięcznym (dopłata)",
-                    prices: ["+105", "+105", "+105", "+105", "+105", "+105"],
-                    note: "Ceny jak wyżej +105 zł"
-                }
+                { name: "Strzyżenie klasyczne / fade", prices: [90] },
+                { name: "Strzyżenie + mycie + stylizacja", prices: [110] },
+                { name: "Broda & kontur brzytwą", prices: [70] },
+                { name: "Strzyżenie + broda (combo)", prices: [150] },
+                { name: "Golenie tradycyjne z gorącym ręcznikiem", prices: [80] },
+                { name: "Junior cut", prices: [70] }
             ]
         },
         {
-            title: "Mycie kompletne i wnętrze",
+            title: "Zabiegi dodatkowe",
             items: [
-                { name: "Mycie kompletne", prices: [115, 125, 135, 155, 175, 205] },
-                { name: "Mycie kompletne z hydrowoskiem (dopłata)", prices: ["+15", "+15", "+15", "+15", "+15", "+15"] },
-                {
-                    name: "Mycie kompletne z woskiem 1-miesięcznym (dopłata)",
-                    prices: ["+35", "+35", "+35", "+45", "+45", "+45"],
-                    note: "Dopłata 35 zł (A-C) / 45 zł (D1-Busy)"
-                },
-                { name: "Mycie kompletne z woskiem 4-miesięcznym (dopłata)", prices: ["+105", "+105", "+105", "+105", "+105", "+105"] },
-                { name: "Czyszczenie wnętrza", prices: [65, 75, 85, 95, 115, 155] }
-            ]
-        },
-        {
-            title: "Pranie tapicerki i elementów",
-            items: [
-                { name: "Pranie tapicerki całościowe", prices: [490, 510, 520, 530, 550, 590] },
-                { name: "Pranie foteli i kanapy", prices: [290, 300, 310, 320, 340, 350] },
-                { name: "Pranie podłogi", prices: [55, 65, 75, 85, 105, 125] },
-                { name: "Pranie sufitu", prices: [85, 95, 105, 115, 135, 155] },
-                { name: "Pranie bagażnika", prices: [55, 65, 75, 85, 105, 125] },
-                { name: "Pranie boczków", prices: [25, 35, 45, 55, 65, 85] },
-                {
-                    name: "Czyszczenie i konserwacja tapicerki skórzanej",
-                    prices: [205, 235, 265, 285, 305, 355],
-                    note: "Dodatkowy fotel w busie/7-osobowym +45 zł/szt."
-                }
-            ]
-        },
-        {
-            title: "Detale i dodatki",
-            items: [
-                { name: "Odkurzanie", prices: [25, 30, 35, 40, 55, 70] },
-                { name: "Mycie szyb", prices: [20, 25, 35, 40, 55, 70] },
-                { name: "Czyszczenie plastików", prices: [25, 30, 35, 40, 50, 65] }
+                { name: "Kamuflaż siwizny / tonowanie", prices: [120], note: "Koloryzacja dopasowana do naturalnego odcienia" },
+                { name: "Odświeżenie + stylizacja włosów", prices: [60] },
+                { name: "Gorący ręcznik + pielęgnacja brody", prices: [50] }
             ]
         }
     ],
     singleItems: [
-        { name: "Czyszczenie opon (komplet 4 kół)", price: "60 zł" },
-        { name: "Ozonowanie 30 minut", price: "70 zł" },
-        { name: "Ozonowanie 60 minut", price: "105 zł" },
-        { name: "Usuwanie sierści", price: "od 25 zł", note: "wycena indywidualna przy dużej ilości" },
-        { name: "Usuwanie naklejek", price: "15/35 zł+", note: "w górę po konsultacji; może dojść koszt zmywacza" },
-        { name: "Konserwacja uszczelek na zimę", price: "15 zł" },
-        { name: "Czyszczenie silnika (bez użycia wody)", price: "55–75 zł", note: "zależnie od detergentu i kształtu plastików" },
-        { name: "Pakiet Zima A", price: "410 zł", note: "Mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny, powłoka na szyby" },
-        { name: "Pakiet Zima B", price: "420 zł", note: "Mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny, powłoka na szyby" },
-        { name: "Pakiet Zima C", price: "430 zł", note: "Mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny, powłoka na szyby" },
-        { name: "Pakiet Zima D / D2", price: "450 / 470 zł", note: "Mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny, powłoka na szyby" },
-        { name: "Niewidzialna wycieraczka – szyba czołowa + 2 przednie", price: "170 zł / 190 zł", note: "auta normalne / większe" }
-    ],
-    winterPackages: [
-        { name: "Pakiet Zima A – 410 zł", description: "Mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny, powłoka na szyby" },
-        { name: "Pakiet Zima B – 420 zł", description: "Mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny, powłoka na szyby" },
-        { name: "Pakiet Zima C – 430 zł", description: "Mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny, powłoka na szyby" },
-        { name: "Pakiet Zima D / D2 – 450 / 470 zł", description: "Mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny, powłoka na szyby" }
+        { name: "Pakiet Portowy (strzyżenie + broda + hot towel)", price: "180 zł" },
+        { name: "Regulacja brwi", price: "20 zł" },
+        { name: "Depilacja woskiem (nos/uszy)", price: "30 zł" },
+        { name: "Mycie i masaż głowy", price: "25 zł" }
     ]
 };

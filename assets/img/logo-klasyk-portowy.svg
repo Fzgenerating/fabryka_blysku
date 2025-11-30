@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" role="img" aria-labelledby="title desc">
+  <title id="title">Klasyk Portowy Barber Shop</title>
+  <desc id="desc">Minimalistyczne logo barbershopu inspirowane kotwicą i czerwono-niebieskimi pasami.</desc>
+  <defs>
+    <linearGradient id="flag" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d1202f"/>
+      <stop offset="50%" stop-color="#111217"/>
+      <stop offset="100%" stop-color="#1a7fd1"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="120" fill="#0b0c12" rx="10"/>
+  <g transform="translate(24 18)">
+    <path d="M80 0c-6 12-9 24-9 38 0 22 13 40 36 43-5 6-13 10-22 10-22 0-39-17-39-42 0-20 10-35 27-45z" fill="#f4f6ff" opacity="0.12"/>
+    <rect x="76" y="6" width="28" height="72" rx="6" fill="#0f1016" stroke="#f4f6ff" stroke-width="2"/>
+    <rect x="82" y="12" width="16" height="60" rx="4" fill="url(#flag)"/>
+    <path d="M90 6c0-6 5-10 10-10s10 4 10 10-5 10-10 10-10-4-10-10zm6.5 0a3.5 3.5 0 107 0 3.5 3.5 0 00-7 0z" fill="#f4f6ff"/>
+    <path d="M70 84c12 10 31 10 43 0" fill="none" stroke="#f4f6ff" stroke-width="3" stroke-linecap="round"/>
+    <path d="M40 48c9 1 15 5 21 12m98 0c-9 1-15 5-21 12" fill="none" stroke="#f4f6ff" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 8"/>
+    <path d="M16 60c14-18 32-30 52-34m136 34c-14-18-32-30-52-34" fill="none" stroke="#f4f6ff" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  </g>
+  <text x="170" y="70" font-family="'Libre Baskerville', 'Segoe UI', system-ui" font-size="22" fill="#f4f6ff" font-weight="700">KLASYK PORTOWY</text>
+  <text x="170" y="92" font-family="'Inter', 'Segoe UI', system-ui" font-size="16" fill="#d7d8df" letter-spacing="2">BARBER SHOP</text>
+</svg>

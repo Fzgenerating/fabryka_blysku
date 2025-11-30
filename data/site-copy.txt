@@ -1,114 +1,51 @@
 === Strona główna (index.html) ===
-Tytuł strony: Fabryka Błysku - myjnia samochodowa i autodetailing Bydgoszcz
-Meta description: Fabryka Błysku - studio autodetailingu i myjnia samochodowa w Bydgoszczy. Kompleksowe mycie, detailing, pranie tapicerki, ochrona lakieru, folie PPF i pakiety sezonowe.
-Meta keywords: myjnia samochodowa Bydgoszcz, autodetailing Bydgoszcz, Fabryka Błysku Brzozowa 4A/2, pranie tapicerki, folie PPF, mycie premium
+Tytuł strony: Klasyk Portowy Barber Shop – fryzjer męski Warszawa (Praga Północ)
+Meta description: Klasyk Portowy Barber Shop – klasyczne strzyżenia, brody i golenie na Pradze Północ. Męska pielęgnacja, gorące ręczniki i perfekcyjny fade w sercu Warszawy.
+Meta keywords: barber Warszawa, barber Praga Północ, Klasyk Portowy, strzyżenie męskie, golenie brzytwą, broda, fade, Kępna 2b
 Nawigacja: Strona główna; Usługi; Cennik; O nas; Galeria; Opinie; Kontakt
 
-Hero: "Fabryka Błysku - twój samochód w wersji premium" + podtytuł "Studio autodetailingu i myjnia samochodowa w Bydgoszczy, w którym każde auto traktujemy jak swoje. Łączymy pasję do motoryzacji z precyzyjną pracą i nowoczesną chemią samochodową." Przyciski: "Umów wizytę" i "Sprawdź cennik".
+Hero: "Klasyk Portowy Barber Shop" + podtytuł "Barber na Pradze Północ w Warszawie. Klasyczne cięcia, perfekcyjny fade, brody z brzytwą i gorący ręcznik – w portowym klimacie, zarezerwujesz wizytę w kilka sekund." CTA: "Umów wizytę w Booksy", "Sprawdź cennik".
 
-Sekcja "Co robimy" / usługi:
-- Mycie zewnętrzne — "Bezpieczne mycie nadwozia, felg i opon z użyciem piany aktywnej, ręcznych pianownic i miękkich rękawic."
-- Czyszczenie wnętrza — "Dokładne odkurzanie, czyszczenie plastików, mycie szyb od środka i odświeżenie wszystkich zakamarków."
-- Pranie tapicerki — "Głębokie pranie tapicerki materiałowej oraz pielęgnacja tapicerki skórzanej z konserwacją."
-- Detailing i korekta lakieru — "Wieloetapowe mycie, dekontaminacja, polerowanie i zabezpieczenie lakieru powłokami."
-- Folie PPF i zmiana koloru — "Zabezpieczenie najbardziej narażonych elementów folią ochronną oraz zmiana koloru auta folią."
-- Pakiety sezonowe — "Pakiety zimowe i letnie z myciem kompletnym, woskami, niewidzialną wycieraczką i uszczelkami."
+Sekcja Usługi (Portowe rzemiosło):
+- Strzyżenie klasyczne — "Perfekcyjny fade lub klasyczne cięcie z konturem, stylizacją i wskazówkami pielęgnacyjnymi."
+- Broda & kontur — "Modelowanie brody, kontur brzytwą, balsam i odżywienie – tak, by nosiła się jak z okładki."
+- Strzyżenie + broda — "Pełen pakiet barbera: cięcie, stylizacja, broda z brzytwą i gorący ręcznik w jednym terminie."
+- Golenie tradycyjne — "Klasyczne golenie na mokro z pianą, brzytwą i kompresami – rytuał, który odpręża i odświeża."
+- Junior cut — "Fryzury dla młodszych gentlemens – cierpliwie, dokładnie i w przyjaznej atmosferze."
+- Stylizacja & kamuflaż — "Modelowanie, odsiwianie i zabiegi regeneracyjne, które podkreślają kształt fryzury i brody."
 
-Sekcja "Cennik":
-Nagłówek: Cennik
-Podtekst: "Ceny edytujesz jednym plikiem: data/pricing.json. Podmień go lokalnie lub na serwerze, a tabela i dodatki zaktualizują się automatycznie."
-Nagłówek tabeli kategorii: "Mycie zewnętrzne według kategorii pojazdu"
-Loader: "Ładowanie cennika..."
-Kategorie pojazdów: Kategoria A (małe auta); Kategoria B (hatchback/kombi/compact); Kategoria C (sedan/kombi/compact); Kategoria D1 (małe SUV/minivan); Kategoria D2 (duże SUV/7-osobowe); Busy
+Sekcja Cennik:
+Nagłówek: Cennik. Podtekst: "Wszystkie ceny edytujesz w jednym pliku data/pricing.json – podmień go, a tabela zaktualizuje się automatycznie."
+Tabela (kategoria: Cena) – Strzyżenia i brody:
+- Strzyżenie klasyczne / fade – 90 zł
+- Strzyżenie + mycie + stylizacja – 110 zł
+- Broda & kontur brzytwą – 70 zł
+- Strzyżenie + broda (combo) – 150 zł
+- Golenie tradycyjne z gorącym ręcznikiem – 80 zł
+- Junior cut – 70 zł
+Tabela Zabiegi dodatkowe:
+- Kamuflaż siwizny / tonowanie – 120 zł (notka: koloryzacja dopasowana do naturalnego odcienia)
+- Odświeżenie + stylizacja włosów – 60 zł
+- Gorący ręcznik + pielęgnacja brody – 50 zł
+Usługi dodatkowe (singleItems): Pakiet Portowy (strzyżenie + broda + hot towel) – 180 zł; Regulacja brwi – 20 zł; Depilacja woskiem (nos/uszy) – 30 zł; Mycie i masaż głowy – 25 zł.
 
-Tabela "Mycie podstawowe i dopłaty" (A / B / C / D1 / D2 / Busy):
-- Mycie podstawowe — 55 zł / 65 zł / 75 zł / 95 zł / 115 zł / 135 zł
-- Mycie z hydrowoskiem (dopłata) — +15 zł / +15 zł / +15 zł / +15 zł / +15 zł / +15 zł
-- Mycie z woskiem 1-miesięcznym (dopłata) — +35 zł / +35 zł / +35 zł / +45 zł / +45 zł / +45 zł (notka: dopłata 35 zł dla A–C, 45 zł dla D1–Busy)
-- Mycie z woskiem 4-miesięcznym (dopłata) — +105 zł / +105 zł / +105 zł / +105 zł / +105 zł / +105 zł (notka: "Ceny jak wyżej +105 zł")
+Sekcja O nas:
+Nagłówek: O nas. Podtytuł: "Tworzymy barbershop z portowym charakterem – klasyka brzytwy, gorące ręczniki i luźna atmosfera Pragi Północ."
+Akapity: opis barbershopu, praca na produktach premium; wachlarz usług od pompadoura po skin fade i kamuflaż siwizny.
+Wyróżniki: Doświadczeni specjaliści (barberzy), Jakość ponad wszystko (produkty premium), Terminowość (Booksy przypomina o terminie).
 
-Tabela "Mycie kompletne i wnętrze" (A / B / C / D1 / D2 / Busy):
-- Mycie kompletne — 115 zł / 125 zł / 135 zł / 155 zł / 175 zł / 205 zł
-- Mycie kompletne z hydrowoskiem (dopłata) — +15 zł / +15 zł / +15 zł / +15 zł / +15 zł / +15 zł
-- Mycie kompletne z woskiem 1-miesięcznym (dopłata) — +35 zł / +35 zł / +35 zł / +45 zł / +45 zł / +45 zł (notka: dopłata 35 zł dla A–C, 45 zł dla D1–Busy)
-- Mycie kompletne z woskiem 4-miesięcznym (dopłata) — +105 zł / +105 zł / +105 zł / +105 zł / +105 zł / +105 zł
-- Czyszczenie wnętrza — 65 zł / 75 zł / 85 zł / 95 zł / 115 zł / 155 zł
+Sekcja Opinie: nagłówek "Opinie klientów" + opis "Pokazujemy tylko 5‑gwiazdkowe recenzje z wizytówki Klasyk Portowy Barber Shop na Google." Dane pobierane z Google (Place ID: ChIJ8e6j9v3NHkcRf16BlEm9VpQ).
 
-Tabela "Pranie tapicerki i elementów" (A / B / C / D1 / D2 / Busy):
-- Pranie tapicerki całościowe — 490 zł / 510 zł / 520 zł / 530 zł / 550 zł / 590 zł
-- Pranie foteli i kanapy — 290 zł / 300 zł / 310 zł / 320 zł / 340 zł / 350 zł
-- Pranie podłogi — 55 zł / 65 zł / 75 zł / 85 zł / 105 zł / 125 zł
-- Pranie sufitu — 85 zł / 95 zł / 105 zł / 115 zł / 135 zł / 155 zł
-- Pranie bagażnika — 55 zł / 65 zł / 75 zł / 85 zł / 105 zł / 125 zł
-- Pranie boczków — 25 zł / 35 zł / 45 zł / 55 zł / 65 zł / 85 zł
-- Czyszczenie i konserwacja tapicerki skórzanej — 205 zł / 235 zł / 265 zł / 285 zł / 305 zł / 355 zł (notka: "Dodatkowy fotel w busie/7-osobowym +45 zł/szt.")
+Sekcja Kontakt: nagłówek "Kontakt" + opis "Umów wizytę, zapytaj o termin lub dopytaj o szczegóły usług barberskich." Dane: telefon +48 503 807 503; e-mail klasykportowy@gmail.com; adres Kępna 2b, 03-730 Warszawa; godziny otwarcia (pon-pt 09-19/20, sobota 09-20). Przycisk "Zadzwoń teraz" tel:+48503807503. Mapa osadzona na adres Kępna 2b 03-730 Warszawa.
 
-Tabela "Detale i dodatki" (A / B / C / D1 / D2 / Busy):
-- Odkurzanie — 25 zł / 30 zł / 35 zł / 40 zł / 55 zł / 70 zł
-- Mycie szyb — 20 zł / 25 zł / 35 zł / 40 zł / 55 zł / 70 zł
-- Czyszczenie plastików — 25 zł / 30 zł / 35 zł / 40 zł / 50 zł / 65 zł
-
-Usługi dodatkowe i pakiety (karty):
-- Czyszczenie opon (komplet 4 kół) — 60 zł
-- Ozonowanie 30 minut — 70 zł
-- Ozonowanie 60 minut — 105 zł
-- Usuwanie sierści — od 25 zł (notka: "wycena indywidualna przy dużej ilości")
-- Usuwanie naklejek — 15/35 zł+ (notka: "w górę po konsultacji; może dojść koszt zmywacza")
-- Konserwacja uszczelek na zimę — 15 zł
-- Czyszczenie silnika (bez użycia wody) — 55–75 zł (notka: "zależnie od detergentu i kształtu plastików")
-- Pakiet Zima A — 410 zł (notka: "Mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny, powłoka na szyby")
-- Pakiet Zima B — 420 zł (notka: jak wyżej)
-- Pakiet Zima C — 430 zł (notka: jak wyżej)
-- Pakiet Zima D / D2 — 450 / 470 zł (notka: jak wyżej)
-- Niewidzialna wycieraczka – szyba czołowa + 2 przednie — 170 zł / 190 zł (notka: "auta normalne / większe")
-
-Nagłówek: "Pakiety Zima"
-Opis pakietów: "Pakiety różnią się ceną w zależności od kategorii pojazdu. W skład wchodzi mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny oraz powłoka na szyby."
-Lista pakietów (karty): Pakiet Zima A – 410 zł; Pakiet Zima B – 420 zł; Pakiet Zima C – 430 zł; Pakiet Zima D / D2 – 450 / 470 zł (wszystkie z opisem: "Mycie kompletne, dekontaminacja lakieru, odkamienianie szyb, wosk 4-miesięczny, powłoka na szyby").
-
-Sekcja "O nas":
-Nagłówek: O nas
-Lead: "Łączymy pasję do motoryzacji z technologią autodetailingu, aby Twój samochód wyglądał lepiej niż kiedykolwiek wcześniej."
-Akapit 1: "Witaj w naszym studiu autodetailingu - miejscu, w którym pasja do motoryzacji łączy się z precyzją i nowoczesną technologią. Dbamy o to, aby każde auto, które do nas trafia, wyglądało lepiej niż kiedykolwiek wcześniej."
-Akapit 2: "Specjalizujemy się w kompleksowej ochronie i odświeżaniu samochodów: od zmiany koloru folią, przez zabezpieczenia lakieru folią PPF, aż po profesjonalne polerowanie, pełne mycie detailingowe i głębokie czyszczenie wnętrz wraz z praniem tapicerki."
-Wyróżniki:
-- Doświadczeni specjaliści — "Przeszkolony zespół, który zna się na lakierach, foliach i bezpiecznych metodach czyszczenia."
-- Najlepsza chemia samochodowa — "Używamy sprawdzonych produktów klasy premium, bezpiecznych dla lakieru, wnętrza i środowiska."
-- Dokładność i dbałość o detale — "Nie pomijamy progów, wnęk, zakamarków i trudno dostępnych miejsc. Liczy się każdy detal."
-
-Sekcja "Opinie klientów":
-Nagłówek: Opinie klientów
-Opis: "Na bieżąco pokazujemy tylko 5‑gwiazdkowe recenzje z Google dotyczące myjni i studiów detailingu."
-Komunikaty dynamiczne: "Ładujemy świeże opinie Google..."; "Nie udało się pobrać opinii z Google."; "Brak opinii 5★ do wyświetlenia."; Badge: "Google ★★★★★"; Link w karcie: "Zobacz na Google"; Domyślny tekst opinii: "Brak treści opinii"; Domyślny czas: "Niedawno".
-
-Sekcja "Kontakt":
-Nagłówek: Kontakt
-Lead: "Umów wizytę, zapytaj o szczegóły lub zarezerwuj pakiet dla swojego auta."
-Blok "Dane kontaktowe": "Telefon: 577 772 707" (link tel), "E-mail: kontakt.fabrykablysku@gmail.com" (link mailto)
-Blok "Adres": "Fabryka Błysku\nBrzozowa 4A/2\n85-154 Bydgoszcz, Poland"
-Blok "Godziny otwarcia": "poniedziałek - 09:00 - 19:00"; "wtorek - 09:00 - 19:00"; "środa - 09:00 - 19:00"; "czwartek - 09:00 - 19:00"; "piątek - 09:00 - 20:00"; "sobota - 09:00 - 20:00"; "niedziela - zamknięte"
-Przycisk CTA: "Zadzwoń teraz"
-Formularz kontaktowy (etykiety): "Imię i nazwisko"; "E-mail"; "Telefon (opcjonalnie)"; "Temat"; "Wiadomość"; przycisk "Wyślij wiadomość"; komunikat statusu w polu #form-message.
-Teksty walidacji/wysyłki formularza: "Podaj swoje imię i nazwisko."; "Podaj adres e-mail."; "Podaj poprawny adres e-mail."; "Podaj temat wiadomości."; "Napisz treść wiadomości."; "Otworzyliśmy domyślny program pocztowy z gotowym mailem. Sprawdź i kliknij Wyślij."; "Wysyłanie wiadomości..."; komunikat sukcesu serwerowego domyślnie: "Dziękujemy za wiadomość. Skontaktujemy się z Tobą tak szybko jak to możliwe."; komunikaty błędów: "Wystąpił błąd po stronie serwera."; "Nie udało się wysłać wiadomości. Spróbuj ponownie później."; "Nie udało się nawiązać połączenia z serwerem. Spróbuj ponownie później.".
-
-Stopka: "© [rok bieżący] Fabryka Błysku. Wszystkie prawa zastrzeżone." + link "Polityka prywatności" + sygnatura "Projekt i wykonanie strony: Jakub Torończak – kontakt@jakubtoronczak.dev".
-
-Baner cookies: "Ta strona korzysta z plików cookies w celach statystycznych i funkcjonalnych. Kontynuując korzystanie z serwisu wyrażasz zgodę na ich użycie. Szczegóły znajdziesz w dokumencie Polityka prywatności i cookies." Przycisk: "Akceptuję".
+Stopka: © Klasyk Portowy Barber Shop. Link do Polityki prywatności.
 
 === Galeria (gallery.html) ===
-Tytuł strony: Galeria - Fabryka Błysku
-Nawigacja (logo i menu): Strona główna; Usługi; Cennik; O nas; Galeria; Opinie; Kontakt
-Nagłówek: "Galeria realizacji"
-Przełącznik widoku: przyciski "Widok pokazu" i "Miniatury".
-Przycisk autoplay: "Automatyczne przewijanie: włączone" / "Automatyczne przewijanie: wyłączone" (tekst zmienia się dynamicznie).
-Slider: podpis licznika startowy "0/0" (aktualizowany), podpis zdjęcia startowy "Ładuję zdjęcia...", strzałki "‹" (Poprzednie zdjęcie) i "›" (Następne zdjęcie), kropki nawigacji.
-Miniatury: sekcja "Miniatury" z siatką; komunikat pusty "Brak zdjęć do wyświetlenia.".
-Link powrotu: "← Wróć na stronę główną".
+Tytuł strony: Galeria - Klasyk Portowy Barber Shop
+Nagłówek: "Galeria Klasyk Portowy" + opis "Wybrane strzyżenia, brody i stylizacje wykonane w naszym barbershopie." Widok pokazu / miniatur, przycisk autoplay (domyślnie włączony), licznik slajdów, nawigacja strzałkami.
+Nawigacja jak na stronie głównej; logo: assets/img/logo-klasyk-portowy.svg.
 
 === Polityka prywatności (privacy-policy.html) ===
-Tytuł: Polityka prywatności i plików cookies
-Wstęp: "Ten dokument opisuje zasady przetwarzania danych osobowych oraz wykorzystywania plików cookies na stronie internetowej Fabryki Błysku."
-Dane kontaktowe administratora: "Administratorem danych osobowych jest Fabryka Błysku, Brzozowa 4A/2, 85-154 Bydgoszcz. Kontakt: kontakt.fabrykablysku@gmail.com."
-Formularz kontaktowy: "Dane podane w formularzu kontaktowym (imię i nazwisko, adres e-mail, opcjonalnie numer telefonu oraz treść wiadomości) są wykorzystywane wyłącznie w celu udzielenia odpowiedzi na Twoje zapytanie oraz prowadzenia korespondencji związanej z usługami Fabryki Błysku."
-Pliki cookies: "Strona korzysta z plików cookies w celu zapewnienia jej prawidłowego działania, analityki statystycznej oraz poprawy komfortu korzystania z serwisu. Możesz zmienić ustawienia dotyczące cookies w swojej przeglądarce internetowej."
-Prawa użytkownika: "Masz prawo dostępu do swoich danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przenoszenia danych oraz wniesienia sprzeciwu wobec przetwarzania. Możesz także wnieść skargę do Prezesa Urzędu Ochrony Danych Osobowych, jeśli uznasz, że przetwarzanie danych narusza przepisy."
+Tytuł: Polityka prywatności i cookies - Klasyk Portowy Barber Shop
+Administrator: Klasyk Portowy Barber Shop, Kępna 2b, 03-730 Warszawa, e-mail: klasykportowy@gmail.com.
+Opis: zasady przetwarzania danych z formularza kontaktowego, plików cookies, prawa użytkownika. Stopka © Klasyk Portowy Barber Shop.
