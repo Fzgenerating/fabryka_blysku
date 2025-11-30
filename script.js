@@ -857,7 +857,7 @@ function initTeamFallbacks() {
 }
 
 /**
- * Animacja pianowych baniek w hero oparta o canvas (lekka i responsywna)
+ * Lekka animacja „barber stripes” z nożyczkami przecinającymi ekran
  */
 
 function initHeroBubbles() {
@@ -873,28 +873,24 @@ function initHeroBubbles() {
     let last = performance.now();
     let offset = 0;
 
-    const ribbons = Array.from({ length: 7 }).map(function (_, i) {
-        const isAccent = i % 2 === 0;
+    const stripes = ["#111522", "#c92c3a", "#111522", "#f0f4ff"]; // ciemny + akcenty
+    const scissors = Array.from({ length: 6 }).map(function () {
         return {
-            color: isAccent ? "#d1202f" : "#0f1118",
-            accent: isAccent,
-            width: isAccent ? 110 : 60,
-            amplitude: 24 + Math.random() * 28,
-            wavelength: 320 + Math.random() * 120,
-            speed: 30 + Math.random() * 25,
+            x: 0,
+            y: 0,
+            speed: 24 + Math.random() * 32,
+            wobble: 6 + Math.random() * 6,
+            size: 16 + Math.random() * 8,
             phase: Math.random() * Math.PI * 2
         };
     });
 
-    const sparkles = Array.from({ length: 40 }).map(function () {
-        return {
-            x: Math.random(),
-            y: Math.random(),
-            size: 0.6 + Math.random() * 1.2,
-            speed: 10 + Math.random() * 25,
-            alpha: 0.1 + Math.random() * 0.35
-        };
-    });
+    function resetScissor(s) {
+        s.x = -80 - Math.random() * 80;
+        s.y = height * (0.25 + Math.random() * 0.5);
+    }
+
+    scissors.forEach(resetScissor);
 
     function resize() {
         const rect = hero.getBoundingClientRect();
@@ -908,86 +904,85 @@ function initHeroBubbles() {
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    function draw(dt) {
-        offset += dt;
-        ctx.clearRect(0, 0, width, height);
-
-        const diagonal = Math.sqrt(width * width + height * height);
-
-        ribbons.forEach(function (ribbon, idx) {
-            const scroll = (offset * ribbon.speed * (ribbon.accent ? 1.2 : 0.9)) % (ribbon.width * 4);
-
-            for (let x = -diagonal; x < diagonal * 1.2; x += ribbon.width * 3.5) {
-                ctx.save();
-                ctx.translate(x - scroll, 0);
-                ctx.rotate(-Math.PI / 7.5);
-
-                const path = new Path2D();
-                const baseY = -height * 0.3;
-                const stripeHeight = height * 1.8;
-                const amp = ribbon.amplitude;
-                const wave = ribbon.wavelength;
-                const startX = -ribbon.width * 0.5;
-                const endX = startX + ribbon.width;
-
-                path.moveTo(startX, baseY);
-                for (let y = baseY; y <= stripeHeight; y += 80) {
-                    const wobble = Math.sin((y + offset * ribbon.speed * 2) / wave + ribbon.phase + idx) * amp;
-                    path.lineTo(startX + wobble, y);
-                }
-                path.lineTo(endX, stripeHeight);
-                for (let y = stripeHeight; y >= baseY; y -= 80) {
-                    const wobble = Math.sin((y + offset * ribbon.speed * 2) / wave + ribbon.phase + idx + Math.PI / 4) * amp * 0.7;
-                    path.lineTo(endX + wobble, y);
-                }
-                path.closePath();
-
-                const grad = ctx.createLinearGradient(startX, 0, endX, 0);
-                grad.addColorStop(0, ribbon.accent ? "#e13d4b" : "#0a0c12");
-                grad.addColorStop(0.5, ribbon.color);
-                grad.addColorStop(1, ribbon.accent ? "#f06871" : "#161926");
-
-                ctx.fillStyle = grad;
-                ctx.globalAlpha = ribbon.accent ? 0.9 : 0.72;
-                ctx.filter = "blur(0.15px)";
-                ctx.fill(path);
-                ctx.restore();
-            }
-        });
-
-        // Rozsypane iskry
-        ctx.save();
-        ctx.globalCompositeOperation = "screen";
-        sparkles.forEach(function (spark) {
-            spark.y -= spark.speed * dt / height;
-            if (spark.y < -0.05) {
-                spark.y = 1.05;
-                spark.x = Math.random();
-            }
-            const x = spark.x * width;
-            const y = spark.y * height;
-            const g = ctx.createRadialGradient(x, y, 0, x, y, spark.size * 12);
-            g.addColorStop(0, `rgba(255,255,255,${spark.alpha})`);
-            g.addColorStop(1, "rgba(255,255,255,0)");
-            ctx.fillStyle = g;
-            ctx.beginPath();
-            ctx.arc(x, y, spark.size * 10, 0, Math.PI * 2);
-            ctx.fill();
-        });
-        ctx.restore();
-
-        // Delikatne ziarno
-        const grain = ctx.createLinearGradient(0, 0, width, height);
-        grain.addColorStop(0, "rgba(255,255,255,0.03)");
-        grain.addColorStop(1, "rgba(255,255,255,0.01)");
-        ctx.fillStyle = grain;
+    function drawBackground() {
+        const bg = ctx.createLinearGradient(0, 0, 0, height);
+        bg.addColorStop(0, "#0c0f17");
+        bg.addColorStop(1, "#090b12");
+        ctx.fillStyle = bg;
         ctx.fillRect(0, 0, width, height);
+    }
+
+    function drawStripes(dt) {
+        const diagonal = Math.sqrt(width * width + height * height);
+        const spacing = 180;
+        const thickness = 90;
+        const scroll = (offset * 36) % spacing;
+
+        ctx.save();
+        ctx.translate(width / 2, height / 2);
+        ctx.rotate(-0.32);
+
+        for (let i = -diagonal * 1.4; i < diagonal * 1.4; i += spacing) {
+            const color = stripes[(Math.floor(i / spacing) % stripes.length + stripes.length) % stripes.length];
+            ctx.fillStyle = color;
+            ctx.globalAlpha = color === "#f0f4ff" ? 0.25 : color === "#c92c3a" ? 0.65 : 0.45;
+            ctx.fillRect(i - scroll, -diagonal, thickness, diagonal * 2);
+        }
+
+        ctx.globalAlpha = 1;
+        ctx.restore();
+    }
+
+    function drawScissors(dt) {
+        ctx.save();
+        ctx.strokeStyle = "#f6f8ff";
+        ctx.lineWidth = 2;
+        ctx.lineCap = "round";
+
+        scissors.forEach(function (s) {
+            s.x += s.speed * dt;
+            s.y += Math.sin(offset * 2 + s.phase) * dt * s.wobble;
+            if (s.x > width + 120) {
+                resetScissor(s);
+            }
+
+            ctx.save();
+            ctx.translate(s.x, s.y);
+            ctx.rotate(-0.2);
+
+            // ostrza
+            ctx.beginPath();
+            ctx.moveTo(-s.size * 0.3, 0);
+            ctx.lineTo(s.size * 0.65, -s.size * 0.25);
+            ctx.moveTo(-s.size * 0.3, 0);
+            ctx.lineTo(s.size * 0.65, s.size * 0.25);
+            ctx.stroke();
+
+            // oczka nożyczek
+            ctx.beginPath();
+            ctx.arc(-s.size * 0.4, -s.size * 0.25, s.size * 0.22, 0, Math.PI * 2);
+            ctx.arc(-s.size * 0.4, s.size * 0.25, s.size * 0.22, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.restore();
+        });
+
+        ctx.restore();
     }
 
     function loop(now) {
         const dt = Math.min(0.05, (now - last) / 1000);
         last = now;
-        draw(dt);
+        offset += dt;
+
+        drawBackground();
+        drawStripes(dt);
+        drawScissors(dt);
+
+        // delikatny bloom
+        ctx.fillStyle = "rgba(255,255,255,0.04)";
+        ctx.fillRect(0, 0, width, height);
+
         requestAnimationFrame(loop);
     }
 

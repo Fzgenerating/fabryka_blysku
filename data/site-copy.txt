@@ -44,7 +44,7 @@ Notka pod listą: dodaj zdjęcia JPG do assets/img/barbers pod powyższymi nazwa
 
 Sekcja Opinie: nagłówek „Opinie klientów”; opis „Pokazujemy tylko 5‑gwiazdkowe recenzje z wizytówki Klasyk Portowy Barber Shop na Google.” Dane z Google (Place ID: ChIJ8e6j9v3NHkcRf16BlEm9VpQ, API key przekazany w data-api-key). Wyświetlane do 3 opinii, z rotacją z cache.
 
-Sekcja Kontakt: nagłówek „Kontakt”; opis „Umów wizytę, zapytaj o termin lub dopytaj o szczegóły usług barberskich.” Dane: telefon +48 503 807 503; e-mail klasykportowy@gmail.com; adres Kępna 2b, 03-730 Warszawa; godziny otwarcia pon-czw 09:00-19:00, pt-sob 09:00-20:00; przycisk „Zadzwoń teraz”. Mapa na adres Kępna 2b 03-730 Warszawa.
+Sekcja Kontakt: nagłówek „Kontakt”; opis „Umów wizytę, zapytaj o termin lub dopytaj o szczegóły usług barberskich.” Dane: telefon +48 503 807 503; e-mail klasykportowy@gmail.com; adres Kępna 2b, 03-730 Warszawa; godziny otwarcia pn–pt 09:00–20:00, sob 09:00–16:00, niedziela zamknięte; przycisk „Zadzwoń teraz”. Mapa na adres Kępna 2b 03-730 Warszawa.
 
 Stopka: © Klasyk Portowy Barber Shop. Link do Polityki prywatności. Podpis projektanta z e-mailem kontakt@jakubtoronczak.dev.
 

@@ -634,11 +634,13 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 
 .team {
     margin-top: 34px;
-    background: linear-gradient(180deg, rgba(9, 12, 20, 0.9), rgba(5, 7, 12, 0.9));
+    background: radial-gradient(circle at 12% 20%, rgba(201, 44, 58, 0.1), transparent 45%),
+        radial-gradient(circle at 82% 28%, rgba(45, 105, 194, 0.12), transparent 46%),
+        linear-gradient(180deg, rgba(9, 12, 20, 0.9), rgba(5, 7, 12, 0.92));
     border: 1px solid rgba(192, 196, 210, 0.16);
     border-radius: var(--radius-lg);
-    padding: 22px;
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.75);
+    padding: 26px;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.78);
 }
 
 .team h3 {
@@ -651,16 +653,32 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 .team-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 16px;
+    gap: 20px;
+    align-items: stretch;
+}
+
+@media (min-width: 900px) {
+    .team-grid {
+        grid-template-columns: repeat(3, minmax(260px, 1fr));
+    }
+}
+
+@media (min-width: 1200px) {
+    .team-grid {
+        grid-template-columns: repeat(4, minmax(240px, 1fr));
+    }
 }
 
 .team-card {
     border: 1px solid rgba(192, 196, 210, 0.16);
     border-radius: var(--radius-md);
-    background: rgba(9, 11, 16, 0.85);
+    background: rgba(9, 11, 16, 0.88);
     overflow: hidden;
     box-shadow: 0 16px 32px rgba(0, 0, 0, 0.65);
     transition: transform var(--transition-med), box-shadow var(--transition-med);
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
 }
 
 .team-card:hover {
@@ -670,8 +688,8 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 
 .team-photo {
     position: relative;
-    padding-top: 62%;
-    background: radial-gradient(circle at 20% 20%, rgba(209, 32, 47, 0.25), rgba(26, 127, 209, 0.08));
+    padding-top: 68%;
+    background: radial-gradient(circle at 20% 20%, rgba(209, 32, 47, 0.22), rgba(26, 127, 209, 0.08));
     overflow: hidden;
 }
 
@@ -685,7 +703,11 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 }
 
 .team-body {
-    padding: 14px 14px 16px;
+    padding: 16px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
 }
 
 .team-body h4 {
@@ -1433,6 +1455,6 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
     pointer-events: none;
     z-index: 1;
     mix-blend-mode: normal;
-    opacity: 0.75;
+    opacity: 0.6;
 }
 
