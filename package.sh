@@ -35,26 +35,18 @@ fi
 # Clean previous archive
 rm -f "$OUTPUT"
 
-# 1) Spróbuj zbudować archiwum bezpośrednio z Git (najpewniejsze na repozytorium)
-if ! $INCLUDE_GIT && command -v git >/dev/null 2>&1 && git -C "$REPO_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-  if git -C "$REPO_ROOT" archive -o "$TMP_DIR/$OUTPUT" HEAD >/dev/null 2>&1 && [ -s "$TMP_DIR/$OUTPUT" ]; then
-    echo "Użyto git archive (HEAD)" >&2
-    mv "$TMP_DIR/$OUTPUT" "$SCRIPT_DIR/$OUTPUT"
-    echo "Zapisano paczkę: $OUTPUT"
-    exit 0
-  fi
+# Zawsze używamy stagingu z aktualnego drzewa roboczego (obejmuje pliki nie-commitowane)
+RSYNC_EXCLUDES=("$OUTPUT" "drzewko.txt")
+if ! $INCLUDE_GIT; then
+  RSYNC_EXCLUDES+=(".git")
 fi
 
-# 2) Fallback – staging i zip (gdy brak Git lub archive się nie powiodło)
-if command -v git >/dev/null 2>&1 && git -C "$REPO_ROOT" rev-parse --show-toplevel >/dev/null 2>&1; then
-  if $INCLUDE_GIT; then
-    rsync -a --delete --exclude="$OUTPUT" "$REPO_ROOT/" "$TMP_DIR/"
-  else
-    (cd "$REPO_ROOT" && git ls-files -z) | rsync -a --files-from=- --from0 "$REPO_ROOT/" "$TMP_DIR/"
-  fi
-else
-  rsync -a --delete --exclude="$OUTPUT" --exclude='drzewko.txt' "$REPO_ROOT/" "$TMP_DIR/"
-fi
+RSYNC_ARGS=("-a" "--delete")
+for ex in "${RSYNC_EXCLUDES[@]}"; do
+  RSYNC_ARGS+=("--exclude=$ex")
+done
+
+rsync "${RSYNC_ARGS[@]}" "$REPO_ROOT/" "$TMP_DIR/"
 
 if ! find "$TMP_DIR" -type f -print -quit | grep -q .; then
   echo "Brak plików do spakowania (staging pusty)." >&2
@@ -68,11 +60,13 @@ if [ ! -s "$TMP_DIR/$OUTPUT" ] || [ "$(zipinfo -1 "$TMP_DIR/$OUTPUT" | wc -l | t
   exit 1
 fi
 
-python - <<'PY'
+export TMP_DIR OUTPUT
+python - <<PY
+import os
 import sys
 from zipfile import ZipFile
 
-zip_path = """$TMP_DIR/$OUTPUT"""
+zip_path = os.path.join(os.environ["TMP_DIR"], os.environ["OUTPUT"])
 with ZipFile(zip_path) as zf:
     files = [z for z in zf.infolist() if not z.is_dir() and z.file_size > 0]
     if not files:
