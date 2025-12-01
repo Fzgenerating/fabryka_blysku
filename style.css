@@ -119,9 +119,11 @@ body {
 }
 
 .logo-img {
-    height: 64px;
+    height: clamp(64px, 8vw, 108px);
+    max-width: 260px;
     width: auto;
     display: block;
+    object-fit: contain;
 }
 
 /* Menu desktop */
@@ -1350,9 +1352,9 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 
 /* === AUTO-UPDATES: Fabryka BĹ‚ysku custom tweaks === */
 
-/* 1. WiÄ™ksze logo w nawigacji */
+/* 1. Większe logo w nawigacji */
 .logo-img {
-    height: 120px;
+    height: clamp(64px, 8vw, 108px);
 }
 
 /* 2. WiÄ™kszy hero heading + tekst + przyciski */
@@ -1391,7 +1393,7 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 
 
 /* --- AUTO PATCH --- */
-.logo-img { height: 140px !important; width: auto !important; }
+.logo-img { height: clamp(64px, 8vw, 108px) !important; width: auto !important; }
 
 .hero-glow, .hero-bg-box, .hero-bg-layer-extra {
     display: none !important;

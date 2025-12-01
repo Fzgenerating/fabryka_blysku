@@ -3,9 +3,9 @@
 Ten repozytorium nie zawiera binarnych grafik, żeby uniknąć błędów przy generowaniu ZIP/PR. Dodaj je ręcznie po wypakowaniu, korzystając z poniższych ścieżek i nazw.
 
 ## Logo
-- **Plik:** `assets/img/logo-klasyk-portowy.jpg`
-- **Zalecenia:** JPG 500–800 px szerokości, tło przezroczyste lub ciemne; pozostaw plik SVG (`assets/img/logo-klasyk-portowy.svg`) jako fallback.
-- **Użycie:** nawigacja i favicon/zakładki w `index.html`.
+- **Plik główny:** `assets/img/logo-klasyk-portowy.png` (transparentne tło, szerokość ~600 px)
+- **Rezerwa:** `assets/img/logo-klasyk-portowy.jpg` (gdy brak wersji PNG) oraz `assets/img/logo-klasyk-portowy.svg` jako fallback.
+- **Użycie:** nawigacja i favicon/zakładki w `index.html` oraz `gallery.html`.
 
 ## Galeria
 - **Folder:** `assets/img/gallery/`
