@@ -119,8 +119,8 @@ body {
 }
 
 .logo-img {
-    height: clamp(64px, 8vw, 108px);
-    max-width: 260px;
+    height: clamp(58px, 6.6vw, 92px);
+    max-width: 220px;
     width: auto;
     display: block;
     object-fit: contain;
@@ -668,21 +668,50 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 }
 
 .barber-line {
+    position: relative;
     width: 100%;
-    height: 3px;
+    height: 4px;
     border-radius: 999px;
-    background: linear-gradient(90deg, #d72638, #f7f7f9, #1f6ec7, #f7f7f9, #d72638);
-    background-size: 220% 100%;
-    animation: barber-line-flow 5s linear infinite;
-    box-shadow: 0 0 14px rgba(215, 38, 56, 0.28);
+    overflow: hidden;
+    background: #0d0f17;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
 }
 
-@keyframes barber-line-flow {
+.barber-line::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        #d72638 0%,
+        #d72638 14%,
+        #f7f7f9 14%,
+        #f7f7f9 28%,
+        #1f6ec7 28%,
+        #1f6ec7 42%,
+        #f7f7f9 42%,
+        #f7f7f9 56%
+    );
+    background-size: 38px 38px;
+    animation: barber-line-scroll 3.2s linear infinite;
+    opacity: 0.92;
+}
+
+.barber-line::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18));
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+
+@keyframes barber-line-scroll {
     from {
-        background-position: 0% 50%;
+        transform: translateX(-38px);
     }
     to {
-        background-position: 200% 50%;
+        transform: translateX(38px);
     }
 }
 
@@ -1354,7 +1383,7 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 
 /* 1. Większe logo w nawigacji */
 .logo-img {
-    height: clamp(64px, 8vw, 108px);
+    height: clamp(58px, 6.6vw, 92px);
 }
 
 /* 2. WiÄ™kszy hero heading + tekst + przyciski */
@@ -1393,7 +1422,7 @@ body.nav-open .nav-toggle-bar:nth-child(3) {
 
 
 /* --- AUTO PATCH --- */
-.logo-img { height: clamp(64px, 8vw, 108px) !important; width: auto !important; }
+.logo-img { height: clamp(58px, 6.6vw, 92px) !important; width: auto !important; }
 
 .hero-glow, .hero-bg-box, .hero-bg-layer-extra {
     display: none !important;
