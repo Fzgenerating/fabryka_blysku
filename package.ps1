@@ -72,6 +72,13 @@ if (-not $zipInfo -or $zipInfo.Length -le 0) {
     throw "Archiwum wygląda na puste – przerwano."
 }
 
+# Weryfikujemy, że zip zawiera faktyczne pliki (nie tylko puste katalogi)
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$entries = [System.IO.Compression.ZipFile]::OpenRead($Output).Entries | Where-Object { -not $_.FullName.EndsWith('/') -and $_.Length -gt 0 }
+if (-not $entries -or $entries.Count -lt 1) {
+    throw "Archiwum nie zawiera żadnych plików (>0B)."
+}
+
 erase $temp -Recurse -Force
 
 Write-Host "Utworzono: $Output" -ForegroundColor Green

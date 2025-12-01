@@ -62,10 +62,23 @@ if ! find "$TMP_DIR" -type f -print -quit | grep -q .; then
 fi
 
 (cd "$TMP_DIR" && zip -r "$OUTPUT" .)
+# Weryfikacja, że archiwum zawiera realne pliki (a nie tylko puste katalogi)
 if [ ! -s "$TMP_DIR/$OUTPUT" ] || [ "$(zipinfo -1 "$TMP_DIR/$OUTPUT" | wc -l | tr -d ' ')" -eq 0 ]; then
   echo "Archiwum wygląda na puste – przerwano." >&2
   exit 1
 fi
+
+python - <<'PY'
+import sys
+from zipfile import ZipFile
+
+zip_path = """$TMP_DIR/$OUTPUT"""
+with ZipFile(zip_path) as zf:
+    files = [z for z in zf.infolist() if not z.is_dir() and z.file_size > 0]
+    if not files:
+        sys.stderr.write("Archiwum nie zawiera żadnych plików (>0B).\n")
+        sys.exit(1)
+PY
 mv "$TMP_DIR/$OUTPUT" "$SCRIPT_DIR/$OUTPUT"
 
 echo "Zapisano paczkę: $OUTPUT"
